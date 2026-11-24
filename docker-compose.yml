@@ -1,0 +1,39 @@
+# Run the app in a container:   docker compose up --build      then open http://127.0.0.1:8000
+# Before the first run create a file named .env next to this one with a long random value, for example:
+#     SECRET_KEY=<paste a long random string here>
+# (generate one with:  python -c "import secrets; print(secrets.token_urlsafe(48))")
+# Your data, models and databases stay on your computer and are mounted into the container.
+services:
+  ecx:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in a .env file (see the comment at the top of this file)}
+      ECX_DIGEST_DIR: /app/reports/digests
+      ECX_METRICS_TOKEN: ${ECX_METRICS_TOKEN:-}     # empty = /metrics stays off
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./database:/app/database
+      - ./v2_results:/app/v2_results
+      - ./reports:/app/reports
+    restart: unless-stopped
+
+  # Optional: runs the monitor + digest automatically every ECX_MONITOR_INTERVAL_HOURS (default 24).
+  # Start everything with:  docker compose --profile scheduler up --build
+  scheduler:
+    build: .
+    profiles: ["scheduler"]
+    command: ["python", "-m", "ecx3.scheduler"]
+    environment:
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in a .env file (see the comment at the top of this file)}
+      ECX_DIGEST_DIR: /app/reports/digests
+      ECX_MONITOR_INTERVAL_HOURS: ${ECX_MONITOR_INTERVAL_HOURS:-24}
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./database:/app/database
+      - ./v2_results:/app/v2_results
+      - ./reports:/app/reports
+    restart: unless-stopped

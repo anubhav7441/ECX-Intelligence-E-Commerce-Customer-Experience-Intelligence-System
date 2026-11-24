@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel — ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Admin panel</h1><p class="lead-sm">Users, datasets, activity, logs and demo settings. Password hashes are never shown.</p>
+<div class="row g-3 my-1" id="kp"></div>
+<ul class="nav nav-tabs mt-3" id="tabs" role="tablist">
+{% for k,l in [('users','Users'),('datasets','Datasets'),('activity','Analysis activity'),('audit','Audit history'),('logs','System log'),('demo','Demo settings')] %}
+<li class="nav-item"><button class="nav-link {{ 'active' if loop.first }}" data-t="{{ k }}">{{ l }}</button></li>{% endfor %}</ul>
+<div class="card border-top-0 rounded-top-0"><div class="card-body" id="pane"></div></div>
+<div class="modal fade" id="cm" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Please confirm</h5></div><div class="modal-body" id="cmt"></div><div class="modal-footer"><button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-danger" id="cmok">Confirm</button></div></div></div></div>
+{% endblock %}
+{% block scripts %}<script>
+function E(t){var d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML;}
+function J(u){return fetch(u).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||r.status);return j})})}
+function confirmBox(msg,ok){document.getElementById('cmt').textContent=msg;var m=new bootstrap.Modal(document.getElementById('cm'));var b=document.getElementById('cmok');b.onclick=function(){m.hide();ok()};m.show();}
+function tbl(h,rows){return '<div class="table-responsive"><table class="table table-sm"><thead><tr>'+h.map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>'+rows.join('')+'</tbody></table></div>';}
+var TRASH='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/><path d="M10 11v5M14 11v5"/></svg>';
+var P=document.getElementById('pane');
+var V={
+ users:function(){return J('/api/admin/users').then(function(j){P.innerHTML=tbl(['ID','Email','Name','Role','Status','Last login',''],j.users.map(function(u){
+   return '<tr><td>'+u.id+'</td><td>'+E(u.email)+'</td><td>'+E(u.name)+'</td><td>'+E(u.role)+'</td><td>'+(!u.approved?'<b style="color:#FFB020">waiting for approval</b>':(u.active?'active':'<b class="bad">disabled</b>'))+'</td><td class="note">'+E((u.last_login||'never').slice(0,16))+'</td><td class="text-nowrap">'
+   +(!u.approved?'<button class="btn btn-outline-secondary btn-sm" data-a="ok" data-id="'+u.id+'">Approve</button> <button class="btn btn-outline-secondary btn-sm" data-a="no" data-id="'+u.id+'">Reject</button>':
+   '<button class="btn btn-outline-secondary btn-sm" data-a="role" data-id="'+u.id+'" data-r="'+(u.role==='admin'?'user':'admin')+'">Make '+(u.role==='admin'?'user':'admin')+'</button> '
+   +'<button class="btn btn-outline-secondary btn-sm" data-a="act" data-id="'+u.id+'" data-v="'+(u.active?0:1)+'">'+(u.active?'Disable':'Enable')+'</button>')
+   +(u.id===j.me?'':' <button class="btn btn-outline-secondary btn-sm" data-a="del" data-id="'+u.id+'" data-e="'+E(u.email)+'" title="Delete user" aria-label="Delete user">'+TRASH+'</button>')+'</td></tr>'}));
+   P.querySelectorAll('button[data-a]').forEach(function(b){b.onclick=function(){
+    if(b.dataset.a==='del'){return confirmBox('Delete '+b.dataset.e+' and all their files? This cannot be undone.',function(){fetch('/api/admin/users/'+b.dataset.id,{method:'DELETE'}).then(function(r){return r.json().then(function(x){if(!r.ok)throw new Error(x.error||r.status)})}).then(function(){V.users();stat()}).catch(function(e){alert(e.message)})})}
+    if(b.dataset.a==='ok'||b.dataset.a==='no'){var ap=b.dataset.a==='ok';return confirmBox((ap?'Approve':'Reject and remove')+' sign-up '+b.dataset.id+'?',function(){postJSON('/api/admin/users/'+b.dataset.id+'/'+(ap?'approve':'reject'),{}).then(function(){V.users();stat()}).catch(function(e){alert(e.message)})})}
+    var body=b.dataset.a==='role'?{role:b.dataset.r}:{active:+b.dataset.v};
+    confirmBox('Apply this change to user '+b.dataset.id+'?',function(){postJSON('/api/admin/users/'+b.dataset.id,body).then(function(){V.users();stat()}).catch(function(e){alert(e.message)})})}})})},
+ datasets:function(){return J('/api/admin/datasets').then(function(j){P.innerHTML=tbl(['ID','Name','Owner','Rows','Created',''],j.datasets.map(function(d){return '<tr><td><code>'+E(d.dataset_id)+'</code></td><td>'+E(d.name)+'</td><td>'+E(d.owner_email||(d.read_only?'(built-in)':'-'))+'</td><td>'+E(d.n_rows)+'</td><td class="note">'+E((d.created_at||'').slice(0,16))+'</td><td>'+(d.read_only?'':'<button class="btn btn-outline-danger btn-sm" data-d="'+E(d.dataset_id)+'">Delete</button>')+'</td></tr>'}));
+   P.querySelectorAll('button[data-d]').forEach(function(b){b.onclick=function(){confirmBox('Permanently delete dataset '+b.dataset.d+' and its reports?',function(){fetch('/api/admin/datasets/'+b.dataset.d,{method:'DELETE'}).then(function(){V.datasets();stat()})})}})})},
+ activity:function(){return J('/api/admin/activity').then(function(j){P.innerHTML=j.activity.length?tbl(['When','User','Dataset','Type','Status'],j.activity.map(function(a){return '<tr><td class="note">'+E(a.ts.slice(0,16).replace('T',' '))+'</td><td>'+E(a.email||a.owner_id)+'</td><td>'+E(a.dataset_name)+'</td><td>'+E(a.kind)+'</td><td>'+E(a.status)+'</td></tr>'})):'<div class="empty">No analysis activity yet.</div>'})},
+ audit:function(){return J('/api/admin/audit').then(function(j){P.innerHTML=tbl(['When','User','Action','Detail','IP'],j.audit.map(function(a){return '<tr><td class="note">'+E(a.ts.slice(0,19).replace('T',' '))+'</td><td>'+E(a.user_email||'-')+'</td><td>'+E(a.action)+'</td><td class="note">'+E(a.detail)+'</td><td class="note">'+E(a.ip)+'</td></tr>'}))})},
+ logs:function(){return J('/api/admin/logs').then(function(j){P.innerHTML='<pre style="max-height:420px;overflow:auto;font-size:.78rem">'+(j.lines.length?E(j.lines.join('\n')):'No log lines yet.')+'</pre>'})},
+ demo:function(){return J('/api/admin/demo-config').then(function(c){P.innerHTML='<p class="note">These limits apply to <b>guests only</b>. Registered users and administrators are never limited by them.</p>'
+   +[['demo_row_limit','Max demo rows (50–2000)',c.rows],['demo_max_predictions','Predictions per guest session (0–100)',c.predictions],['demo_max_investigations','Investigations per guest session (0–50)',c.investigations]].map(function(x){return '<div class="mb-2"><label class="form-label" for="'+x[0]+'">'+x[1]+'</label><input class="form-control" style="max-width:200px" id="'+x[0]+'" type="number" value="'+x[2]+'"></div>'}).join('')+'<button class="btn btn-primary btn-sm" id="sv">Save</button> <span id="sm" class="note"></span>';
+   document.getElementById('sv').onclick=function(){var b={};['demo_row_limit','demo_max_predictions','demo_max_investigations'].forEach(function(k){b[k]=+document.getElementById(k).value});postJSON('/api/admin/demo-config',b).then(function(){document.getElementById('sm').textContent='Saved.'}).catch(function(e){document.getElementById('sm').textContent=e.message})}})}
+};
+function stat(){J('/api/admin/stats').then(function(s){document.getElementById('kp').innerHTML=[['Waiting for approval',s.pending],['Users',s.users],['Administrators',s.admins],['Uploaded datasets',s.datasets],['Analysis runs',(s.runs.analysis||0)],['Reports',(s.runs.report||0)],['Failed logins',s.failed_logins]].map(function(x){return '<div class="col-6 col-md-2"><div class="card kpi"><div class="v">'+x[1]+'</div><div class="l">'+x[0]+'</div></div></div>'}).join('')})}
+document.querySelectorAll('#tabs button').forEach(function(b){b.onclick=function(){document.querySelectorAll('#tabs button').forEach(function(x){x.classList.remove('active')});b.classList.add('active');P.innerHTML='<div class="skeleton" style="height:80px"></div>';V[b.dataset.t]().catch(function(e){P.innerHTML='<div class="alert alert-danger">'+E(e.message)+'</div>'})}});
+stat();V.users();
+</script>{% endblock %}

@@ -1,0 +1,12 @@
+flowchart LR
+  R[Raw Olist CSVs] --> S[SQL database + checks]
+  S --> C[Cleaning + order-level join]
+  C --> E[EDA + statistics]
+  C --> N[Portuguese NLP: complaints, aspects, severity]
+  C --> H[Leakage-safe history features]
+  H --> ML[4 models, time-based split]
+  ML --> X[SHAP explanations]
+  E --> B[BI findings]
+  N --> B
+  X --> B
+  B --> W[Web app + advice cards + PDF reports]

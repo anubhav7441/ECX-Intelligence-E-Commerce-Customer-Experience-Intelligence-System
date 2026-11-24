@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block title %}Ask a Question - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Ask a Question</h1>
+<p class="lead-sm">Ask about the sample marketplace data in your own words. Answers come from the real numbers and say where they came from. If the data cannot answer, the assistant says so instead of guessing.</p>
+<div class="row g-3"><div class="col-lg-7"><div class="card mb-3"><div class="card-header">Type your question</div><div class="card-body">
+<form id="f" class="d-flex gap-2"><input id="q" class="form-control" maxlength="500" placeholder="e.g. Does late delivery make customers unhappy?" required><button class="btn btn-primary">Ask</button></form>
+<div class="mt-3 note">Not sure what to ask? Click an example:</div><div class="d-flex flex-wrap gap-2 mt-1" id="ex">{% for t in ["What is the late rate?","Which sellers have the highest late rate?","Does late delivery affect dissatisfaction?","Which states have the most dissatisfied customers?","Show anomalies"] %}<button type="button" class="btn btn-sm btn-outline-secondary ex">{{ t }}</button>{% endfor %}</div><details class="mt-3"><summary class="note" style="cursor:pointer">All kinds of questions I can answer</summary>{% for s in supported %}<span class="d-block note">- {{ s }}</span>{% endfor %}</details><div id="err" class="alert alert-danger mt-2 d-none"></div></div></div>
+<div id="chat"></div></div>
+<div class="col-lg-5"><details class="card"><summary class="card-header" style="cursor:pointer;list-style:none">Advanced: test two things against each other</summary><div class="card-body">
+<p class="note">Pick something that might matter (“Exposure”) and something you care about (“Outcome”). We test whether they are linked. Numbers are computed from the data, not guessed.</p>
+<form id="rf" class="row g-2"><div class="col-6"><label class="form-label note">Exposure</label><select id="ex" class="form-select">{% for e in exposures %}<option>{{ e }}</option>{% endfor %}</select></div>
+<div class="col-6"><label class="form-label note">Outcome</label><select id="oc" class="form-select">{% for e in outcomes %}<option>{{ e }}</option>{% endfor %}</select></div>
+<div class="col-12"><button class="btn btn-outline-primary">Run test</button></div></form><div id="rerr" class="alert alert-danger mt-2 d-none"></div><div id="rout" class="mt-3"></div></div></details></div></div>
+{% endblock %}
+{% block scripts %}<script>
+document.querySelectorAll('.ex').forEach(b=>b.onclick=()=>{q.value=b.textContent;f.requestSubmit()});
+f.addEventListener('submit',async e=>{e.preventDefault();showErr('err');const ch=document.getElementById('chat');
+ const qq=q.value.trim();const card=el('div',null,'card mb-2');const b=el('div',null,'card-body');b.appendChild(el('div','You: '+qq,'fw-semibold'));card.appendChild(b);ch.prepend(card);q.value='';
+ try{const r=await postJSON('/api/v2/assistant',{question:qq});b.appendChild(el('p',r.answer,'mt-2 mb-1'));
+  const m=el('div',null,'note');m.appendChild(r.refused?badge('The data cannot answer this','secondary'):badge('Answer from real data','success'));if(r.used_llm)m.appendChild(badge('LLM rephrased','info'));
+  b.appendChild(m);
+  r.citations.forEach(c=>b.appendChild(el('div','Source: '+c.source+' ('+c.ref+')','note')));
+ }catch(x){b.appendChild(el('p',x.message,'bad'))}});
+rf.addEventListener('submit',async e=>{e.preventDefault();showErr('rerr');const o=clear(document.getElementById('rout'));
+ try{const t=await postJSON('/api/v2/research',{exposure:ex.value,outcome:oc.value});
+  o.appendChild(el('div','Hypothesis: '+t.exposure+' is associated with '+t.outcome,'fw-semibold'));
+  const rows=[['n',fmt(t.n)],['Method',t.method.join('; ')],['p-value',t.p_value<1e-300?'<1e-300':t.p_value.toExponential(2)],['Effect size',num(t.effect_size,3)]];
+  if(t.rate_exposed!=null)rows.push(['Rate exposed vs unexposed',pct(t.rate_exposed)+' vs '+pct(t.rate_unexposed)],['Odds ratio (95% CI)',num(t.odds_ratio,2)+' ('+num(t.or_ci95[0],2)+'-'+num(t.or_ci95[1],2)+')']);
+  if(t.mean_exposed!=null)rows.push(['Mean exposed vs unexposed',num(t.mean_exposed,2)+' vs '+num(t.mean_unexposed,2)]);
+  if(t.spearman_rho!=null)rows.push(['Spearman rho',num(t.spearman_rho,3)]);
+  if(t.adjusted&&t.adjusted.odds_ratio)rows.push(['Adjusted OR (95% CI)',num(t.adjusted.odds_ratio,2)+' ('+num(t.adjusted.ci95[0],2)+'-'+num(t.adjusted.ci95[1],2)+') '+t.adjusted.note,'controls: '+t.adjusted.controls.join(', ')]);
+  rows.push(['Verdict',t.verdict]);o.appendChild(table([{label:'Item',k:0},{label:'Value',k:1}],rows.map(r=>({0:r[0],1:r[1]}))));
+  o.appendChild(el('div',t.caveats.join(' '),'note mt-2'));o.appendChild(el('div','Source: '+t.source,'note'));
+ }catch(x){showErr('rerr',x.message)}});
+</script>{% endblock %}

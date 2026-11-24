@@ -1,0 +1,40 @@
+{% extends "base.html" %}{% block title %}Action Outcomes - ECX-Intelligence{% endblock %}
+{% block content %}
+<p class="note mb-1"><a href="{{ url_for('ops.center') }}">&larr; Operations Center</a></p>
+<h1 class="page">Did the action work?</h1>
+<div class="caveat mb-3"><strong>How we measure.</strong> We compare the rate in the same number of days before and after the action date, and subtract what happened to all other orders over the same period (difference-in-differences). It says "improved" or "worsened" only when the whole 95% interval is on one side of zero. This is not a randomised experiment, so treat it as strong evidence, not proof. Fixes also take time to reach customers.</div>
+<div class="card mb-3"><div class="card-body"><form id="f" class="row g-2">
+ <div class="col-md-3"><label class="form-label note">Metric</label><select class="form-select form-select-sm" name="metric"><option value="late_rate">Late-delivery rate</option><option value="dissatisfaction_rate">Unhappy-customer rate</option></select></div>
+ <div class="col-md-2"><label class="form-label note">Applies to</label><select class="form-select form-select-sm" name="entity_type"><option>platform</option><option>state</option><option>category</option><option>seller</option></select></div>
+ <div class="col-md-3"><label class="form-label note">Which one (e.g. SP, or a seller ID; "all" for platform)</label><input class="form-control form-control-sm" name="entity_id" value="all" required></div>
+ <div class="col-md-2"><label class="form-label note">Action date</label><input class="form-control form-control-sm" type="date" name="action_date" required></div>
+ <div class="col-md-2"><label class="form-label note">Window (days)</label><input class="form-control form-control-sm" type="number" name="window_days" value="28" min="7" max="180"></div>
+ <div class="col-md-6"><label class="form-label note">Linked action (optional)</label><select class="form-select form-select-sm" name="action_id"><option value="">None</option>{% for x in actions %}<option value="{{ x.action_id }}">{{ x.action_id }} - {{ x.title[:70] }}</option>{% endfor %}</select></div>
+ <div class="col-12"><button class="btn btn-primary btn-sm">Measure outcome</button></div></form>
+ <div id="err" class="alert alert-danger d-none mt-2"></div>
+ <div id="res" class="mt-3"></div><div style="height:240px" class="d-none" id="cw"><canvas id="ch"></canvas></div></div></div>
+<h2 class="h5">Earlier measurements</h2>
+<div class="card"><div class="card-body p-0">
+{% if outs %}<div class="tbl-wrap"><table class="table table-sm sticky-head mb-0"><thead><tr><th>ID</th><th>Action</th><th>Metric</th><th>Applies to</th><th>Action date</th><th>Verdict</th><th>Effect (points)</th></tr></thead><tbody>
+{% for o in outs %}<tr><td>{{ o.outcome_id }}</td><td>{{ o.action_id or '-' }}</td><td>{{ o.metric }}</td><td>{{ o.entity_type }} {{ o.entity_id }}</td><td>{{ o.action_date }}</td><td>{{ o.verdict.replace('_',' ') }}</td><td>{{ ('%.1f'|format(o.result.effect*100)) if o.result.effect is not none else '-' }}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note p-3 mb-0">Nothing measured yet.</p>{% endif %}</div></div>
+{% endblock %}
+{% block scripts %}<script>
+let chart=null;
+f.addEventListener('submit',async e=>{e.preventDefault();showErr('err');const b={};new FormData(f).forEach((v,k)=>{if(v!=='')b[k]=v});b.window_days=parseInt(b.window_days||'28',10);
+ try{const r=await fetch('/api/ops/outcomes',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();if(!r.ok)throw new Error(j.error||'Failed');show(j.result)}catch(x){showErr('err',x.message)}});
+function pct(v){return v==null?'-':(v*100).toFixed(1)+'%'}
+function show(r){const o=clear(document.getElementById('res'));const v=r.verdict.replace('_',' ');
+ const cls={improved:'success',worsened:'danger',inconclusive:'secondary','insufficient data':'warning'}[v]||'secondary';
+ const h=el('div',null,'mb-2');h.appendChild(el('span','Verdict: '+v,'badge bg-'+cls+' me-2'));
+ if(r.effect!=null)h.appendChild(el('span','Effect: '+(r.effect*100).toFixed(1)+' points (95% interval '+(r.ci95[0]*100).toFixed(1)+' to '+(r.ci95[1]*100).toFixed(1)+')'));o.appendChild(h);
+ if(r.reason)o.appendChild(el('div',r.reason,'note'));
+ if(r.note)o.appendChild(el('div',r.note,'note'));
+ if(r.rate_before!=null)o.appendChild(el('div','Before: '+pct(r.rate_before)+' ('+r.n_before+' orders). After: '+pct(r.rate_after)+' ('+r.n_after+' orders).'+(r.control_rate_before!=null?' Everything else: '+pct(r.control_rate_before)+' then '+pct(r.control_rate_after)+'.':''),'note'));
+ o.appendChild(el('div',r.caution,'note'));
+ const cw=document.getElementById('cw');if(chart){chart.destroy();chart=null}
+ if(r.series&&r.series.length){cw.classList.remove('d-none');const L=r.series.map(s=>(s.week<0?'':'+')+s.week+'w');const ds=[{label:'This one',data:r.series.map(s=>s.entity*100),borderColor:'#7c6cff',backgroundColor:'#7c6cff',tension:.25,pointRadius:3}];
+  if(r.series.some(s=>s.control!=null))ds.push({label:'Everything else',data:r.series.map(s=>s.control==null?null:s.control*100),borderColor:'#8d96c8',backgroundColor:'#8d96c8',borderDash:[5,4],tension:.25,pointRadius:2});
+  chart=new Chart(document.getElementById('ch'),{type:'line',data:{labels:L,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},scales:{y:{title:{display:true,text:'Rate (%)'},ticks:{color:'#c4cbe8'},grid:{color:'rgba(255,255,255,.07)'}},x:{title:{display:true,text:'Weeks from action date'},ticks:{color:'#c4cbe8'},grid:{display:false}}},plugins:{legend:{labels:{color:'#c4cbe8'}},tooltip:{callbacks:{label:c=>c.dataset.label+': '+(c.parsed.y==null?'-':c.parsed.y.toFixed(1)+'%')}}}}})}
+ else cw.classList.add('d-none')}
+</script>{% endblock %}

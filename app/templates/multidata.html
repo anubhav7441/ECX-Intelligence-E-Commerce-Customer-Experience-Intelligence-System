@@ -1,0 +1,126 @@
+{% extends "base.html" %}{% block title %}My Data - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">My Data</h1>
+<p class="lead-sm">Add a spreadsheet of your sales, orders or reviews. We check it, you confirm what the columns mean, and then you get advice and a PDF report. Your files are private to you.</p>
+<div id="gErr" class="alert alert-danger d-none" role="alert"></div>
+
+<div class="card mb-3"><div class="card-header">Add a file</div><div class="card-body">
+<form id="upForm">
+ <div class="row g-3 align-items-end">
+  <div class="col-lg-6"><label class="form-label" for="fi">Choose a CSV or Excel file</label><input id="fi" class="form-control" type="file" name="file" accept=".csv,.xlsx,.xls,.jsonl,.gz" required><div class="note mt-1">Up to 80 MB. Supported: CSV, Excel (.xlsx), JSONL.</div></div>
+  <div class="col-lg-4"><label class="form-label" for="fn">Name (optional)</label><input id="fn" class="form-control" name="name" maxlength="80" placeholder="e.g. My shop sales 2024"></div>
+  <div class="col-lg-2"><button class="btn btn-primary w-100" id="upBtn">Upload &amp; check</button></div>
+ </div>
+ <details class="mt-3"><summary class="note" style="cursor:pointer">More options (usually not needed)</summary>
+  <div class="row g-2 mt-1"><div class="col-md-4"><label class="form-label note" for="ft">File type</label><select id="ft" class="form-select form-select-sm" name="adapter"><option value="auto">Detect automatically</option><option value="online_retail_ii">UCI Online Retail II</option><option value="amazon_reviews">Amazon Reviews 2023</option><option value="none">Other (no cleaning)</option></select></div>
+  <div class="col-md-4"><label class="form-label note" for="fc">Amazon category (Amazon files only)</label><input id="fc" class="form-control form-control-sm" name="category" placeholder="Appliances"></div></div>
+  <p class="note mt-2 mb-0">Files in the project's <code>samples/</code> folder are made-up (synthetic) and only show the formats.</p></details>
+</form></div></div>
+
+<div class="card mb-4"><div class="card-header">Your files</div><div class="card-body p-0" id="dsList"><div class="p-3"><div class="skeleton" style="height:60px"></div></div></div></div>
+
+<div id="work" class="d-none">
+ <div class="d-flex flex-wrap justify-content-between align-items-end mb-2"><div><h2 class="h4 m-0" id="wTitle"></h2><div class="note" id="wSub"></div></div>
+  <ol class="steps-bar" id="stepsBar" aria-label="Progress"></ol></div>
+
+ <div class="card mb-3"><div class="card-header">1. We checked your file</div><div class="card-body" id="prof"></div></div>
+
+ <div class="card mb-3" id="mapCard"><div class="card-header">2. Match your columns</div><div class="card-body">
+   <div id="mapDone" class="d-none"></div>
+   <div id="mapOpen"><p class="note">We matched your columns automatically. Please check they look right. If a column is wrong, choose the correct one from the list.</p>
+   <div id="mapForm" class="row g-2"></div>
+   <details class="mt-2"><summary class="note" style="cursor:pointer">Other columns (optional)</summary><div id="mapMore" class="row g-2 mt-1"></div></details>
+   <div id="mapErr" class="alert alert-danger mt-2 d-none"></div><button id="mapBtn" class="btn btn-primary mt-3">Looks right — continue</button></div></div></div>
+
+ <div class="card mb-3" id="runCard"><div class="card-header">3. Analyse</div><div class="card-body">
+   <p class="note" id="runIntro"></p>
+   <button id="runBtn" class="btn btn-primary">Analyse my data</button> <span id="runMsg" class="note ms-2" role="status"></span>
+   <details class="mt-3 d-none" id="naBox"><summary class="note" style="cursor:pointer">Analyses we cannot do with this file</summary><div id="na" class="note mt-2"></div></details></div></div>
+
+ <div class="card mb-3" id="vizCard"><div class="card-header">4. Charts and what they mean</div><div class="card-body"><p class="note">We pick the charts that suit the columns in your file. Under each chart you can read, in plain words, why it was chosen and what it shows.</p><div id="viz"><span class="note">Confirm the column matching to see your charts.</span></div></div></div>
+
+ <div class="card mb-3" id="resCard"><div class="card-header">5. Your advice and report</div><div class="card-body">
+   <div class="d-flex flex-wrap gap-2 mb-3"><a id="advBtn" class="btn btn-primary" href="#">See advice &amp; recommendations →</a><button id="repBtn" class="btn btn-outline-secondary">Create PDF report</button><span id="repMsg" class="note align-self-center" role="status"></span></div>
+   <div id="dl" class="mb-2"></div>
+   <details><summary style="cursor:pointer;font-weight:600">Detailed results (for those who want the numbers)</summary><div class="mt-3" id="results"></div></details></div></div>
+
+ <details class="mb-3"><summary class="note" style="cursor:pointer">Technical details: processing history and model compatibility</summary>
+  <div class="card mt-2"><div class="card-body note" id="hist"></div></div>
+  <div class="mt-2"><button id="mcBtn" class="btn btn-sm btn-outline-secondary">Can the Olist model be used on this data?</button><div id="mc" class="mt-2 note"></div></div></details>
+</div>
+
+<div class="modal fade" id="cm" tabindex="-1" aria-labelledby="cmh" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="cmh">Delete this file?</h5></div><div class="modal-body" id="cmt"></div><div class="modal-footer"><button class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button><button class="btn btn-danger" id="cmok">Yes, delete</button></div></div></div></div>
+<style>.steps-bar{display:flex;gap:6px;list-style:none;padding:0;margin:0;flex-wrap:wrap}.steps-bar li{font-size:.78rem;padding:4px 12px;border-radius:99px;background:#e2e8f0;color:#475569;font-weight:600}.steps-bar li.done{background:#dcfce7;color:#166534}.steps-bar li.now{background:#2563eb;color:#fff}
+.frow{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}.frow:last-child{border-bottom:0}.frow .nm{flex:1;min-width:200px}.frow .nm b{display:block}.frow.sel{background:#f5f8ff}.ibtn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:34px;padding:0}.frow .nm:hover b{text-decoration:underline}</style>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='js/viz.js', v='3') }}"></script><script>
+let CUR=null,DETAIL=null;
+const TAG={observed:['FACT','success'],association:['PATTERN','primary'],suggestion:['IDEA','warning text-dark']};
+const $=id=>document.getElementById(id);
+async function api(url,opt){const r=await fetch(url,opt);let j={};try{j=await r.json()}catch(e){}if(!r.ok)throw new Error(j.error||(j.errors&&j.errors.join('; '))||('Request failed ('+r.status+')'));return j}
+function qlabel(q){return q>=90?'Excellent':q>=75?'Good':q>=50?'Fair':'Needs work'}
+function confirmDelete(name,ok){$('cmt').textContent='"'+name+'" and its reports will be permanently removed. This cannot be undone.';const m=bootstrap.Modal.getOrCreateInstance($('cm'));$('cmok').onclick=()=>{m.hide();ok()};m.show()}
+const ICON_DL='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>';
+const ICON_BIN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+async function loadList(){const j=await api('/api/md/datasets');const o=clear($('dsList'));
+ j.datasets.forEach(d=>{const row=el('div',null,'frow'+(d.dataset_id===CUR?' sel':''));const nm=el('div',null,'nm');nm.appendChild(el('b',d.dataset_id==='olist'?'Olist marketplace (sample data)':d.name));
+  nm.appendChild(el('span',(d.n_rows?fmt(d.n_rows)+' rows':'')+(d.read_only?' · built-in sample, read-only':'')+(!d.read_only&&!d.mapping_confirmed?' · columns not matched yet':''),'note'));row.appendChild(nm);
+  nm.style.cursor='pointer';nm.title='Click to open this file';nm.onclick=()=>openDs(d.dataset_id);
+  const adv=el('a','See advice','btn btn-sm btn-primary',{href:'/insights?dataset='+encodeURIComponent(d.dataset_id)});row.appendChild(adv);
+  const dlb=document.createElement('button');dlb.type='button';dlb.className='btn btn-sm btn-outline-success ibtn';dlb.title='Download report (PDF)';dlb.setAttribute('aria-label','Download report for '+d.name);
+  dlb.innerHTML=ICON_DL;dlb.onclick=async()=>{dlb.disabled=true;dlb.innerHTML='<span class="spinner-border spinner-border-sm"></span>';showErr('gErr');try{const j=await api('/api/md/'+d.dataset_id+'/download-report',{method:'POST'});const a=document.createElement('a');a.href=j.url;a.setAttribute('download','');document.body.appendChild(a);a.click();a.remove();if(CUR===d.dataset_id)openDs(d.dataset_id)}catch(e){showErr('gErr',e.message)}finally{dlb.disabled=false;dlb.innerHTML=ICON_DL}};row.appendChild(dlb);
+  if(d.dataset_id!=='olist'){const x=document.createElement('button');x.type='button';x.className='btn btn-sm btn-outline-danger ibtn';x.title='Delete this file';x.setAttribute('aria-label','Delete '+d.name);x.innerHTML=ICON_BIN;x.onclick=()=>confirmDelete(d.name,async()=>{try{await api('/api/md/'+d.dataset_id,{method:'DELETE'});if(CUR===d.dataset_id){CUR=null;$('work').classList.add('d-none')}loadList()}catch(e){showErr('gErr',e.message)}});row.appendChild(x)}
+  o.appendChild(row)});
+ if(j.datasets.length===1)o.insertBefore(el('div','You have not added a file yet. Use the box above to upload one.','empty m-3'),o.firstChild)}
+$('upForm').addEventListener('submit',async e=>{e.preventDefault();showErr('gErr');const b=$('upBtn');b.disabled=true;b.textContent='Checking…';
+ try{const j=await api('/api/md/upload',{method:'POST',body:new FormData(e.target)});e.target.reset();await loadList();await openDs(j.dataset_id);$('work').scrollIntoView({behavior:'smooth'})}catch(x){showErr('gErr',x.message)}finally{b.disabled=false;b.textContent='Upload & check'}});
+async function openDs(id){showErr('gErr');try{DETAIL=await api('/api/md/'+id);CUR=id;render();loadList()}catch(x){showErr('gErr',x.message)}}
+function steps(){const m=DETAIL.meta,conf=!!m.mapping_confirmed,ran=Object.keys(DETAIL.results).length>0;
+ const S=[['Checked',true],['Columns',conf],['Analysed',ran],['Advice',ran]];const first=S.findIndex(s=>!s[1]);
+ const b=clear($('stepsBar'));S.forEach((s,i)=>b.appendChild(el('li',(s[1]?'✓ ':'')+s[0],s[1]?'done':(i===first?'now':''))))}
+function render(){const D=DETAIL,m=D.meta,ro=!!m.read_only;$('work').classList.remove('d-none');
+ $('wTitle').textContent=CUR==='olist'?'Olist marketplace (sample data)':m.name;$('wSub').textContent='Source: '+(m.source||'-')+(m.sample_note?' | '+m.sample_note:'');
+ const p=D.profile,pr=clear($('prof'));
+ const k=el('div',null,'row g-3 mb-3');[['rows',fmt(p.n_rows)],['columns',p.n_cols],['repeated rows',fmt(p.duplicate_rows)],['data quality',qlabel(p.quality_score)+' ('+p.quality_score+'/100)']].forEach(([l,v])=>{const c=el('div',null,'col-6 col-md-3');const kk=el('div',null,'kpi');kk.style.padding='0';kk.appendChild(el('div',String(v),'v',{style:'font-size:1.35rem'}));kk.appendChild(el('div',l,'l'));c.appendChild(kk);k.appendChild(c)});pr.appendChild(k);
+ if(p.issues.length){pr.appendChild(el('div','Things to be aware of:','fw-semibold mb-1'));const u=el('ul',null,'note mb-2');p.issues.slice(0,5).forEach(i=>u.appendChild(el('li',i.issue)));pr.appendChild(u)}else pr.appendChild(el('div','No problems found in the file.','good'));
+ const dt=el('details');dt.appendChild(el('summary','Show every column','note',{style:'cursor:pointer'}));dt.appendChild(table([{label:'Column',k:'name'},{label:'Kind',k:'kind'},{label:'Empty %',k:'missing_pct'},{label:'Different values',k:'unique'},{label:'Example',k:'example'}],p.columns.slice(0,80)));pr.appendChild(dt);
+ // mapping
+ const conf=!!m.mapping_confirmed;$('mapCard').classList.toggle('d-none',ro);
+ const roles=D.suggestion.roles,sg=D.suggestion.suggested,cur=conf?m.mapping:Object.assign({},Object.fromEntries(Object.entries(sg).map(([r,v])=>[r,v.column])),m.preset_mapping||{});
+ const mf=clear($('mapForm')),mm=clear($('mapMore'));
+ Object.entries(roles).forEach(([r,label])=>{const main=!!(cur[r]||sg[r]);const c=el('div',null,'col-md-4');c.appendChild(el('label',label,'form-label note',{for:'sel_'+r}));
+  const s=el('select',null,'form-select form-select-sm',{'data-role':r,id:'sel_'+r});s.appendChild(el('option','-- none --',null,{value:''}));
+  p.columns.forEach(cl=>{const o=el('option',cl.name,null,{value:cl.name});if(cur[r]===cl.name)o.selected=true;s.appendChild(o)});c.appendChild(s);(main?mf:mm).appendChild(c)});
+ const md=$('mapDone');md.classList.toggle('d-none',!conf);$('mapOpen').classList.toggle('d-none',conf);
+ if(conf){clear(md);md.appendChild(el('div','✓ Columns matched: '+Object.entries(m.mapping).filter(x=>x[1]).map(([r,c])=>roles[r]+' → '+c).join(' · '),'note'));const e=el('button','Change','btn btn-sm btn-link');e.onclick=()=>{md.classList.add('d-none');$('mapOpen').classList.remove('d-none')};md.appendChild(e)}
+ // analyses
+ const caps=D.capabilities,okc=caps.filter(a=>a.available),no=caps.filter(a=>!a.available);
+ $('runIntro').textContent=ro?'This is the built-in sample data. You can read its advice and open the research pages.':!conf?'First confirm your columns above. Then we will run every analysis your file supports.':okc.length?'We can run '+okc.length+' analyses on your file: '+okc.map(a=>a.title).join(', ')+'.':'None of the analyses fit this file yet. Try matching more columns.';
+ $('runBtn').disabled=!conf||!okc.length||ro;$('runBtn').classList.toggle('d-none',ro);
+ $('naBox').classList.toggle('d-none',!(conf&&no.length));const na=clear($('na'));no.forEach(a=>na.appendChild(el('div','• '+a.title+': '+(a.reason||'').replace('Cannot run: ',''))));
+ $('advBtn').href='/insights?dataset='+encodeURIComponent(CUR);
+ $('repBtn').disabled=!Object.keys(D.results).length&&CUR!=='olist';
+ drawResults();drawHist();loadFiles();steps();drawViz()}
+async function drawViz(){const o=clear($('viz'));const id=CUR;if(!DETAIL.meta.mapping_confirmed){o.appendChild(el('span','Confirm the column matching to see your charts.','note'));return}
+ o.appendChild(el('span','Drawing charts…','note'));try{const j=await api('/api/md/'+id+'/visuals');if(id!==CUR)return;clear(o);if(!j.charts.length){o.appendChild(el('div','No chart suits this file yet. Charts need a date, an amount, a product, a region, a rating or several number columns.','note'));return}
+  ECXViz.draw(o,j.charts,'/api/md/'+id+'/files/')}catch(x){clear(o);o.appendChild(el('span',x.message,'note text-danger'))}}
+function drawResults(){const o=clear($('results'));const R=DETAIL.results;if(!Object.keys(R).length){o.appendChild(el('span','Nothing yet. Run the analysis first.','note'));return}
+ Object.entries(R).forEach(([id,r])=>{const c=el('div',null,'mb-4');c.appendChild(el('h3',r.title,'h6'));
+  if(r.status!=='done'){c.appendChild(el('div',r.reason||'Skipped (not enough data).','note text-danger'));(r.notes||[]).forEach(n=>c.appendChild(el('div',n,'note')));o.appendChild(c);return}
+  if(r.kpis&&r.kpis.length){const row=el('div',null,'row g-2 mb-2');r.kpis.forEach(k=>{const cc=el('div',null,'col-6 col-md-3');const kk=el('div',null,'card kpi p-2');kk.appendChild(el('div',k.value,'v',{style:'font-size:1.05rem'}));kk.appendChild(el('div',k.label,'l'));cc.appendChild(kk);row.appendChild(cc)});c.appendChild(row)}
+  (r.findings||[]).forEach(f=>{const p=el('p',null,'mb-1');p.appendChild(badge(TAG[f.type][0],TAG[f.type][1]));p.appendChild(document.createTextNode(' '));p.appendChild(el('span',f.text));c.appendChild(p)});
+  (r.charts||[]).forEach(ch=>{const fig=el('div',null,'mt-2');fig.appendChild(el('img',null,'fig',{src:'/api/md/'+CUR+'/files/'+ch.file+'?t='+Date.now(),alt:ch.caption,style:'max-width:620px'}));fig.appendChild(el('div',ch.caption,'note'));c.appendChild(fig)});
+  (r.notes||[]).forEach(n=>c.appendChild(el('div','Note: '+n,'note')));(r.assumptions||[]).forEach(n=>c.appendChild(el('div','Assumption: '+n,'note')));o.appendChild(c)})}
+function drawHist(){const h=clear($('hist'));DETAIL.history.forEach(x=>h.appendChild(el('div',(x.time||'')+'  '+x.step+': '+(typeof x.detail==='string'?x.detail:JSON.stringify(x.detail).slice(0,260)))))}
+async function loadFiles(){const d=clear($('dl'));
+ try{const j=await api('/api/md/'+CUR+'/files');const f=j.files.filter(x=>!x.endsWith('.png'));
+  if(f.includes('report.pdf'))d.appendChild(el('a','Download PDF report','btn btn-success btn-sm me-2',{href:'/api/md/'+CUR+'/files/report.pdf'}));
+  f.filter(x=>x!=='report.pdf').forEach(x=>d.appendChild(el('a',x,'btn btn-sm btn-link',{href:'/api/md/'+CUR+'/files/'+x})))}catch(e){}}
+$('mapBtn').onclick=async()=>{showErr('mapErr');const mp={};document.querySelectorAll('#mapForm select,#mapMore select').forEach(s=>{if(s.value)mp[s.dataset.role]=s.value});
+ try{await api('/api/md/'+CUR+'/mapping',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mapping:mp})});await openDs(CUR)}catch(x){showErr('mapErr',x.message)}};
+$('runBtn').onclick=async()=>{const ids=DETAIL.capabilities.filter(a=>a.available).map(a=>a.id);$('runMsg').textContent='Working… this can take a little while for big files.';$('runBtn').disabled=true;
+ try{const j=await api('/api/md/'+CUR+'/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({analyses:ids})});const ok=j.summary.filter(s=>s.status==='done').length;$('runMsg').textContent='Done: '+ok+' of '+j.summary.length+' analyses finished.';await openDs(CUR);$('resCard').scrollIntoView({behavior:'smooth'})}catch(x){$('runMsg').textContent='';showErr('gErr',x.message);$('runBtn').disabled=false}};
+$('repBtn').onclick=async()=>{$('repMsg').textContent='Creating your report…';showErr('gErr');$('repBtn').disabled=true;try{await api('/api/md/'+CUR+'/report',{method:'POST'});$('repMsg').textContent='Report ready — download it below.';await loadFiles()}catch(x){$('repMsg').textContent='';showErr('gErr',x.message)}finally{$('repBtn').disabled=false}};
+$('mcBtn').onclick=async()=>{try{const j=await api('/api/md/'+CUR+'/model-check');const o=clear($('mc'));o.appendChild(el('div','Olist model applied: '+(j.olist_model_applied?'yes':'NO - not compatible'),'fw-semibold'));j.reasons.forEach(r=>o.appendChild(el('div','- '+r)));o.appendChild(el('div',j.next_step,'mt-1'))}catch(x){showErr('gErr',x.message)}};
+loadList().then(()=>{const q=new URLSearchParams(location.search).get('dataset');if(q&&/^[\w-]+$/.test(q))openDs(q).catch(()=>{})});
+</script>{% endblock %}

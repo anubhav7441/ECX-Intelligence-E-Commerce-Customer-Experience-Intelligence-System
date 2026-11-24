@@ -1,0 +1,176 @@
+idx,review_comment_message,true_categories,pred
+0,Achei o produto de ötima qualidade.,other,product_quality
+1,"sem comentarios, muito confusa a informação sobre entrega",other,other
+2,A targaryen não é de confiança não entregou a minha compra e colocou no rastreamento do pedido que foi entregue no dia 14/12/17 empresa falsa quero receber meus produtos que foram pagos com boleto bancari,late_delivery;seller_issue;shipping,shipping;payment
+3,Péssimo! Compro pela internet e nunca tinha me acontecido isso. Comprei dois ítens e só recebi um. Além disso no anúncio falava ser bivolti e recebi um produto 110V com uma qualidade de 3ª. Revoltada.,missing_product;wrong_product;product_quality,missing_product;product_quality
+4,"Comprei 02 Livros, e apenas 01 foi entregue",missing_product,other
+5,Ainda não recebi meu pedido e o prazo expirou dia 15/12/2017.Gostaria de saber o destino da minha compra.Vou ter procurar um profissional para resolver para mim.,late_delivery,late_delivery
+6,"Boa noite, conforme informei anteriormente, a espátula inox nao foi entregue, gostaria de saber sobre.? Grato Jean ",late_delivery,late_delivery
+7,Recebi o produto errado. Não aceitaram a troca pelo produto correto. Comprei na lannister. A responsabilidade é de vocês. Quero meu dinheiro de volta de imediato.,wrong_product;seller_issue;payment,wrong_product;seller_issue;payment
+8,Eu vou devolver o produto,other,seller_issue
+9,Ainda não recebi o produto.,late_delivery,late_delivery
+10,"Comprei dois produtos e só recebi um, já enviei dois emails ao vendedor mas ainda não obtive resposta.",missing_product;seller_issue,late_delivery;missing_product;seller_issue
+11,Produto nao chegou ainda tentei contato para saber como resolver o problema,late_delivery,late_delivery
+12,Prazo de entrega muito longo,late_delivery,other
+13,"O único defeito foi que o relógio estava ligando, ou seja a bateria estava em uso e já apresenta sinais de esta fraca ",product_quality,product_quality
+14,"Produto com péssimo acabamento interno, já solicitei a devolução do produto.",product_quality,seller_issue
+15,"Produto chegou danificado, com rachadura no corpo da fonte, entretanto funcional.
+Mas o fato do produto chegar dessa forma, demonstra que o vendedor nao tomou os devidos cuidados no envio.",damaged_product,damaged_product;seller_issue
+16,"01 kit foi entregue. Falta o outro.
+A tinta preta do kit não funciona. Gostaria de trocá-la. Obrigado.",missing_product;product_quality,product_quality;seller_issue
+17,O produto veio certinho e antes do prazo ,other,other
+18,não tenho como ficar feliz pois passei o natal com minha sala vazia,late_delivery,other
+19,"Tentei fazer o cancelamento do produto e até o momento a solicitação está em andamento e o produto ja foi entregue, agora preciso troca-lo e o serviço não está habilitado. Péssimo atendimento.",seller_issue,late_delivery;seller_issue
+20,Impossível avaliar um serviço que não foi completado ,late_delivery,other
+21,"Amei, muito linda e bem feita. Atendeu minhas expectativas.",other,other
+22,"Não recebi a mercadoria sumil.
+Estou no aguardo esperando resposta .",late_delivery,late_delivery
+23,"Pelo valor, é uma mochila boa. Os fechos são um pouco dificeis de manejar e alguns bolsos nunca ficarão 100% fechados (não é bom pra colocar moedas e coisas pequenas).
+Um zíper também veio sem o fech",product_quality,product_quality
+24,"Demora para atualizar o rastreamento do produto. ( exemplo o produto já tinha chegado, mas a atualização que o produto estava no transporte, só apareceu no outro dia.)",shipping,late_delivery;shipping
+25,"O relógio é lindo e chegou no prazo, apesar de o prazo ter sido bastante extenso. Foi o melhor preço q encontrei no produto, mas veio com um risco no botão reverse. Nada q impeça seu bom funcionamento",damaged_product,other
+26,"Comprei estojo de pinceis de maquiagem, a loja me entregou tesouras de cortar cabelo.
+Péssimo",wrong_product,other
+27,"já compro no site a anos, nunca me senti enganado! no entanto nessa compra na minha opinião fui enganado e passado para trás. não recomento o produto a ninguém! ",seller_issue,seller_issue
+28,"Bom, comprei de presente para meu pai que está acostumado a usar relógio Orient automático, não gostou, pedi a devolução do produto",other,seller_issue
+29,"Entregue antes do prazo.....amei
+",other,other
+30,O material a mochila é bem simples.,product_quality,other
+31,O produto não foi recebido no prazo sem nenhuma justificativa explicando o motivo do atraso,late_delivery;seller_issue,late_delivery
+32,nao recebi o produto,late_delivery,late_delivery
+33,"Chegou muito antes do prazo, ainda n usei o produto mas chegou td certinho. ",other,late_delivery
+34,"O produto veio com tamanho diferente do solicitado, ou seja, tamanho 56 no lugar do 38. A empresa está demorando muito entrar em contato para que eu efetue a troca ou o cancelamento da compra.",wrong_product;seller_issue,late_delivery;wrong_product;seller_issue
+35,chegou quebrado,damaged_product,damaged_product
+36,"não consegue falar com o vendedor quando tem problemas, não tem numero de telefone para entrar em contato, um lixo",seller_issue,product_quality
+37,Comprei o produto na black friday e até hoje não recebi!,late_delivery,late_delivery
+38,"Meu produto foi entregue porém está faltando peças, comprei dois jogos de 30 cabides cada e só recebi 28 cabides. Por favor, providenciar entrega do restante.
+Aguardo providências.",missing_product,late_delivery;missing_product;shipping
+39,"Recomendo a loja, mas o produto não. Vieram faltando prendedores.",missing_product,missing_product
+40,"O produto foi entregue no prazo, até uma semana antes, porém houve um imprevisto na minha entrega, tentei entrar em contato várias vezes sem nenhum sucesso, fiquei mais de semana sem saber de nada.",seller_issue;shipping,other
+41,"baratheon OK, loja OK, Correios OK, produto foi útil, por que comprei para meu cachorro",other,shipping
+42,Produto chegou antes do prazo parabéns a empresa ,other,other
+43,pensei que todas eram grande + veio tudo certo ,other,other
+44,"Não consigo falar com a loja. Produto veio errado
+ ",seller_issue;wrong_product,wrong_product
+45,"utilizo o site das amaericanas a muitos anos, sempre tive um bom retorno, as vezes demora,mas os produtos chegam sempre embalados. mas dessa vez não recebi, por isso a avaliação negativa.",late_delivery,late_delivery
+46,"Relógio mal acabado e frágil, qualidade muito ruim, parece de barraquinha de camelô. Não vale o preço de jeito nenhum.",product_quality,product_quality
+47,Cumpriu com excelência ,other,other
+48,Recebi um produto diferente do que estava no site há entrei em contato espero que a troca seja rápida.,wrong_product,wrong_product;seller_issue
+49,Não está funcionando o produto,product_quality,other
+50,Veio numa embalagem esdruchula. Muito mal embalado. Parecia loja amadora de fundo de quintal. Vergonha stark numa parceria dessas. Chego a pensar se realmente o produto é original Epson.,packaging,packaging
+51,a até agora não recebi,late_delivery,late_delivery
+52,Comprei 3 objetos só chegou um o certa era vir tds juntos ou estou errado..,missing_product,wrong_product
+53,nao recebe as cores pedidos,wrong_product,other
+54,Entrega passou do prazo mas o produto chegou!,late_delivery,late_delivery
+55,Produto não foi entregue e já entrei em contato com a lannister que ainda neo deu retorno ,late_delivery;seller_issue,late_delivery
+56,Nota não tenho pra da quero meu produto,late_delivery,other
+57,Não recebi,late_delivery,late_delivery
+58,"Recebi meu produto, porém com defeito, ele não funciona, aguardo um contato para resolver meu problema",product_quality,product_quality
+59,"a Quase 20 dias aparece no rastreamento dificuldade na entrega, ja mandei mensagens e nada fora feito...ja esta em atraso de 5 dias da data prevista e sem providencia do site das lannister..
+fazer ",late_delivery;shipping;seller_issue,late_delivery;shipping
+60,Não entregaram ainda já ser passou da data de entrega.,late_delivery,late_delivery
+61,Não recebi o produto ainda!!! ,late_delivery,late_delivery
+62,Só pediria que na foto parecesse que na alça tem plástico para segurar. Pois confesso que não gostei dessa parte. ,other,product_quality
+63,O produto não chegou na data e não recomendado é nem compro mais nenhum produto,late_delivery,late_delivery
+64,o produto era pra ter cegado até dia 18 e não chegou,late_delivery,late_delivery
+65,Até a presente data não recebi o produto. Gostaria de saber como devo proceder.... solicito estorno do valor pago!?,late_delivery;payment,late_delivery;payment
+66,lannister nota dez,other,other
+67,É presente pro mor só saberei se veio correto qndo ele pegar comigo.mas a entrega foi péssima os Correios não entregou tive que ir buscar sempre compro site e tdos entregar certo mas por a targaryen nao,shipping,shipping
+68,fiz UMA COMPRA E JÁ PAGUEI A 1 PARCELA E ATÉ AGORA NÃO CHEGOU O MEU PRODUTO JÁ MANDEI EMAIL JÁ LIGUEI MAS NADA ESPERO UM RETORNO URGENTE POIS DESDE DE MARÇO QUE FIZ A COMPRA ESTOU AAGUARDANDO RESPOST,late_delivery;seller_issue,late_delivery;payment
+69,EVITAR COMPRAR NO FINAL DO ANO; DEMOROU A CHEGAR.,late_delivery,late_delivery
+70,"No momento da compra digitei o produto errado e não consigo trocar pelo produto correto pelo site, por isso quero devolver para utilizar o vale para efetuar a compra do produto correto.",other,wrong_product;seller_issue
+71,"Bom dia.
+O produto veio quebrado. 
+Quero a troca.",damaged_product,damaged_product;seller_issue
+72,Achei o prazo de entrega muito longo.,late_delivery,other
+73,A película veio completamente destruida.,damaged_product,other
+74,O produto veio riscado e amassado....sendo que a embalagem está em perfeito estado. Já fiz uma reclamação e estou aguardando o contato para a que a troca do produto seja feito o mais rápido possível. ,damaged_product,damaged_product;seller_issue;packaging
+75,"qualidade muito boa, prazo 100% ...",other,other
+76,Nao recebi o produto ainda. Preciso com urgência. Estou aguardando.,late_delivery,late_delivery
+77,Espero que eu receba minha mercadoria.,late_delivery,other
+78,Ainda não recebi o produto.,late_delivery,late_delivery
+79,O prazo já expirou e não recebi o produto,late_delivery,late_delivery
+80,Otimo produto para quem cozinha e precisa controlar a temperatura do forno.,other,other
+81,"Produto bem mais ou menos . Prazo : OK entrega: OK . porém , o produto parece de camelô , não é bonita , nem parece que comprei em loja . o matéria da mochila não é o pior , mas parece do camelô ! ",product_quality,other
+82,"Recebi o aparelho Playstation 2 e não veio com o controle original veio um paralelo, o aparelho apresenta defeito, de primeira liga e se desligado não liga novamente só depois de muitos tempo que liga",wrong_product;product_quality,late_delivery;product_quality
+83,"No anúncio dizia ""Marca--- Canon"" e eu recebi um produto ""Similar"" ""compatível"". Se eu quisesse um produto falsificado/pirata compraria na minha cidade por 10 reais, não precisaria recorrer à internet",wrong_product,product_quality
+84,Produto veio errado ,wrong_product,wrong_product
+85,Não recomendo pois recebi um produto diferente do solicitado,wrong_product,wrong_product
+86,Os quadrinhos são lindos...,other,other
+87,"Comprei um cesto de roupas e 4 tapetes. Porém nenhum tapete foi entregue, só chegou o cesto de roupas. ",missing_product,other
+88,Loja excelente. Cumpre o prazo.,other,other
+89,Tive problema com o produto e já abri uma reclamação com o stark,other,other
+90,Meu produto não foi entregue. Como devo proceder?,late_delivery,late_delivery
+91,"Boa noite,
+Só recebi o esterilizador, não recebi a almofada.
+Além disso, o esterilizador veio com a caixa aberta/rasgada.",missing_product;packaging,late_delivery;damaged_product;packaging
+92,"loja Medidas Bolsa Grande: 32cm de Altura x 45cm de Largura x 24cm de Espessura
+realidade
+consumidor Bolsa Grande: 28cm de Altura x 38cm de Largura x 14cm de Espessura
+",wrong_product,other
+93,"EFETIVEI A COMPRA DE 3 UNIDADES DO PRODUTO, PORÉM SÓ RECEBI 1 UNIDADE.",missing_product,missing_product
+94,"O produto é bom. É maior q eu imaginava, mas os documentos não cabem. Quem tem CNH tem q tirar o plástico pra guardar na carteira, pois não cabe com o plástico. Identidade não cabe. No geral é boa",other,product_quality
+95,"Poderia ser 5 estrelas, mas pelo fato do vidro do piano estar rachado, não vou poder dar as 5 estrelas.",damaged_product,damaged_product
+96,Nao veio o espeto,missing_product,late_delivery;missing_product
+97,comprei tapetes para meu carro e chegou uma capa para pneu do CrossFox... e até agora não tive nenhuma resposta do vendedor ,wrong_product;seller_issue,late_delivery
+98,Adorei muito perfeito tudo correto,other,other
+99,Não recebi o produto ,late_delivery,late_delivery
+100,"Produto ótimo, entrega rapida, super recomendo",other,other
+101,O produto foi entregue no prazo correto.,other,other
+102,O vendedor não esta cumprindo com os prazos de entrega. Não irei mais comprar nada com o mesmo. ,late_delivery;seller_issue,seller_issue
+103,"Produto com defeito, após contato com targaryen, aguardando envio de mensagem para troca do mesmo.
+",product_quality,late_delivery;product_quality;seller_issue
+104,"A garrafa foi entregue , só falta o fone bluetooth ",missing_product,other
+105,o edereco e outro ,shipping,other
+106,Tá demorando pra valer! Só espero não levar prejuízo!,late_delivery,late_delivery
+107,"Produto está descrito preto, chegou branco. ",wrong_product,other
+108,"Só recebi o controle remoto do cod.012339, feito através da Eletromassa componentes, Nota Fiscal nº 003570.
+O controle do cod. 012495, não constava na embalagem da entrega. ( faltou)
+Fico aguardando",missing_product,late_delivery;missing_product;seller_issue;packaging
+109,Muito bom eu recomendo produto excelente,other,other
+110,Adorei o produto e a entrega foi rápida.,other,other
+111,"Veio apenas 1 pendente, eu comprei 3 na nota está identificando 3 mas me entregaram somente 1 .e agora?",missing_product,missing_product
+112,Produto não chegou até agora.,late_delivery,late_delivery
+113,O produto veio com o rótulo colado e não impresso igual o original.,wrong_product,other
+114,"Não gostei do produto, pq ele é muito grande, mas é de ótima qualidade, só não é o q eu procurava...",other,product_quality
+115,É a primeira vez que há atraso nos meus pedidos. ,late_delivery,late_delivery
+116,"A voltagem veio errada, e demorou de mais pra chegar.Inclusive fiz hj a logística reversa. 
+Espero que o inflado certo não demore a chegar.",wrong_product;late_delivery,late_delivery;wrong_product;shipping
+117,"Apesar de dentro do prazo, achei a entrega bastante demorada.",late_delivery,late_delivery
+118,"Preciso saber quando será entregue minha encomenda,está me atrapalhando essa demora",late_delivery,late_delivery;shipping
+119,Entrega rápida ,other,other
+120,"O PRODUTO É DE PESSIMA QUALIDADE, 100% POLIESTER, TEXTURA HORRÍVEL, NÃO RECOMENDO.",product_quality,product_quality
+121,"Não considero que recebi o produto exatamente como imaginei, pois na imagem ilustrativa constava uma capa para a garrafa térmica, a qual não acompanhou o produto, não comprei em outra loja mais barata",missing_product,other
+122,"Produto veio com avarias no pé. Ligamos para o fabricante que disse que não era problema deles e sim da baratheon e desligou o telefone na minha cara.
+Tentamos troca pela baratheon e sempre dava erro.",damaged_product;seller_issue,damaged_product;seller_issue
+123,Esse veio correto. O primeiro não ,wrong_product,other
+124,Não tinha rastreamento e o produto veio desmontado é não tinha manual!,missing_product;shipping,product_quality;shipping
+125,"O produto demorou para sair da loja pelo menos 50 dias, se eu soubesse tinha comprado da china que viria mais rapido.",late_delivery,late_delivery
+126,Entrega antes do prazo previsto.,other,other
+127,A ENTREGA FOI ESTAVA AGENDADA PARA O DIA 20/03/18 E HOJE JA É 22 E NADA DA ENTREGA. ,late_delivery,other
+128,Nunca chegou o produto ,late_delivery,late_delivery
+129,Tentei obter uma resposta sobre o atraso de meu pedido diretamente com o fornecedor e não obtive resposta. Precisei entrar em contato com a lannister para intrrmediar isso.,late_delivery;seller_issue,late_delivery;seller_issue
+130,Assim que receber o item eu avalio com veracidade e tambem as recomendações.,other,other
+131,nao recomendo pq nem se quer me perguntaram a cor dos ursinhos na hora da comprar cliquei no rosa e veio azul .e agora dinheiro posto fora pois estou gravida de menina,wrong_product,other
+132,"péssima embalagem , tive que colar ele todo, fique com preguiça pelo preço de mandar de volta, mas não indico pra ninguém a loja...",packaging,packaging
+133,"A loja é boa 
+Mas meu produto veio com defeito
+Um cabo hdmi. Gostaria de saber como faço para trocar.",product_quality,product_quality;seller_issue
+134,"A loja me enviou um produto errado, comprei um produto de quase R$600 reais e me enviaram borracha de relógio de plástico.",wrong_product,wrong_product
+135,Se vocês não entregam onde eu morro porque cobram o frete sendo que tenho que ir buscar ,shipping,other
+136,muito prático para apartamento e visual elegante.,other,other
+137,.,other,other
+138,Me mandaram um produto com a medida muito menor do anunciado. Solicitei a troca.,wrong_product,seller_issue
+139,"recebi o produto antes do prazo marcado,",other,other
+140,"Sempre comprei e não tiver problema, porém dessa vem sim meus produtos não chegou até agora ",late_delivery,late_delivery
+141,Só recebi um produto está faltando o outro,missing_product,missing_product
+142,"Não recebi o produto. quero a devolução do valor pago.
+Falta de respeito.
+",late_delivery;seller_issue;payment,late_delivery;missing_product;seller_issue
+143,"Paguei e não recebi, quero meu dinheiro de volta lannister.",late_delivery;payment,late_delivery;payment
+144,Não é bom.o material ,product_quality,product_quality
+145,"Não aceito, esse valores de frete alto ",shipping,shipping
+146,Prazo de 40 dias e ainda sim passa do prazo,late_delivery,other
+147,"Já passou do prazo previsto e nada ainda, o relógio é para presente e a data até passou, se demorarem mais, quero reembolso",late_delivery,late_delivery;seller_issue;payment
+148,PRODUTO DEVOLVIDO AGUARDANDO O ESTORNO DO CARTÃO,payment,shipping;payment
+149,"A espuma é tão fina que a porta passa por cima do protetor. Não serve pra nada. Perdi tempo, me aborreci e ainda tem a pior parte, devolve-lo no Correio na semana do Natal. ",product_quality,product_quality

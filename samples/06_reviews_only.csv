@@ -1,0 +1,301 @@
+review_id,rating,review_text
+1,2,"Wrong size sent, refund was slow"
+2,4,Arrived late and the box was damaged
+3,5,Okay for the price
+4,3,Good value
+5,3,Good value
+6,4,Okay for the price
+7,5,Seller never replied to my message
+8,1,Good value
+9,3,"Terrible, stopped working in a week"
+10,1,"Not as described, poor quality"
+11,5,"Wrong size sent, refund was slow"
+12,5,"Perfect, will buy again"
+13,3,"Wrong size sent, refund was slow"
+14,3,Packaging was bad but product works
+15,4,Good value
+16,2,Okay for the price
+17,2,Good value
+18,3,Arrived late and the box was damaged
+19,4,Okay for the price
+20,1,"Not as described, poor quality"
+21,5,"Not as described, poor quality"
+22,4,"Terrible, stopped working in a week"
+23,3,Seller never replied to my message
+24,1,Arrived late and the box was damaged
+25,5,Seller never replied to my message
+26,1,Arrived late and the box was damaged
+27,1,"Great quality, fast delivery"
+28,1,Okay for the price
+29,1,Seller never replied to my message
+30,5,"Not as described, poor quality"
+31,3,"Wrong size sent, refund was slow"
+32,3,Seller never replied to my message
+33,5,"Great quality, fast delivery"
+34,4,Packaging was bad but product works
+35,2,"Great quality, fast delivery"
+36,4,Okay for the price
+37,5,"Great quality, fast delivery"
+38,3,"Terrible, stopped working in a week"
+39,5,"Not as described, poor quality"
+40,1,Packaging was bad but product works
+41,5,"Terrible, stopped working in a week"
+42,5,"Not as described, poor quality"
+43,5,Arrived late and the box was damaged
+44,5,Arrived late and the box was damaged
+45,3,"Great quality, fast delivery"
+46,1,Seller never replied to my message
+47,4,"Great quality, fast delivery"
+48,5,"Terrible, stopped working in a week"
+49,2,Seller never replied to my message
+50,3,Packaging was bad but product works
+51,4,Arrived late and the box was damaged
+52,5,"Great quality, fast delivery"
+53,5,Seller never replied to my message
+54,1,"Great quality, fast delivery"
+55,2,"Great quality, fast delivery"
+56,5,Arrived late and the box was damaged
+57,4,"Not as described, poor quality"
+58,5,Good value
+59,5,Good value
+60,5,"Perfect, will buy again"
+61,5,"Great quality, fast delivery"
+62,5,Seller never replied to my message
+63,3,"Wrong size sent, refund was slow"
+64,4,"Great quality, fast delivery"
+65,2,Seller never replied to my message
+66,5,Packaging was bad but product works
+67,5,Seller never replied to my message
+68,5,Seller never replied to my message
+69,4,Packaging was bad but product works
+70,3,"Wrong size sent, refund was slow"
+71,4,"Great quality, fast delivery"
+72,1,"Wrong size sent, refund was slow"
+73,5,"Terrible, stopped working in a week"
+74,4,"Not as described, poor quality"
+75,3,Packaging was bad but product works
+76,4,"Perfect, will buy again"
+77,5,"Wrong size sent, refund was slow"
+78,3,Okay for the price
+79,5,Arrived late and the box was damaged
+80,5,Arrived late and the box was damaged
+81,3,"Wrong size sent, refund was slow"
+82,1,"Terrible, stopped working in a week"
+83,5,"Wrong size sent, refund was slow"
+84,5,Okay for the price
+85,1,Good value
+86,5,"Terrible, stopped working in a week"
+87,5,"Not as described, poor quality"
+88,5,"Great quality, fast delivery"
+89,1,"Terrible, stopped working in a week"
+90,1,Arrived late and the box was damaged
+91,5,Packaging was bad but product works
+92,1,"Great quality, fast delivery"
+93,2,"Great quality, fast delivery"
+94,4,"Not as described, poor quality"
+95,4,Okay for the price
+96,5,Okay for the price
+97,2,Arrived late and the box was damaged
+98,5,Packaging was bad but product works
+99,2,Packaging was bad but product works
+100,5,"Wrong size sent, refund was slow"
+101,1,"Terrible, stopped working in a week"
+102,4,"Terrible, stopped working in a week"
+103,1,"Terrible, stopped working in a week"
+104,3,Okay for the price
+105,3,"Wrong size sent, refund was slow"
+106,5,Good value
+107,4,"Wrong size sent, refund was slow"
+108,1,Good value
+109,5,"Wrong size sent, refund was slow"
+110,5,Okay for the price
+111,5,"Perfect, will buy again"
+112,2,"Great quality, fast delivery"
+113,3,"Terrible, stopped working in a week"
+114,2,Packaging was bad but product works
+115,1,"Wrong size sent, refund was slow"
+116,1,Good value
+117,4,Okay for the price
+118,1,Okay for the price
+119,2,"Perfect, will buy again"
+120,5,"Not as described, poor quality"
+121,4,Arrived late and the box was damaged
+122,2,Okay for the price
+123,5,Good value
+124,3,"Not as described, poor quality"
+125,4,"Wrong size sent, refund was slow"
+126,3,"Perfect, will buy again"
+127,4,Seller never replied to my message
+128,4,Good value
+129,4,Packaging was bad but product works
+130,3,"Terrible, stopped working in a week"
+131,5,Good value
+132,5,Arrived late and the box was damaged
+133,2,Okay for the price
+134,1,"Perfect, will buy again"
+135,1,Arrived late and the box was damaged
+136,5,Seller never replied to my message
+137,5,"Great quality, fast delivery"
+138,2,"Perfect, will buy again"
+139,5,"Great quality, fast delivery"
+140,2,"Not as described, poor quality"
+141,4,Okay for the price
+142,4,"Terrible, stopped working in a week"
+143,5,Seller never replied to my message
+144,1,"Perfect, will buy again"
+145,3,"Terrible, stopped working in a week"
+146,4,Arrived late and the box was damaged
+147,1,"Not as described, poor quality"
+148,2,Seller never replied to my message
+149,4,Packaging was bad but product works
+150,5,Good value
+151,5,"Wrong size sent, refund was slow"
+152,5,Okay for the price
+153,5,Packaging was bad but product works
+154,5,"Great quality, fast delivery"
+155,5,Seller never replied to my message
+156,5,Okay for the price
+157,5,Arrived late and the box was damaged
+158,3,Arrived late and the box was damaged
+159,2,Good value
+160,5,"Terrible, stopped working in a week"
+161,2,"Not as described, poor quality"
+162,5,Arrived late and the box was damaged
+163,4,"Great quality, fast delivery"
+164,3,Arrived late and the box was damaged
+165,5,Good value
+166,2,Arrived late and the box was damaged
+167,4,"Wrong size sent, refund was slow"
+168,1,Good value
+169,5,"Not as described, poor quality"
+170,4,"Not as described, poor quality"
+171,5,"Not as described, poor quality"
+172,3,Good value
+173,5,"Terrible, stopped working in a week"
+174,5,Good value
+175,4,"Not as described, poor quality"
+176,5,Good value
+177,4,Good value
+178,4,Seller never replied to my message
+179,5,"Great quality, fast delivery"
+180,5,Okay for the price
+181,3,Packaging was bad but product works
+182,5,"Perfect, will buy again"
+183,2,"Great quality, fast delivery"
+184,4,"Terrible, stopped working in a week"
+185,5,"Perfect, will buy again"
+186,1,Okay for the price
+187,5,Arrived late and the box was damaged
+188,1,"Perfect, will buy again"
+189,5,"Perfect, will buy again"
+190,4,"Great quality, fast delivery"
+191,4,Packaging was bad but product works
+192,5,"Perfect, will buy again"
+193,4,Arrived late and the box was damaged
+194,5,"Great quality, fast delivery"
+195,1,"Not as described, poor quality"
+196,4,Good value
+197,4,Good value
+198,5,Packaging was bad but product works
+199,1,"Wrong size sent, refund was slow"
+200,4,"Terrible, stopped working in a week"
+201,4,Okay for the price
+202,4,"Perfect, will buy again"
+203,1,"Wrong size sent, refund was slow"
+204,4,Okay for the price
+205,2,Seller never replied to my message
+206,2,Good value
+207,5,Packaging was bad but product works
+208,2,"Terrible, stopped working in a week"
+209,4,"Not as described, poor quality"
+210,5,Good value
+211,5,Good value
+212,4,"Terrible, stopped working in a week"
+213,5,"Wrong size sent, refund was slow"
+214,4,"Not as described, poor quality"
+215,4,Good value
+216,5,"Great quality, fast delivery"
+217,5,Okay for the price
+218,4,Seller never replied to my message
+219,4,Good value
+220,4,"Great quality, fast delivery"
+221,3,"Wrong size sent, refund was slow"
+222,5,"Great quality, fast delivery"
+223,3,Okay for the price
+224,4,"Great quality, fast delivery"
+225,5,Arrived late and the box was damaged
+226,4,Okay for the price
+227,3,"Terrible, stopped working in a week"
+228,5,"Perfect, will buy again"
+229,3,Good value
+230,5,"Not as described, poor quality"
+231,5,"Not as described, poor quality"
+232,4,"Terrible, stopped working in a week"
+233,5,Good value
+234,1,Seller never replied to my message
+235,3,"Not as described, poor quality"
+236,5,Packaging was bad but product works
+237,4,Seller never replied to my message
+238,4,Arrived late and the box was damaged
+239,5,Packaging was bad but product works
+240,5,Seller never replied to my message
+241,4,Seller never replied to my message
+242,4,Okay for the price
+243,2,"Not as described, poor quality"
+244,3,"Wrong size sent, refund was slow"
+245,3,Okay for the price
+246,4,"Perfect, will buy again"
+247,5,Arrived late and the box was damaged
+248,3,Packaging was bad but product works
+249,4,"Not as described, poor quality"
+250,3,"Wrong size sent, refund was slow"
+251,4,"Not as described, poor quality"
+252,5,"Great quality, fast delivery"
+253,5,"Great quality, fast delivery"
+254,3,Good value
+255,3,Arrived late and the box was damaged
+256,5,Good value
+257,4,Seller never replied to my message
+258,5,Seller never replied to my message
+259,1,"Not as described, poor quality"
+260,5,Okay for the price
+261,3,Good value
+262,4,Packaging was bad but product works
+263,2,"Terrible, stopped working in a week"
+264,4,"Wrong size sent, refund was slow"
+265,5,"Not as described, poor quality"
+266,5,Arrived late and the box was damaged
+267,4,"Perfect, will buy again"
+268,5,"Perfect, will buy again"
+269,4,"Perfect, will buy again"
+270,3,"Perfect, will buy again"
+271,4,Arrived late and the box was damaged
+272,2,Okay for the price
+273,3,"Great quality, fast delivery"
+274,5,Packaging was bad but product works
+275,5,Packaging was bad but product works
+276,1,Packaging was bad but product works
+277,5,Seller never replied to my message
+278,5,Packaging was bad but product works
+279,4,Packaging was bad but product works
+280,1,Okay for the price
+281,5,Arrived late and the box was damaged
+282,2,Packaging was bad but product works
+283,4,"Perfect, will buy again"
+284,3,Seller never replied to my message
+285,4,Packaging was bad but product works
+286,3,"Terrible, stopped working in a week"
+287,4,Packaging was bad but product works
+288,4,Arrived late and the box was damaged
+289,4,Arrived late and the box was damaged
+290,2,Seller never replied to my message
+291,5,"Perfect, will buy again"
+292,3,"Not as described, poor quality"
+293,3,Okay for the price
+294,3,"Perfect, will buy again"
+295,1,Good value
+296,4,Good value
+297,5,Arrived late and the box was damaged
+298,5,Okay for the price
+299,2,"Not as described, poor quality"
+300,1,"Not as described, poor quality"

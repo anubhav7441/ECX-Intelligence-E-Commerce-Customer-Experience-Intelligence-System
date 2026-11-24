@@ -1,0 +1,193 @@
+{
+  "micro_prf_on_labelled_150": {
+    "v1": {
+      "precision": 0.671,
+      "recall": 0.662,
+      "f1": 0.667
+    },
+    "v2_word_boundary_fix": {
+      "precision": 0.674,
+      "recall": 0.655,
+      "f1": 0.664
+    },
+    "note": "v1 pattern 'ma qualidade' also fired inside 'otima qualidade'; v2 requires a word start. Aggregate change on 150 reviews is negligible, but the false positive on praise is removed."
+  },
+  "keywords_by_category": {
+    "damaged_product": {
+      "n_reviews": 830,
+      "top_distinctive_terms": [
+        "veio",
+        "quebrado",
+        "caixa",
+        "produto veio",
+        "com",
+        "quebrada",
+        "veio com",
+        "amassada",
+        "danificado",
+        "amassado",
+        "embalagem",
+        "veio quebrado"
+      ]
+    },
+    "wrong_product": {
+      "n_reviews": 1171,
+      "top_distinctive_terms": [
+        "errado",
+        "diferente",
+        "veio",
+        "outro",
+        "diferente do",
+        "veio errado",
+        "produto errado",
+        "que",
+        "errada",
+        "comprei",
+        "cor",
+        "outro produto"
+      ]
+    },
+    "missing_product": {
+      "n_reviews": 1657,
+      "top_distinctive_terms": [
+        "faltando",
+        "recebi",
+        "so",
+        "apenas",
+        "veio",
+        "recebi apenas",
+        "faltou",
+        "comprei",
+        "so recebi",
+        "um",
+        "dois",
+        "uma"
+      ]
+    },
+    "late_delivery": {
+      "n_reviews": 5633,
+      "top_distinctive_terms": [
+        "nao",
+        "nao recebi",
+        "ainda",
+        "ainda nao",
+        "recebi",
+        "ate",
+        "recebi produto",
+        "nao chegou",
+        "nao foi",
+        "produto nao",
+        "ate agora",
+        "agora"
+      ]
+    },
+    "seller_issue": {
+      "n_reviews": 2106,
+      "top_distinctive_terms": [
+        "troca",
+        "nao",
+        "fiscal",
+        "nota fiscal",
+        "devolucao",
+        "nota",
+        "devolver",
+        "trocar",
+        "quero",
+        "com",
+        "retorno",
+        "veio"
+      ]
+    },
+    "product_quality": {
+      "n_reviews": 2430,
+      "top_distinctive_terms": [
+        "otima qualidade",
+        "qualidade",
+        "otima",
+        "de otima",
+        "defeito",
+        "de",
+        "nao gostei",
+        "produto de",
+        "com defeito",
+        "nao",
+        "com",
+        "veio com"
+      ]
+    },
+    "shipping": {
+      "n_reviews": 1453,
+      "top_distinctive_terms": [
+        "correios",
+        "encomenda",
+        "dos correios",
+        "dos",
+        "que",
+        "nos correios",
+        "nos",
+        "os correios",
+        "nao",
+        "frete",
+        "foi",
+        "greve"
+      ]
+    },
+    "packaging": {
+      "n_reviews": 600,
+      "top_distinctive_terms": [
+        "embalagem",
+        "caixa",
+        "na embalagem",
+        "protecao",
+        "veio",
+        "sem",
+        "da embalagem",
+        "estava",
+        "com",
+        "com embalagem",
+        "mal",
+        "na"
+      ]
+    },
+    "payment": {
+      "n_reviews": 632,
+      "top_distinctive_terms": [
+        "cartao",
+        "dinheiro de",
+        "pagamento",
+        "de volta",
+        "volta",
+        "dinheiro",
+        "acredito",
+        "meu dinheiro",
+        "meu",
+        "quero",
+        "acredito que",
+        "nao"
+      ]
+    }
+  },
+  "main_issue_distribution_dissatisfied_with_comment": {
+    "late_delivery": 0.3476,
+    "other": 0.2127,
+    "missing_product": 0.121,
+    "wrong_product": 0.0905,
+    "product_quality": 0.0705,
+    "seller_issue": 0.0684,
+    "damaged_product": 0.0503,
+    "shipping": 0.0229,
+    "payment": 0.0083,
+    "packaging": 0.0078
+  },
+  "n_commented_reviews_used": 33228,
+  "main_issue_eval": {
+    "n_labelled_with_issue": 117,
+    "main_issue_in_true_set_rate": 0.632,
+    "note": "labels written by a single AI annotator (not independent human labels); small sample (150); 'hit' = predicted main issue is one of the labelled categories"
+  },
+  "multilingual_transformer_experiment": {
+    "status": "NOT RUN",
+    "reason": "model downloads (HuggingFace) are blocked in the build environment; no result is claimed. Script hook: ecx2/nlp/experiments.md describes the protocol."
+  },
+  "portuguese_handling": "accents/case normalised; negation window; 'praise' phrases removed before matching; English input detected and down-weighted"
+}

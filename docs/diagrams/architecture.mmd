@@ -1,0 +1,15 @@
+flowchart LR
+  U[Browser: guest / user / admin] --> F[Flask app factory]
+  F --> G{Security guard: login, CSRF, rate limit}
+  G --> P[Pages + Jinja2 templates]
+  G --> A1[API v1: Olist analytics]
+  G --> A2[API v2: risk, simulator, agents, assistant]
+  G --> A3[API md: your own datasets]
+  G --> A4[Insights: plain-English advice cards]
+  G --> A5[Demo: 500-row guest sample]
+  G --> A6[Admin panel]
+  A1 --> DB[(SQLite: Olist database)]
+  A1 --> PQ[(Processed parquet files)]
+  A2 --> M[Trained models + evidence ledger]
+  A3 --> UD[(Per-user dataset store)]
+  F --> AU[(Auth DB: users, audit, runs)]

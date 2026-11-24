@@ -1,0 +1,15 @@
+{
+  "n_sellers": 30,
+  "seed": 2026,
+  "agreement": {
+    "late_rate": "30/30",
+    "dissatisfied_rate": "30/30",
+    "verdict_H1": "30/30"
+  },
+  "evidence_completeness": "235/235 findings have a ledger id",
+  "actions_proposed": 29,
+  "actions_with_valid_evidence_links": "29/29",
+  "failures": 0,
+  "mean_seconds_per_investigation": 0.44,
+  "note": "Gold answers come from a separate pandas/scipy implementation, so this checks that agents report tool outputs faithfully and compute consistently; it does not prove the business conclusions are right. Manual-vs-agent timing and human usefulness ratings were NOT run."
+}

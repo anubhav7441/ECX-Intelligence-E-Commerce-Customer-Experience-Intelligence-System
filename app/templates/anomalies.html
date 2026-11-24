@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block title %}Anomaly Center - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Anomaly Center</h1>
+<div class="caveat mb-3">An anomaly is an <strong>investigation signal</strong>, not proof of fraud or fault. Always check data quality, seasonality and sample size first.</div>
+{% if not summ %}<div class="caveat">Run <code>python -m ecx2.anomaly.detect</code> first.</div>{% else %}
+<p class="note">{{ summ.validation_note }} Scores are comparable within a detector, not across detectors.</p>
+<div class="row g-2 mb-3"><div class="col-md-4"><select id="det" class="form-select form-select-sm"><option value="">All detectors</option>{% for d in summ.by_detector %}<option value="{{ d }}">{{ d.replace('_',' ') }} ({{ summ.by_detector[d] }})</option>{% endfor %}</select></div>
+<div class="col-md-4"><input id="ent" class="form-control form-control-sm" placeholder="seller id prefix (optional)"></div><div class="col-md-2"><button id="go" class="btn btn-sm btn-primary">Filter</button></div></div>
+<div id="aErr" class="alert alert-danger d-none"></div><div class="card"><div class="card-body p-0" id="aOut"></div></div>
+<div class="card mt-3 d-none" id="aDetail"><div class="card-header" id="aTitle"></div><div class="card-body" id="aBody"></div></div>{% endif %}
+{% endblock %}
+{% block scripts %}<script>
+async function load(){showErr('aErr');const q=new URLSearchParams({limit:100,detector:document.getElementById('det').value,entity:document.getElementById('ent').value.trim()});
+ const r=await fetch('/api/v2/anomalies?'+q);const j=await r.json();if(!r.ok){showErr('aErr',j.error);return}
+ const o=clear(document.getElementById('aOut'));
+ const t=table([{label:'ID',k:'anomaly_id'},{label:'Entity',f:x=>x.entity==='ALL'?'platform':x.entity.slice(0,10)},{label:'Detector',f:x=>x.detector.replace(/_/g,' ')},{label:'Period',k:'period'},{label:'n',k:'n'},
+  {label:'Measured',k:'measured'},{label:'Expected',f:x=>x.expected===''?'-':x.expected},{label:'Score',f:x=>num(x.score,0)}],j.rows);
+ t.querySelectorAll('tbody tr').forEach((tr,i)=>{tr.style.cursor='pointer';tr.onclick=()=>show(j.rows[i])});o.appendChild(t);
+ o.appendChild(el('div','Showing '+j.rows.length+' of '+j.n+' matching signals. Click a row for the explanation.','note p-2'))}
+function show(a){document.getElementById('aDetail').classList.remove('d-none');document.getElementById('aTitle').textContent=a.anomaly_id+' - '+a.detector.replace(/_/g,' ');
+ const b=clear(document.getElementById('aBody'));[['Why flagged',a.why_flagged],['Possible explanation (hypothesis)',a.possible_explanation],['Recommended investigation',a.recommended_investigation],['Caveat',a.caveat]].forEach(([k,v])=>{b.appendChild(el('div',k,'fw-semibold'));b.appendChild(el('p',v))});
+ if(a.entity_type==='seller'){const l=el('a','Investigate this seller with the agents','btn btn-sm btn-outline-primary',{href:'/investigate?seller='+a.entity});b.appendChild(l)}}
+document.getElementById('go').onclick=load;load();
+</script>{% endblock %}

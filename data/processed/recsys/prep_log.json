@@ -1,0 +1,15 @@
+{
+ "decisions": [
+  "Raw rows: orders 99441, items 112650, customers 99441, products 32951.",
+  "Excluded orders with status ['canceled', 'unavailable']: 549 item rows removed (the product was never delivered to the customer).",
+  "Dropped rows with missing customer/product/time: 0.",
+  "Dropped rows with non-positive price: 0.",
+  "customer_unique_id (not customer_id) identifies a person across orders; olist's customer_id changes with every order.",
+  "Each order_item row is one unit; repeated units of a product in one order are counted as one purchase event with a quantity.",
+  "Products with no category: 610; labelled 'unknown' (never guessed).",
+  "Interaction table: one row per customer-product pair (implicit feedback, 1 = purchased): 101521 rows, 94983 customers, 32729 products.",
+  "Customers with >=2 distinct products: 5431 (5.7%). Sparsity: 99.9967%.",
+  "Baskets (distinct products per order): 98199 orders, 3231 with >=2 distinct products.",
+  "The dataset has no product names or description text, only category, size, weight and counts; content features use these only."
+ ]
+}

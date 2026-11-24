@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Geographical Intelligence - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Geographical Intelligence</h1>
+<p class="lead-sm">Customer states and Brazilian macro-regions with at least 100 reviewed orders. Orange = the 95% confidence interval of the state's dissatisfied rate lies entirely above the platform average. Seller-customer distance uses the median coordinates of each zip-code prefix (straight-line, haversine).</p>
+<div class="row g-3 mb-3"><div class="col-lg-6"><div class="card"><div class="card-header">Dissatisfied reviews by customer state (%)</div><div class="card-body" style="height:520px"><canvas id="cSt"></canvas></div></div></div>
+<div class="col-lg-6"><img class="fig" src="{{ url_for('pages.figure', name='bi_state_late_vs_dissatisfied.png') }}" alt="State lateness vs dissatisfaction"><p class="note mt-1">States with more late deliveries tend to have more dissatisfaction, but not perfectly - for example Bahia (BA) and Rio de Janeiro (RJ) differ from the pattern.</p>
+<div class="card"><div class="card-header">Regions</div><div class="tbl-wrap"><table class="table table-sm mb-0"><thead><tr><th>Region</th><th>Orders</th><th>Avg score</th><th>Late %</th><th>Delivery days</th><th>Dissatisfied %</th></tr></thead><tbody>
+{% for r in regions %}<tr><td>{{ r.customer_region }}</td><td>{{ '{:,}'.format(r.orders) }}</td><td>{{ '%.2f'|format(r.avg_score) }}</td><td>{{ '%.1f'|format(r.late_rate*100) }}</td><td>{{ '%.1f'|format(r.avg_delivery_days) }}</td><td>{{ '%.1f'|format(r.dissatisfied_rate*100) }}</td></tr>{% endfor %}</tbody></table></div></div></div></div>
+<div class="card"><div class="card-header">State table</div><div class="tbl-wrap"><table class="table table-sm sticky-head mb-0" id="gt" data-dir="asc"><thead><tr>
+{% for h,n in [('State',0),('Orders',1),('Avg score',1),('Late %',1),('Delivery days',1),('Freight ratio (median)',1),('Dissatisfied %',1),('Hotspot',0)] %}<th role="button" onclick="sortTable('gt',{{ loop.index0 }},{{ 'true' if n else 'false' }})">{{ h }}</th>{% endfor %}</tr></thead><tbody>
+{% for r in states %}<tr><td>{{ r.customer_state }}</td><td>{{ r.orders }}</td><td>{{ '%.2f'|format(r.avg_score) }}</td><td>{{ '%.1f'|format(r.late_rate*100) }}</td><td>{{ '%.1f'|format(r.avg_delivery_days) }}</td><td>{{ '%.2f'|format(r.freight_ratio) }}</td><td>{{ '%.1f'|format(r.dissatisfied_rate*100) }}</td><td>{{ 'Yes' if r.hotspot else '' }}</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}
+{% block scripts %}<script>
+const S={{ states|tojson }}.slice().sort((a,b)=>b.dissatisfied_rate-a.dissatisfied_rate);
+mk('cSt',{type:'bar',data:{labels:S.map(s=>s.customer_state),datasets:[{data:S.map(s=>s.dissatisfied_rate*100),backgroundColor:S.map(s=>s.hotspot?C.orange:C.blue),borderRadius:3}]},options:{indexAxis:'y'}});
+</script>{% endblock %}

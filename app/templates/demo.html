@@ -1,0 +1,101 @@
+{% extends "public.html" %}
+{% block title %}Demo — ECX-Intelligence{% endblock %}
+{% block bodyclass %}demo{% endblock %}
+{% block navlinks %}<a class="l" href="{{ url_for('landing') }}">Home</a>{% endblock %}
+{% block navdemo %}<a class="btn-x" href="{{ url_for('auth.login') }}">Sign in</a>{% endblock %}
+{% block body %}
+<div class="demobar" role="status"><div class="wrap"><span><b>DEMO MODE</b>Showing a sample of at most <strong id="rl">{{ limits.rows }}</strong> real Olist orders. Predictions and investigations are limited.</span><a class="btn-x pri" href="{{ url_for('auth.register') }}">Create free account</a></div></div>
+<main class="wrap" style="padding-top:28px;padding-bottom:48px">
+  <h1 style="font-weight:800;font-size:1.7rem;margin:0 0 4px">Guided demo</h1>
+  <p style="color:var(--ink2);max-width:70ch" id="note">Loading the demo sample…</p>
+  <div class="dgrid" id="kpis"><div class="dk skeleton" style="height:78px"></div><div class="dk skeleton"></div><div class="dk skeleton"></div><div class="dk skeleton"></div></div>
+  <div class="row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:18px">
+    <div class="dpanel"><h3>Orders per month</h3><div class="chartbox"><canvas id="c1" role="img" aria-label="Orders per month"></canvas></div></div>
+    <div class="dpanel"><h3>Review score distribution</h3><div class="chartbox"><canvas id="c2" role="img" aria-label="Review score distribution"></canvas></div></div>
+    <div class="dpanel"><h3>Late-delivery rate by state (top 8 by orders)</h3><div class="chartbox"><canvas id="c3" role="img" aria-label="Late rate by state"></canvas></div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:18px">
+    <div class="dpanel"><h3>Sample orders</h3><p class="note" style="font-size:.82rem;color:var(--ink2)">Copy an order id for the prediction below.</p><div style="overflow:auto;max-height:320px"><table class="dt" id="ot"><thead><tr><th>Order id</th><th>State</th><th>Category</th><th>Score</th><th>Late</th></tr></thead><tbody></tbody></table></div></div>
+    <div>
+      <div class="dpanel"><h3>Limited prediction <small id="pu" style="font-weight:400;color:var(--ink2)"></small></h3>
+        <p style="font-size:.88rem;color:var(--ink2)">Risk of a bad review for one sample order, with its top 5 drivers.</p>
+        <div class="fld"><input id="oid" placeholder="order id (first 8+ characters)" aria-label="Order id" style="width:100%;padding:.55rem;border:1px solid #c9c8bf;border-radius:.5rem"></div>
+        <button class="btn-x pri" id="pb">Predict</button><div id="pr" style="margin-top:12px;font-size:.9rem" aria-live="polite"></div></div>
+      <div class="dpanel" style="margin-top:16px"><h3>Limited AI investigation <small id="iu" style="font-weight:400;color:var(--ink2)"></small></h3>
+        <p style="font-size:.88rem;color:var(--ink2)">Descriptive profile of one seller inside the sample.</p>
+        <div id="sl" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"></div>
+        <button class="btn-x pri" id="ib" disabled>Investigate selected seller</button><div id="ir" style="margin-top:12px;font-size:.9rem" aria-live="polite"></div></div>
+    </div>
+  </div>
+  <div class="dpanel" style="margin-top:18px" id="own">
+    <h3>Check your own data <small id="uu" style="font-weight:400;color:var(--ink2)"></small></h3>
+    <p style="font-size:.9rem;color:var(--ink2);max-width:75ch">Upload a <b>.csv</b> or <b>.xlsx</b> file (up to 5 MB). In demo mode only the <b>first <span class="rl2">{{ limits.rows }}</span> rows</b> are read and nothing is saved. You get a quick quality profile of those rows.</p>
+    <form id="uf" novalidate style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <input type="file" id="uff" accept=".csv,.xlsx" aria-label="Choose a CSV or Excel file" style="max-width:100%">
+      <button class="btn-x pri" id="ub" type="submit">Check my data</button>
+    </form>
+    <div id="ue" class="alert-x" role="alert" style="display:none;margin-top:10px"></div>
+    <div id="ur" style="margin-top:14px" aria-live="polite"></div>
+  </div>
+  <div class="lock" style="margin-top:18px"><b>Not available in demo:</b> full-size uploads (demo reads only the first {{ limits.rows }} rows of your own file), full-dataset analysis, the full multi-agent investigation, simulation, anomaly center, reports and history. <a href="{{ url_for('auth.register') }}">Register free</a> to unlock them.</div>
+</main>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script>
+var $=function(i){return document.getElementById(i)};
+function esc(t){var d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML;}
+function usage(u){$('pu').textContent='('+u.predictions.used+'/'+u.predictions.max+' used)';$('iu').textContent='('+u.investigations.used+'/'+u.investigations.max+' used)';}
+function ch(id,type,labels,data,color,fmtp){new Chart($(id),{type:type,data:{labels:labels,datasets:[{data:data,backgroundColor:color,borderColor:color,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:fmtp||function(v){return v}}}}}});}
+fetch('/api/demo/summary').then(function(r){return r.json()}).then(function(s){
+  if(s.error){$('note').textContent=s.error;return;}
+  $('note').textContent=s.note;$('rl').textContent=s.row_limit;var k=s.kpis;
+  $('kpis').innerHTML=[['Orders in sample',k.orders],['Late deliveries',(k.late_rate*100).toFixed(1)+'%'],['Mean review score',k.mean_review.toFixed(2)],['Dissatisfied (score ≤2)',(k.dissatisfied_rate*100).toFixed(1)+'%'],['Mean delivery days',k.mean_delivery_days.toFixed(1)]].map(function(x){return '<div class="dk"><b>'+esc(x[1])+'</b><span>'+esc(x[0])+'</span></div>'}).join('');
+  ch('c1','line',s.monthly.map(function(m){return m.order_purchase_timestamp||m.index||Object.values(m)[0]}),s.monthly.map(function(m){return m.orders}),'#2DD4BF');
+  ch('c2','bar',Object.keys(s.scores),Object.values(s.scores),'#2DD4BF');
+  ch('c3','bar',s.states.map(function(x){return x.customer_state}),s.states.map(function(x){return +(x.late*100).toFixed(1)}),'#FFB020',function(v){return v+'%'});
+  $('ot').tBodies[0].innerHTML=s.orders_preview.map(function(o){return '<tr><td><code>'+esc(o.order_id)+'</code></td><td>'+esc(o.customer_state)+'</td><td>'+esc(o.primary_category||'-')+'</td><td>'+esc(o.review_score)+'</td><td>'+(o.is_late?'yes':'no')+'</td></tr>'}).join('');
+  usage(s.usage);
+}).catch(function(){$('note').textContent='Could not load the demo. Please reload.'});
+fetch('/api/demo/sellers').then(function(r){return r.json()}).then(function(j){var sel=null;$('sl').innerHTML='';
+  j.sellers.forEach(function(s){var b=document.createElement('button');b.className='btn-x';b.style.padding='.3rem .6rem';b.textContent=s.id+' ('+s.orders+')';b.onclick=function(){sel=s.full;$('ib').disabled=false;[].forEach.call($('sl').children,function(c){c.style.background=''});b.style.background='#eaf2fc'};$('sl').appendChild(b)});
+  $('ib').onclick=function(){var b=$('ib');b.disabled=true;$('ir').textContent='Working…';fetch('/api/demo/investigate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({seller_prefix:sel})}).then(function(r){return r.json()}).then(function(r){
+    $('ir').innerHTML=r.error?'<div class="alert-x">'+esc(r.error)+'</div>':'<ul style="padding-left:18px">'+r.findings.map(function(f){return '<li>'+esc(f)+'</li>'}).join('')+'</ul><div class="lock">'+esc(r.limitation)+'</div>';b.disabled=false;
+    fetch('/api/demo/summary').then(function(x){return x.json()}).then(function(s){usage(s.usage)});});};});
+$('pb').onclick=function(){var b=$('pb');b.disabled=true;$('pr').textContent='Working…';fetch('/api/demo/predict',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({order_prefix:$('oid').value})}).then(function(r){return r.json()}).then(function(r){
+  if(r.error){$('pr').innerHTML='<div class="alert-x">'+esc(r.error)+'</div>';}
+  else{var rows=(r.contributions||[]).map(function(c){return '<tr><td>'+esc(c.feature)+'</td><td>'+esc(c.direction)+'</td></tr>'}).join('');
+    $('pr').innerHTML='<p><b>Risk score:</b> '+(r.risk_score!=null?(r.risk_score*100).toFixed(1)+'%':'n/a')+'<br><span style="color:var(--ink2)">Observed in this score band on the held-out test period: '+(r.observed_rate_in_band!=null?(r.observed_rate_in_band*100).toFixed(1)+'%':'n/a')+'</span></p><table class="dt"><tbody>'+rows+'</tbody></table><p style="color:var(--ink2);font-size:.82rem">'+esc(r.demo_note)+'</p>';}
+  b.disabled=false;fetch('/api/demo/summary').then(function(x){return x.json()}).then(function(s){usage(s.usage)});});};
+
+(function(){
+var MAXB=5*1024*1024;
+function showErr(m){var e=$('ue');e.textContent=m;e.style.display=m?'block':'none';}
+function tbl(head,rows){return '<div style="overflow:auto;max-height:300px"><table class="dt"><thead><tr>'+head.map(function(h){return '<th>'+esc(h)+'</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+esc(c)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>';}
+$('uf').addEventListener('submit',function(ev){ev.preventDefault();showErr('');$('ur').innerHTML='';
+  var f=$('uff').files[0];
+  if(!f){showErr('Choose a .csv or .xlsx file first.');return;}
+  if(!/\.(csv|xlsx)$/i.test(f.name)){showErr('Only .csv or .xlsx files can be checked in demo mode.');return;}
+  if(f.size===0){showErr('The file is empty.');return;}
+  if(f.size>MAXB){showErr('Demo mode accepts files up to 5 MB. Register a free account for larger files.');return;}
+  var fd=new FormData();fd.append('file',f);var b=$('ub');b.disabled=true;b.textContent='Checking…';
+  window.ECX_BUSY&&ECX_BUSY.start('upload');
+  fetch('/api/demo/upload',{method:'POST',body:fd}).then(function(r){return r.json().catch(function(){return {error:'Unexpected server answer.'}})}).then(function(r){
+    if(r.error){showErr(r.error);}
+    else{
+      $('uu').textContent='('+r.usage.used+'/'+r.usage.max+' used)';
+      var h='<div class="lock" style="border-left:4px solid #f5b301"><b>'+(r.truncated?'Limited to '+r.row_limit+' rows only. ':'')+'</b>'+esc(r.notice)+'</div>';
+      h+='<div class="dgrid" style="margin-top:10px">'+[['Rows read',r.rows_used],['Rows in file',r.rows_in_file],['Columns',r.n_cols],['Duplicate rows',r.duplicate_rows],['Quality score',r.quality_score+' / 100']].map(function(x){return '<div class="dk"><b>'+esc(x[1])+'</b><span>'+esc(x[0])+'</span></div>'}).join('')+'</div>';
+      if(r.notes&&r.notes.length)h+='<ul style="padding-left:18px;margin-top:8px">'+r.notes.map(function(n){return '<li>'+esc(n)+'</li>'}).join('')+'</ul>';
+      if(r.issues&&r.issues.length)h+='<h4 style="margin-top:12px">Things to check</h4><ul style="padding-left:18px">'+r.issues.map(function(i){return '<li>'+esc(i.issue)+'</li>'}).join('')+'</ul>';
+      h+='<h4 style="margin-top:12px">Columns</h4>'+tbl(['Column','Type','Missing %','Unique','Example'],r.columns.map(function(c){return [c.name,c.kind,c.missing_pct,c.unique,c.example]}));
+      if(r.numeric_summary.length)h+='<h4 style="margin-top:12px">Numbers (first '+esc(r.rows_used)+' rows)</h4>'+tbl(['Column','Min','Mean','Max'],r.numeric_summary.map(function(c){return [c.name,c.min,c.mean==null?null:Math.round(c.mean*100)/100,c.max]}));
+      if(r.top_categories)h+='<h4 style="margin-top:12px">Most common values in “'+esc(r.top_categories.column)+'”</h4>'+tbl(['Value','Count'],r.top_categories.top.map(function(t){return [t.value,t.count]}));
+      h+='<h4 style="margin-top:12px">First rows</h4>'+tbl(r.preview_columns,r.preview_rows);
+      h+='<p style="color:var(--ink2);font-size:.82rem;margin-top:8px">'+esc(r.limitation)+'</p>';
+      $('ur').innerHTML=h;
+    }
+  }).catch(function(){showErr('Could not reach the server. Please try again.');}).then(function(){b.disabled=false;b.textContent='Check my data';window.ECX_BUSY&&ECX_BUSY.end('upload');});
+});
+})();
+</script>{% endblock %}

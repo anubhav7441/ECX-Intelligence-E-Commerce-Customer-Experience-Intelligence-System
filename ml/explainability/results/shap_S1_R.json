@@ -1,0 +1,260 @@
+{
+  "model": "XGBoost",
+  "feature_set": "S1+R delivery-time + history",
+  "n_explained": 14374,
+  "top15": [
+    {
+      "feature": "delay_days",
+      "mean_abs_shap": 0.22383298667820817
+    },
+    {
+      "feature": "n_items",
+      "mean_abs_shap": 0.15763063836675353
+    },
+    {
+      "feature": "delivery_days",
+      "mean_abs_shap": 0.095625168195773
+    },
+    {
+      "feature": "seller_hist_mean",
+      "mean_abs_shap": 0.06829571317141699
+    },
+    {
+      "feature": "is_late",
+      "mean_abs_shap": 0.06637995681086656
+    },
+    {
+      "feature": "seller_hist_neg",
+      "mean_abs_shap": 0.02909030438335189
+    },
+    {
+      "feature": "seller_handling_days",
+      "mean_abs_shap": 0.023289515834419214
+    },
+    {
+      "feature": "n_sellers",
+      "mean_abs_shap": 0.013852236877339117
+    },
+    {
+      "feature": "estimated_days",
+      "mean_abs_shap": 0.008927470411366586
+    },
+    {
+      "feature": "log_freight_value",
+      "mean_abs_shap": 0.006588973203152365
+    },
+    {
+      "feature": "carrier_transit_days",
+      "mean_abs_shap": 0.005847877677488559
+    },
+    {
+      "feature": "cat_hist_mean",
+      "mean_abs_shap": 0.0057421083335117236
+    },
+    {
+      "feature": "log_total_volume_cm3",
+      "mean_abs_shap": 0.005416582387325754
+    },
+    {
+      "feature": "distance_km",
+      "mean_abs_shap": 0.005209045207914473
+    },
+    {
+      "feature": "seller_hist_n",
+      "mean_abs_shap": 0.005058978753545304
+    }
+  ],
+  "group_share_pct": {
+    "Delivery performance": 57.571850123281735,
+    "Order structure": 23.07131206172786,
+    "Historical reviews": 15.20423771692155,
+    "Geography": 1.4178966383573344,
+    "Product": 1.3623841303182436,
+    "Price & freight": 1.2149820194700371,
+    "Payment type": 0.12275449727133546,
+    "Time of purchase": 0.034582812651910426
+  },
+  "delivery_feature_ranks": {
+    "delay_days": 1,
+    "delivery_days": 3,
+    "is_late": 5,
+    "carrier_transit_days": 11,
+    "estimated_days": 9
+  },
+  "local_examples": {
+    "highest_risk_true_dissatisfied": {
+      "probability_dissatisfied": 0.8037421107292175,
+      "threshold": 0.5814061164855957,
+      "predicted_dissatisfied": true,
+      "base_value_logodds": 0.0018707552226260304,
+      "contributions": [
+        {
+          "feature": "delay_days",
+          "value": 10.0,
+          "shap_logodds": 0.8740521669387817,
+          "direction": "raises risk"
+        },
+        {
+          "feature": "is_late",
+          "value": 1.0,
+          "shap_logodds": 0.27137377858161926,
+          "direction": "raises risk"
+        },
+        {
+          "feature": "delivery_days",
+          "value": 31.790914351851853,
+          "shap_logodds": 0.22156192362308502,
+          "direction": "raises risk"
+        },
+        {
+          "feature": "n_items",
+          "value": 1.0,
+          "shap_logodds": -0.04250885546207428,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "seller_handling_days",
+          "value": 15.784583333333334,
+          "shap_logodds": 0.03387145325541496,
+          "direction": "raises risk"
+        },
+        {
+          "feature": "seller_hist_mean",
+          "value": 4.022119340029294,
+          "shap_logodds": 0.023902619257569313,
+          "direction": "raises risk"
+        },
+        {
+          "feature": "seller_hist_neg",
+          "value": 0.16013615539011763,
+          "shap_logodds": 0.022828804329037666,
+          "direction": "raises risk"
+        },
+        {
+          "feature": "distance_km",
+          "value": 2266.9427392725624,
+          "shap_logodds": -0.009156997315585613,
+          "direction": "lowers risk"
+        }
+      ],
+      "order_id": "e1320973675a5fc37fab54cb22c582ab",
+      "actual_dissatisfied": 1
+    },
+    "lowest_risk_true_satisfied": {
+      "probability_dissatisfied": 0.3159848153591156,
+      "threshold": 0.5814061164855957,
+      "predicted_dissatisfied": false,
+      "base_value_logodds": 0.0018707552226260304,
+      "contributions": [
+        {
+          "feature": "delay_days",
+          "value": -15.0,
+          "shap_logodds": -0.23307844996452332,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "n_items",
+          "value": 1.0,
+          "shap_logodds": -0.12758831679821014,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "seller_hist_mean",
+          "value": 4.411598269057016,
+          "shap_logodds": -0.11393841356039047,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "delivery_days",
+          "value": 4.945868055555556,
+          "shap_logodds": -0.1073116734623909,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "is_late",
+          "value": 0.0,
+          "shap_logodds": -0.07022459805011749,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "seller_hist_neg",
+          "value": 0.041085238550643464,
+          "shap_logodds": -0.057311419397592545,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "seller_handling_days",
+          "value": 0.6429398148148148,
+          "shap_logodds": -0.01978304237127304,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "cat_hist_mean",
+          "value": 4.3332285397766395,
+          "shap_logodds": -0.009963910095393658,
+          "direction": "lowers risk"
+        }
+      ],
+      "order_id": "0f1a032292563a581f27eac807f97a05",
+      "actual_dissatisfied": 0
+    },
+    "missed_dissatisfied_false_negative": {
+      "probability_dissatisfied": 0.3186977803707123,
+      "threshold": 0.5814061164855957,
+      "predicted_dissatisfied": false,
+      "base_value_logodds": 0.0018707552226260304,
+      "contributions": [
+        {
+          "feature": "delay_days",
+          "value": -6.0,
+          "shap_logodds": -0.22375577688217163,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "seller_hist_mean",
+          "value": 4.444318692176412,
+          "shap_logodds": -0.12059137225151062,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "n_items",
+          "value": 1.0,
+          "shap_logodds": -0.11714047938585281,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "delivery_days",
+          "value": 6.3767708333333335,
+          "shap_logodds": -0.0960412323474884,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "is_late",
+          "value": 0.0,
+          "shap_logodds": -0.07544167339801788,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "seller_hist_neg",
+          "value": 0.05326440246048618,
+          "shap_logodds": -0.05748278275132179,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "seller_handling_days",
+          "value": 0.18802083333333333,
+          "shap_logodds": -0.014852374792098999,
+          "direction": "lowers risk"
+        },
+        {
+          "feature": "cat_hist_mean",
+          "value": 4.3793756094308645,
+          "shap_logodds": -0.009944281540811062,
+          "direction": "lowers risk"
+        }
+      ],
+      "order_id": "993f3fc78c8cdf418bd5b0f7cfffcaa9",
+      "actual_dissatisfied": 1
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Customer Voice 2.0 - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Customer Voice Intelligence 2.0</h1>
+<p class="lead-sm">Analyse a review: sentiment, complaint category, <strong>main issue</strong>, evidence keywords, severity, a root-cause <em>hypothesis</em> and a heuristic confidence. Built for Portuguese; English text is detected and flagged as unreliable. Rule-based categories scored micro-F1 about 0.66 on a 150-review sample labelled by a single AI annotator.</p>
+<div class="row g-3"><div class="col-lg-6"><div class="card"><div class="card-header">Review text</div><div class="card-body"><form id="f"><textarea id="t" class="form-control mb-2" rows="5" maxlength="2000" required placeholder="Ex.: O produto chegou quebrado e a entrega atrasou muito."></textarea><button class="btn btn-primary">Analyse</button></form><div id="err" class="alert alert-danger mt-2 d-none"></div></div></div>
+<div class="card mt-3"><div class="card-header">Result</div><div class="card-body" id="out"><span class="note">Enter a review and press Analyse.</span></div></div></div>
+<div class="col-lg-6">{% if res %}<div class="card mb-3"><div class="card-header">Main issue among commented 1-2 star reviews</div><div class="card-body" style="height:280px"><canvas id="c"></canvas></div></div>
+<div class="card"><div class="card-header">Distinctive terms per complaint category (TF-IDF)</div><div class="tbl-wrap"><table class="table table-sm mb-0"><thead><tr><th>Category</th><th>Reviews</th><th>Top terms</th></tr></thead><tbody>
+{% for c,v in res.keywords_by_category.items() %}<tr><td>{{ c.replace('_',' ') }}</td><td>{{ v.n_reviews }}</td><td style="white-space:normal">{{ v.top_distinctive_terms[:8]|join(', ') }}</td></tr>{% endfor %}</tbody></table></div></div>{% else %}<div class="caveat">Run <code>python -m ecx2.nlp.build</code>.</div>{% endif %}</div></div>
+{% endblock %}
+{% block scripts %}<script>
+{% if res %}const d={{ res.main_issue_distribution_dissatisfied_with_comment|tojson }};mk('c',{type:'bar',data:{labels:Object.keys(d).map(x=>x.replace(/_/g,' ')),datasets:[{data:Object.values(d).map(x=>x*100),backgroundColor:'#2a78d6'}]},options:{indexAxis:'y',scales:{x:{title:{display:true,text:'% of reviews'}}}}});{% endif %}
+f.addEventListener('submit',async e=>{e.preventDefault();showErr('err');
+ try{const r=await postJSON('/api/v2/voice',{text:t.value});const o=clear(document.getElementById('out'));
+  const row=[['Language',r.language],['Sentiment (rules / model)',r.sentiment_rule+' / '+(r.sentiment_model?Object.entries(r.sentiment_model).sort((a,b)=>b[1]-a[1])[0][0]:'-')],['Main issue',r.main_issue.replace(/_/g,' ')],['All categories',r.complaint_categories.join(', ')],['Evidence keywords',(r.keywords||[]).join(', ')||'-'],['Severity',r.severity],['Aspects',Object.entries(r.aspects).map(([k,v])=>k+': '+v).join('; ')||'-'],['Possible root cause (hypothesis)',r.possible_root_cause],['Confidence (heuristic)',String(r.confidence)]];
+  o.appendChild(table([{label:'Field',k:0},{label:'Value',k:1}],row.map(x=>({0:x[0],1:x[1]}))));
+  o.appendChild(el('div',r.caveats.join(' ')+' '+r.confidence_note,'note mt-2'));
+ }catch(x){showErr('err',x.message)}});
+</script>{% endblock %}

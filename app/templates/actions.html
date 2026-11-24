@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% block title %}Action Center - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Action Center &amp; Evidence Ledger</h1>
+<div class="caveat mb-3"><strong>Human approval required.</strong> The system only <em>proposes</em> actions. A named reviewer approves or rejects each one; "completed" records a human's completion note. No real-world action is ever executed by this software.</div>
+<ul class="nav nav-tabs mb-3"><li class="nav-item"><button class="nav-link active" data-tab="a">Actions</button></li><li class="nav-item"><button class="nav-link" data-tab="e">Evidence ledger</button></li><li class="nav-item"><button class="nav-link" data-tab="n">New manual action</button></li></ul>
+<div id="tab-a"><div class="mb-2"><select id="flt" class="form-select form-select-sm w-auto"><option value="">All statuses</option><option>proposed</option><option>approved</option><option>in_progress</option><option>completed</option><option>rejected</option></select></div>
+<div class="mb-2"><label class="note">Your name (required for every decision)</label><input id="actor" class="form-control form-control-sm w-auto" placeholder="reviewer name"></div>
+<div id="aErr" class="alert alert-danger d-none"></div><div id="list"></div></div>
+<div id="tab-e" class="d-none"><div class="card"><div class="card-body p-0" id="ev"></div></div></div>
+<div id="tab-n" class="d-none"><div class="card"><div class="card-body"><form id="nf" class="row g-2">
+<div class="col-md-6"><label class="form-label note">Title</label><input class="form-control" name="title" required></div>
+<div class="col-md-3"><label class="form-label note">Priority</label><select class="form-select" name="priority">{% for p in priorities %}<option {{ 'selected' if p=='Medium' }}>{{ p }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><label class="form-label note">Owner role</label><select class="form-select" name="owner_role">{% for r in roles %}<option>{{ r }}</option>{% endfor %}</select></div>
+<div class="col-12"><label class="form-label note">Reason / evidence (a ledger entry is created from this)</label><textarea class="form-control" name="reason" required></textarea></div>
+<div class="col-12"><button class="btn btn-primary">Propose action</button></div></form><div id="nErr" class="alert alert-danger mt-2 d-none"></div></div></div></div>
+{% endblock %}
+{% block scripts %}<script>
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+ ['a','e','n'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('d-none',t!==b.dataset.tab));if(b.dataset.tab==='e')loadEv()});
+async function act(id,status){const note=prompt('Note for this decision'+(status==='completed'||status==='rejected'?' (required)':' (optional)'))||'';showErr('aErr');
+ try{await postJSON('/api/v2/actions/'+id+'/status',{status,actor:actor.value,note});load()}catch(x){showErr('aErr',x.message)}}
+async function load(){const j=await (await fetch('/api/v2/actions'+(flt.value?'?status='+flt.value:''))).json();const o=clear(document.getElementById('list'));
+ if(!j.actions.length){o.appendChild(el('p','No actions yet. Run an investigation in the AI Investigation Center to generate proposals.','note'));return}
+ j.actions.forEach(a=>{const c=el('div',null,'card mb-2');const b=el('div',null,'card-body');const h=el('div',null,'d-flex justify-content-between');
+  h.appendChild(el('strong',a.action_id+' - '+a.title));const s=el('span');s.appendChild(badge(a.priority,a.priority==='High'||a.priority==='Critical'?'danger':'secondary'));s.appendChild(badge(a.status,a.status==='completed'?'success':'primary'));h.appendChild(s);b.appendChild(h);
+  b.appendChild(el('div','Reason: '+a.reason,'note'));b.appendChild(el('div','Owner role: '+a.owner_role+' | Evidence: '+a.evidence_ids.join(', ')+' | Created: '+a.created_at+' | Source: '+a.source,'note'));
+  if(a.completion_notes)b.appendChild(el('div','Completion note: '+a.completion_notes,'note'));
+  const d=el('details');d.appendChild(el('summary','Review history ('+a.history.length+')','note'));a.history.forEach(x=>d.appendChild(el('div',x.ts+': '+(x.from_status||'-')+' -> '+x.to_status+' by '+x.actor+(x.note?' ('+x.note+')':''),'note')));b.appendChild(d);
+  const bt=el('div',null,'mt-2');const nxt={proposed:['approved','rejected'],approved:['in_progress','completed','rejected'],in_progress:['completed']}[a.status]||[];
+  nxt.forEach(n=>{const x=el('button',n.replace('_',' '),'btn btn-sm btn-outline-secondary me-1');x.onclick=()=>act(a.action_id,n);bt.appendChild(x)});b.appendChild(bt);c.appendChild(b);o.appendChild(c)})}
+async function loadEv(){const j=await (await fetch('/api/v2/evidence')).json();const o=clear(document.getElementById('ev'));
+ o.appendChild(table([{label:'ID',k:'finding_id'},{label:'Module',k:'source_module'},{label:'Entity',f:x=>(x.entity_id||'-').slice(0,10)},{label:'Metric',k:'metric'},{label:'Finding',k:'description'},{label:'Confidence',k:'confidence'},{label:'Time',k:'created_at'},{label:'Limitation',k:'limitation'}],j.evidence))}
+flt.onchange=load;
+nf.addEventListener('submit',async e=>{e.preventDefault();showErr('nErr');const b={};new FormData(e.target).forEach((v,k)=>b[k]=v);b.actor=actor.value||'manual';
+ try{await postJSON('/api/v2/actions',b);nf.reset();document.querySelector('[data-tab=a]').click();load()}catch(x){showErr('nErr',x.message)}});
+load();
+</script>{% endblock %}

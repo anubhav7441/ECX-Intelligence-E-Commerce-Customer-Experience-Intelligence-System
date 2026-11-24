@@ -1,0 +1,3 @@
+# Extra packages for running behind a real web server. Install after requirements.txt:  pip install -r requirements-prod.txt
+gunicorn==23.0.0; sys_platform != "win32"
+waitress==3.0.2

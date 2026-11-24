@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="{{ csrf_token }}">
+<title>{% block title %}ECX-Intelligence{% endblock %}</title>
+<meta name="description" content="{% block desc %}ECX-Intelligence turns your sales and customer data into plain-English advice: what is wrong, why, and what to do.{% endblock %}">
+<link href="{{ url_for('static', filename='css/fonts.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/public.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
+</head>
+<body class="pub {% block bodyclass %}{% endblock %}" data-auth="0" data-user="{{ 1 if user else 0 }}">
+<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+<script src="{{ url_for('static', filename='js/guard.js') }}"></script>
+{% block header %}<header class="pnav"><div class="wrap">
+  <a class="logo" href="{{ url_for('landing') }}"><span class="mark"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/></svg></span><span>ECX-<span class="n">Intelligence</span></span></a>
+  <nav class="links" aria-label="Main">
+    <div class="mid">{% block navlinks %}{% endblock %}</div>
+    <div class="rt">{% if user %}<a class="btn-x pri" href="{{ url_for('auth.workspace') }}">Open my workspace</a>
+    {% else %}<a class="btn-x white" href="{{ url_for('auth.register') }}">Create free account</a>{% block navdemo %}<a class="btn-x" href="{{ url_for('demo.page') }}">Explore demo</a>{% endblock %}{% endif %}</div>
+  </nav>
+</div></header>{% endblock %}
+{% block body %}{% endblock %}
+{% block footer %}<footer class="pf"><div class="wrap"><span>ECX-Intelligence — final-year major project. Demo data: public Olist marketplace dataset (2016–2018).</span><span>Research prototype · runs on your own computer</span></div></footer>{% endblock %}
+{% block scripts %}{% endblock %}
+</body></html>

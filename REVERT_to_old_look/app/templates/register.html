@@ -1,0 +1,46 @@
+{% extends "public.html" %}
+{% block title %}Create account — ECX-Intelligence{% endblock %}
+{% block bodyclass %}authpage{% endblock %}
+{% block header %}{% endblock %}{% block footer %}{% endblock %}
+{% block body %}<main class="split">
+  {% include "_authside.html" %}
+  <div class="r">
+    <h1>Get started</h1>
+    <div class="tabs" role="tablist"><a class="on" href="{{ url_for('auth.register') }}" aria-current="page">Sign up</a><a href="{{ url_for('auth.login') }}">Sign in</a></div>
+    {% if errors %}<div class="alert-x" role="alert">Please fix the highlighted fields.</div>{% endif %}
+    <form method="post" action="{{ url_for('auth.register') }}" novalidate id="rf">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="fld {{ 'bad' if errors.name }}"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required value="{{ form.name }}">{% if errors.name %}<div class="err">{{ errors.name }}</div>{% endif %}</div>
+      <div class="fld {{ 'bad' if errors.email }}"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="username" required value="{{ form.email }}">{% if errors.email %}<div class="err">{{ errors.email }}</div>{% endif %}</div>
+      <div class="fld {{ 'bad' if errors.password }}"><label for="password">Password</label><div class="pw"><input id="password" name="password" type="password" autocomplete="new-password" required><button type="button" id="eye" aria-label="Show or hide password">Show</button></div>
+        <div class="meter" aria-hidden="true"><i id="m1"></i><i id="m2"></i><i id="m3"></i></div><div class="meter-l"><span>10+ characters</span><span>1+ number</span><span>Letters</span></div>{% if errors.password %}<div class="err">{{ errors.password }}</div>{% endif %}</div>
+      <div class="fld {{ 'bad' if errors.confirm }}"><label for="confirm">Confirm password</label><input id="confirm" name="confirm" type="password" autocomplete="new-password" required>{% if errors.confirm %}<div class="err">{{ errors.confirm }}</div>{% endif %}</div>
+      <button class="btn-x pri lg" style="width:100%" id="sb">Create account</button>
+    </form>
+    <p class="alt">Already registered? <a href="{{ url_for('auth.login') }}">Sign in</a> · <a href="{{ url_for('demo.page') }}">Explore demo</a></p>
+  </div>
+</main>{% endblock %}
+{% block scripts %}<script>
+var pw=document.getElementById('password');
+pw.addEventListener('input',function(){var v=pw.value;document.getElementById('m1').className=v.length>=10?'ok':'';document.getElementById('m2').className=/\d/.test(v)?'ok':'';document.getElementById('m3').className=/[A-Za-z]/.test(v)?'ok':'';});
+var TYPO={'gmial.com':'gmail.com','gmai.com':'gmail.com','gmail.co':'gmail.com','gmail.con':'gmail.com','gamil.com':'gmail.com','gmil.com':'gmail.com','gmaill.com':'gmail.com','gmail.in':'gmail.com','yahho.com':'yahoo.com','yaho.com':'yahoo.com','yahoo.con':'yahoo.com','hotmial.com':'hotmail.com','hotmail.con':'hotmail.com','outlok.com':'outlook.com','outlook.con':'outlook.com'};
+function emailErr(e){if(!e||e.length>254||e.split('@').length!==2||!/^[A-Za-z0-9._%+\-]{1,64}@[A-Za-z0-9.\-]{1,190}\.[A-Za-z]{2,24}$/.test(e))return 'Enter a valid email address, for example name@example.com.';
+ var p=e.split('@'),l=p[0],d=p[1].toLowerCase();
+ if(l.charAt(0)==='.'||l.slice(-1)==='.'||l.indexOf('..')>-1)return 'The part before @ cannot start or end with a dot or have two dots in a row.';
+ var parts=d.split('.');for(var i=0;i<parts.length;i++){if(!parts[i]||parts[i].charAt(0)==='-'||parts[i].slice(-1)==='-'||parts[i].length>63)return 'The domain after @ is not valid.';}
+ if(!/^[a-z]{2,24}$/.test(parts[parts.length-1]))return 'The domain after @ is not valid.';
+ if(TYPO[d])return 'Did you mean '+l+'@'+TYPO[d]+'? Please check the spelling.';
+ if(d==='gmail.com'){var b=l.split('+')[0];if(b.length<6||b.length>30||!/^[A-Za-z0-9.]+$/.test(b)||/^\d+$/.test(b))return 'This is not a valid Gmail address. Gmail names have 6 to 30 letters, numbers or dots.';}
+ return '';}
+function fe(id,msg){var f=document.getElementById(id).parentNode;while(f&&!f.classList.contains('fld'))f=f.parentNode;var o=f.querySelector('.err');if(!o){o=document.createElement('div');o.className='err';f.appendChild(o);}o.textContent=msg;f.classList.toggle('bad',!!msg);return !msg;}
+document.getElementById('rf').addEventListener('submit',function(e){
+  var n=document.getElementById('name').value.trim().replace(/\s+/g,' '),em=document.getElementById('email').value.trim(),p=pw.value,c=document.getElementById('confirm').value;
+  var ok=[
+   fe('name',n.length<2||n.length>60?'Name must be 2-60 characters.':''),
+   fe('email',emailErr(em)),
+   fe('password',p.length<10?'Use at least 10 characters.':!/\d/.test(p)?'Include at least one number.':!/[A-Za-z]/.test(p)?'Include at least one letter.':p.length>200?'Password is too long.':''),
+   fe('confirm',c!==p?'The two passwords do not match.':'')];
+  if(ok.indexOf(false)>-1){e.preventDefault();return;}
+  var b=document.getElementById('sb');b.disabled=true;b.textContent='Creating…';});
+document.getElementById('eye').onclick=function(){var s=pw.type==='password';pw.type=s?'text':'password';this.textContent=s?'Hide':'Show';};
+</script>{% endblock %}

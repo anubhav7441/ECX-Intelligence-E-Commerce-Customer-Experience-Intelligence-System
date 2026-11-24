@@ -1,0 +1,44 @@
+{% extends "base.html" %}{% block title %}{{ a.alert_id }} - ECX-Intelligence{% endblock %}
+{% block content %}
+<p class="note mb-1"><a href="{{ url_for('ops.center') }}">&larr; Operations Center</a></p>
+<h1 class="page">{{ a.alert_id }}: {{ a.title }}</h1>
+<div class="card mb-3"><div class="card-body">
+ <span class="badge bg-{{ 'danger' if a.severity=='critical' else 'warning text-dark' }}">{{ a.severity }}</span> <span class="badge bg-secondary">{{ a.state }}</span>
+ <p class="mt-2 mb-1">{{ a.detail }}</p>
+ <div class="note">Windows: {{ a.window_label }}. Orders: {{ a.n_current }} current, {{ a.n_baseline }} baseline.</div>
+ <div class="mt-3"><label class="note">Your name is taken from your login. A note is required to resolve.</label>
+  <div class="d-flex flex-wrap gap-2"><input id="note" class="form-control form-control-sm w-auto" placeholder="note (optional, required to resolve)" style="min-width:260px">
+   {% for s in ['acknowledged','resolved','open'] if s != a.state %}<button class="btn btn-sm btn-outline-secondary" onclick="setState('{{ s }}')">Mark {{ s }}</button>{% endfor %}</div>
+  <div id="stErr" class="alert alert-danger d-none mt-2"></div></div>
+</div></div>
+<div class="card mb-3"><div class="card-body"><strong>Notes</strong>
+ <div class="note mb-2">Comments are kept as a record. They cannot be edited or deleted. Your name is taken from your login.</div>
+ {% if notes %}<ul class="list-unstyled mb-2" id="noteList">{% for n in notes %}<li class="mb-2"><span class="note">{{ n.author }} &middot; {{ n.created_at }}</span><br>{{ n.body }}</li>{% endfor %}</ul>{% else %}<p class="note mb-2" id="noteList">No notes yet.</p>{% endif %}
+ <div class="d-flex flex-wrap gap-2"><input id="newNote" class="form-control form-control-sm" maxlength="1000" placeholder="Add a note (max 1000 characters)" style="min-width:320px;flex:1">
+  <button class="btn btn-sm btn-primary" onclick="addNote()">Add note</button></div>
+ <div id="ntErr" class="alert alert-danger d-none mt-2"></div></div></div>
+{% if an %}
+<h2 class="h5">Where does it come from?</h2>
+<div class="note mb-2">Confidence: <strong>{{ an.confidence }}</strong>. Extra events in the window: {{ '%.1f'|format(an.total_excess_events) }}. {% if an.drivers %}The strongest driver accounts for {{ '%.0f'|format(an.top_share*100) }}% of them. Drivers overlap, so the shares in the table do not add up to 100%.{% endif %}</div>
+{% if an.drivers %}<div class="card mb-3"><div class="card-body p-0"><div class="tbl-wrap"><table class="table table-sm sticky-head mb-0"><thead><tr><th>Dimension</th><th>Group</th><th>Orders</th><th>Rate now</th><th>Rate elsewhere</th><th>Share of extra events</th></tr></thead><tbody>
+{% for d in an.drivers %}<tr><td>{{ d.dimension_label }}</td><td>{{ d.level }}</td><td>{{ d.n_current }}</td><td>{{ '%.1f'|format(d.rate_current*100) }}%</td><td>{{ '%.1f'|format(d.rate_rest_current*100) }}%</td><td>{{ '%.0f'|format(d.share_of_excess*100) }}%</td></tr>{% endfor %}
+</tbody></table></div></div></div>
+{% else %}<p class="note">No single group stands out. The change looks spread out.</p>{% endif %}
+{% if an.stage_check %}<div class="card mb-3"><div class="card-body"><strong>Which delivery stage got slower?</strong>
+ {% for k,v in an.stage_check.items() if k!='slower_stages' %}<div class="note">{{ v.label }}: median {{ '%.1f'|format(v.median_baseline) }} then {{ '%.1f'|format(v.median_current) }} days{{ ' (significantly slower)' if v.p_slower<0.05 and v.median_current>v.median_baseline else '' }}</div>{% endfor %}</div></div>{% endif %}
+<ul class="note">{% for l in an.limitations %}<li>{{ l }}</li>{% endfor %}</ul>
+{% elif a.kind != 'data_drift' %}<div class="alert alert-warning">A root-cause breakdown could not be computed for this alert (not enough orders in the windows).</div>{% endif %}
+{% if recs %}<h2 class="h5 mt-4">What to do</h2>
+{% if act %}<div class="alert alert-success">An action was proposed: <a href="{{ url_for('v2.actions_page') }}">{{ act.action_id }}</a> (status: {{ act.status }}). A named reviewer must approve it. After it is done, <a href="{{ url_for('ops.outcomes_page') }}">measure the outcome</a>.</div>{% endif %}
+<div id="pErr" class="alert alert-danger d-none"></div>
+{% for r in recs %}<div class="card mb-2"><div class="card-body"><div class="d-flex justify-content-between"><strong>{{ r.title }}</strong><span><span class="badge bg-secondary">{{ r.owner }}</span> <span class="badge bg-secondary">effort: {{ r.effort }}</span></span></div>
+ <div class="note">{{ r.why }} Linked events in the window: {{ r.linked_events }}.</div>
+ <ol class="mb-2 mt-2">{% for s in r.steps %}<li>{{ s }}</li>{% endfor %}</ol>
+ {% if not act %}<button class="btn btn-sm btn-primary" onclick="propose({{ loop.index0 }})">Propose this as an action</button>{% endif %}</div></div>{% endfor %}{% endif %}
+{% endblock %}
+{% block scripts %}<script>
+async function call(url,b,errId){showErr(errId);try{const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();if(!r.ok)throw new Error(j.error||'Failed');location.reload()}catch(x){showErr(errId,x.message)}}
+function setState(s){call('/api/ops/alerts/{{ a.alert_id }}/state',{state:s,note:document.getElementById('note').value},'stErr')}
+function addNote(){call('/api/ops/alerts/{{ a.alert_id }}/notes',{body:document.getElementById('newNote').value},'ntErr')}
+function propose(i){call('/api/ops/alerts/{{ a.alert_id }}/propose',{playbook_index:i},'pErr')}
+</script>{% endblock %}

@@ -1,0 +1,69 @@
+{
+  "note": "v1 artifacts are untouched. v2 artifacts live in models/v2/.",
+  "models": [
+    {
+      "name": "Satisfaction checkout-time",
+      "version": "v1",
+      "task": "dissatisfied (1-2 stars)",
+      "algorithm": "XGBoost",
+      "test_roc_auc": 0.57,
+      "file": "models/best_S0.joblib"
+    },
+    {
+      "name": "Satisfaction checkout + history",
+      "version": "v1",
+      "task": "dissatisfied (1-2 stars)",
+      "algorithm": "XGBoost",
+      "test_roc_auc": 0.608,
+      "file": "models/best_S0_R.joblib"
+    },
+    {
+      "name": "Satisfaction delivery-time",
+      "version": "v1",
+      "task": "dissatisfied (1-2 stars)",
+      "algorithm": "XGBoost",
+      "test_roc_auc": 0.687,
+      "file": "models/best_S1.joblib"
+    },
+    {
+      "name": "Satisfaction delivery + history",
+      "version": "v1",
+      "task": "dissatisfied (1-2 stars)",
+      "algorithm": "XGBoost",
+      "test_roc_auc": 0.714,
+      "file": "models/best_S1_R.joblib (used by the what-if simulator)"
+    },
+    {
+      "name": "Review sentiment",
+      "version": "v1",
+      "task": "sentiment (weak labels from stars)",
+      "algorithm": "TF-IDF + Logistic Regression",
+      "test_roc_auc": null,
+      "file": "models/sentiment_tfidf_lr.joblib"
+    },
+    {
+      "name": "Late-risk checkout stage (A0)",
+      "version": "v2",
+      "task": "is_late",
+      "algorithm": "Logistic Regression",
+      "test_roc_auc": 0.652,
+      "file": "models/v2/delivery_risk_A0.joblib"
+    },
+    {
+      "name": "Late-risk carrier hand-off (A1)",
+      "version": "v2",
+      "task": "is_late",
+      "algorithm": "Logistic Regression",
+      "test_roc_auc": 0.79,
+      "file": "models/v2/delivery_risk_A1.joblib"
+    },
+    {
+      "name": "Seller anomaly ranking",
+      "version": "v2",
+      "task": "unsupervised",
+      "algorithm": "Isolation Forest (+ FDR-controlled tests)",
+      "test_roc_auc": null,
+      "file": "computed by ecx2/anomaly/detect.py (no stored model)"
+    }
+  ]
+}

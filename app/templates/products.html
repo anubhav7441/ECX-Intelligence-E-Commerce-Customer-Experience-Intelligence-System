@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Product Intelligence - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Product Intelligence</h1>
+<p class="lead-sm">Category performance for the {{ info.n_eligible }} categories with at least {{ info.min_orders }} reviewed orders. Category = category of the first item in the order.</p>
+<div class="row g-3 mb-3"><div class="col-lg-7"><img class="fig" src="{{ url_for('pages.figure', name='bi_category_segments.png') }}" alt="Category segmentation"></div>
+<div class="col-lg-5"><div class="card h-100"><div class="card-header">Highest revenue with below-average satisfaction</div><div class="card-body">
+{% for r in info.priority_problem %}<p class="mb-1"><strong>{{ r.primary_category.replace('_',' ') }}</strong> - score {{ '%.2f'|format(r.avg_score) }}, {{ '%.1f'|format(r.dissatisfied_rate*100) }}% dissatisfied, R$ {{ '{:,.0f}'.format(r.revenue) }}</p>{% endfor %}</div></div></div></div>
+<div class="card"><div class="tbl-wrap"><table class="table table-sm sticky-head mb-0" id="ct" data-dir="asc"><thead><tr>
+{% for h,n in [('Category',0),('Orders',1),('Revenue R$',1),('Avg score',1),('Dissatisfied %',1),('95% CI',0),('Late %',1),('Late-complaint %',1),('Segment',0)] %}<th role="button" onclick="sortTable('ct',{{ loop.index0 }},{{ 'true' if n else 'false' }})">{{ h }}</th>{% endfor %}</tr></thead><tbody>
+{% for r in rows %}<tr><td>{{ r.primary_category.replace('_',' ') }}</td><td>{{ r.orders }}</td><td>{{ '{:,.0f}'.format(r.revenue) }}</td><td>{{ '%.2f'|format(r.avg_score) }}</td><td>{{ '%.1f'|format(r.dissatisfied_rate*100) }}</td><td>{{ '%.0f'|format(r.dis_ci_lo*100) }}-{{ '%.0f'|format(r.dis_ci_hi*100) }}%</td><td>{{ '%.1f'|format(r.late_rate*100) }}</td><td>{{ '%.1f'|format(r.late_complaint_rate*100) }}</td><td>{{ r.segment }}</td></tr>{% endfor %}</tbody></table></div></div>
+<p class="note mt-2">"unknown" = products without a category in the source data. Late-complaint % = share of reviews whose text mentions delay/non-delivery (only among reviews with text).</p>
+{% endblock %}

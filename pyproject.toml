@@ -1,0 +1,37 @@
+[project]
+name = "ecx-intelligence"
+version = "3.0.0"
+description = "Customer-experience intelligence: detect, diagnose, recommend, act and measure (prototype)."
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 140
+extend-exclude = ["data", "models", "uploads", "docs/presentation", "notebooks"]
+
+[tool.ruff.lint]
+# Real-bug checks only: syntax errors, undefined names, unused imports, common bug patterns.
+select = ["E9", "F", "B"]
+ignore = [
+    "B008",  # Flask/Pydantic default-argument patterns
+    "B905",  # zip() without strict= (all zips here are over equal-length inputs)
+    "B007",  # unused loop variable: kept for readability
+    "B023",  # closures in loops here are used immediately inside the same iteration (checked)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B017"]
+# analysis and research scripts keep a few intermediate variables for readability
+"research/*" = ["F841"]
+"ml/*" = ["F841"]
+"scripts/*" = ["F841"]
+"multids/*" = ["F841"]
+"ecx2/*" = ["F841"]
+"recsys/*" = ["F841"]
+"app/*" = ["F841"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["app", "ecx2", "ecx3", "multids", "recsys", "ml"]
+omit = ["*/tests/*", "ml/*/run_*.py", "ml/prediction/train_models.py", "ml/plotting.py", "ml/evaluation/*"]

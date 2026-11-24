@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block title %}Explainable AI - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Explainable AI (SHAP)</h1>
+<p class="lead-sm">SHAP (TreeExplainer) shows how much each factor pushes a prediction toward or away from "dissatisfied", in log-odds. Global plots use the {{ '{:,}'.format(g.S1_R.n_explained) }} held-out test orders. SHAP explains the <em>model</em>, not real-world causes.</p>
+<div class="row g-3 mb-3">
+<div class="col-lg-6"><div class="card"><div class="card-header">Delivery-time model: importance by factor group (%)</div><div class="card-body" style="height:300px"><canvas id="cG1"></canvas></div></div></div>
+<div class="col-lg-6"><div class="card"><div class="card-header">Checkout-time model: importance by factor group (%)</div><div class="card-body" style="height:300px"><canvas id="cG0"></canvas></div></div></div></div>
+<div class="row g-3 mb-3">
+<div class="col-lg-6"><img class="fig" src="{{ url_for('pages.figure', name='shap_beeswarm_S1_R.png') }}" alt="SHAP beeswarm, delivery-time model"><p class="note">Each dot is an order. Right = raises predicted dissatisfaction; colour = feature value.</p></div>
+<div class="col-lg-6"><img class="fig" src="{{ url_for('pages.figure', name='shap_dependence_delay_S1_R.png') }}" alt="Delay dependence plot"><p class="note">Risk rises sharply once delivery passes the estimated date (orange line).</p></div></div>
+<div class="card mb-3"><div class="card-header">Explain a specific order from the test period</div><div class="card-body">
+<div class="input-group mb-2"><input id="oid" class="form-control" maxlength="64" placeholder="32-character order_id" aria-label="Order id"><button class="btn btn-primary" onclick="explainOrder()">Explain</button></div>
+<div class="note mb-2">Examples from the test period: {% for k,v in g.S1_R.local_examples.items() %}<a href="#" onclick="document.getElementById('oid').value='{{ v.order_id }}';explainOrder();return false">{{ k.replace('_',' ') }}</a>{{ ' | ' if not loop.last }}{% endfor %}</div>
+<div id="eErr" class="alert alert-danger d-none"></div>
+<div id="eOut" class="d-none"><p id="eSum" class="mb-2"></p><div style="height:300px"><canvas id="cLoc"></canvas></div></div></div></div>
+<div class="row g-3"><div class="col-lg-6"><img class="fig" src="{{ url_for('pages.figure', name='shap_importance_S1_R.png') }}" alt="Top features, delivery-time model"></div>
+<div class="col-lg-6"><img class="fig" src="{{ url_for('pages.figure', name='shap_importance_S0_R.png') }}" alt="Top features, checkout-time model"></div></div>
+<p class="caveat mt-3">Limitations: SHAP values depend on the model and on correlated features (e.g. delay, delivery days and late flag overlap, so credit is shared among them); they describe association, not causation. "Items in order" ranks high, which may reflect split shipments or one review covering several items - not observable here.</p>
+{% endblock %}
+{% block scripts %}<script>
+const G={{ g|tojson }};
+function grp(id,d){const k=Object.keys(d.group_share_pct);mk(id,{type:'bar',data:{labels:k,datasets:[{data:k.map(x=>d.group_share_pct[x]),backgroundColor:k.map(x=>x==='Delivery performance'?C.orange:C.blue),borderRadius:3}]},options:{indexAxis:'y'}});}
+grp('cG1',G.S1_R);grp('cG0',G.S0_R);
+let lc=null;
+async function explainOrder(){const e=document.getElementById('eErr'),o=document.getElementById('eOut');e.classList.add('d-none');o.classList.add('d-none');
+ const id=document.getElementById('oid').value.trim();
+ try{const r=await fetch('/api/explain/'+encodeURIComponent(id));const j=await r.json();if(!r.ok)throw new Error(j.error||'Request failed');
+  document.getElementById('eSum').textContent=`Risk score ${j.risk_score.toFixed(2)} (flag threshold ${j.threshold.toFixed(2)}; similar-score orders were ${(j.observed_rate_in_band*100).toFixed(0)}% dissatisfied in the test period). Actual review: ${j.actual_review_score} star(s).`;
+  const c=j.contributions.slice().reverse();if(lc)lc.destroy();
+  lc=mk('cLoc',{type:'bar',data:{labels:c.map(x=>x.feature.replace(/_/g,' ')+(x.value!=null?' = '+x.value:'')),datasets:[{data:c.map(x=>x.shap_logodds),backgroundColor:c.map(x=>x.shap_logodds>0?C.orange:C.blue),borderRadius:3}]},options:{indexAxis:'y'}});
+  o.classList.remove('d-none');}catch(x){e.textContent=x.message;e.classList.remove('d-none');}}
+</script>{% endblock %}

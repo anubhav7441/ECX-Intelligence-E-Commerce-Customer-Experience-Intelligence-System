@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Account Settings — ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Account settings</h1>
+<div class="row g-3 mt-1"><div class="col-lg-6"><div class="card"><div class="card-header">Profile</div><div class="card-body">
+  <label class="form-label" for="nm">Name</label><input id="nm" class="form-control mb-2" value="{{ user['name'] }}" maxlength="60">
+  <div class="note mb-2">Email: {{ user['email'] }} (cannot be changed)</div>
+  <button class="btn btn-primary btn-sm" id="sp">Save name</button> <span id="pm" class="note" role="status"></span></div></div></div>
+<div class="col-lg-6"><div class="card"><div class="card-header">Change password</div><div class="card-body">
+  <label class="form-label" for="cp">Current password</label><input id="cp" type="password" class="form-control mb-2" autocomplete="current-password">
+  <label class="form-label" for="np">New password</label><input id="np" type="password" class="form-control mb-2" autocomplete="new-password">
+  <label class="form-label" for="nc">Confirm new password</label><input id="nc" type="password" class="form-control mb-2" autocomplete="new-password">
+  <button class="btn btn-primary btn-sm" id="sw">Change password</button> <span id="wm" class="note" role="status"></span></div></div></div></div>
+{% endblock %}
+{% block scripts %}<script>
+function $(i){return document.getElementById(i)}
+$('sp').onclick=function(){postJSON('/api/account/profile',{name:$('nm').value}).then(function(){$('pm').textContent='Saved.'}).catch(function(e){$('pm').textContent=e.message})};
+$('sw').onclick=function(){postJSON('/api/account/password',{current:$('cp').value,new:$('np').value,confirm:$('nc').value}).then(function(){$('wm').textContent='Password changed.';$('cp').value=$('np').value=$('nc').value=''}).catch(function(e){$('wm').textContent=e.message})};
+</script>{% endblock %}

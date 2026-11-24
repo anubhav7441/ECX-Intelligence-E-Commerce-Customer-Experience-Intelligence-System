@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.git/
+.venv/
+venv/
+.pytest_cache/
+.env
+uploads/
+logs/
+data/raw/
+data/datasets/
+database/*.db
+database/.secret_key
+docs/
+notebooks/
+reports/

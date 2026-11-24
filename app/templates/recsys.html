@@ -1,0 +1,65 @@
+{% extends "base.html" %}{% block title %}Product Recommendations - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Recommendation Intelligence Center</h1>
+<p class="lead-sm">Suggests products to customers using what people bought before. It uses real purchase data, not a fixed list.</p>
+<div class="caveat mb-3"><strong>Please read:</strong> in this dataset only about 6% of customers ever bought two different products, so personal recommendations are hard. Scores rank products; they are <u>not</u> chances of buying. See the "How good is it?" tab for the honest test results.</div>
+<ul class="nav nav-tabs mb-3" id="tabs">
+ <li class="nav-item"><button class="nav-link active" data-t="t1">For a customer</button></li>
+ <li class="nav-item"><button class="nav-link" data-t="t2">Similar products</button></li>
+ <li class="nav-item"><button class="nav-link" data-t="t3">Bought together</button></li>
+ <li class="nav-item"><button class="nav-link" data-t="t4">New customer</button></li>
+ <li class="nav-item"><button class="nav-link" data-t="t5">How good is it?</button></li>
+ <li class="nav-item"><button class="nav-link" data-t="t6">Pattern insights</button></li>
+</ul>
+<div id="err" class="alert alert-danger d-none"></div>
+<section id="t1" class="tab"><div class="card"><div class="card-body">
+ <div class="row g-2 align-items-end"><div class="col-md-4"><label class="form-label note" for="tier">Pick an example customer</label><select id="tier" class="form-select"><option value="established">With several purchases</option><option value="limited">With one purchase</option></select></div>
+ <div class="col-md-5"><label class="form-label note" for="cust">Customer</label><select id="cust" class="form-select"></select></div>
+ <div class="col-md-3"><label class="form-label note" for="model">Method</label><select id="model" class="form-select"><option value="hybrid">Hybrid (recommended)</option><option value="popularity">Popular only</option><option value="item_cf">Similar buyers</option><option value="als">Matrix factorisation</option><option value="content">Product similarity</option><option value="assoc">Bought together</option></select></div></div>
+ <button class="btn btn-primary mt-3" id="go1">Show recommendations</button></div></div>
+ <div id="o1" class="mt-3"></div></section>
+<section id="t2" class="tab d-none"><div class="card"><div class="card-body"><div class="row g-2 align-items-end"><div class="col-md-5"><label class="form-label note" for="q2">Search by category or product code</label><input id="q2" class="form-control" placeholder="e.g. toys"></div><div class="col-md-5"><label class="form-label note" for="p2">Product</label><select id="p2" class="form-select"></select></div><div class="col-md-2"><button class="btn btn-primary w-100" id="go2">Find similar</button></div></div></div></div><div id="o2" class="mt-3"></div></section>
+<section id="t3" class="tab d-none"><div class="card"><div class="card-body"><div class="row g-2 align-items-end"><div class="col-md-5"><label class="form-label note" for="q3">Search by category or product code</label><input id="q3" class="form-control" placeholder="e.g. computers"></div><div class="col-md-5"><label class="form-label note" for="p3">Product</label><select id="p3" class="form-select"></select></div><div class="col-md-2"><button class="btn btn-primary w-100" id="go3">Show</button></div></div></div></div><div id="o3" class="mt-3"></div></section>
+<section id="t4" class="tab d-none"><div class="card"><div class="card-body"><div class="row g-2 align-items-end"><div class="col-md-6"><label class="form-label note" for="c4">Interest (optional)</label><select id="c4" class="form-select"><option value="">Anything</option></select></div><div class="col-md-3"><button class="btn btn-primary w-100" id="go4">Show popular products</button></div></div></div></div><div id="o4" class="mt-3"></div></section>
+<section id="t5" class="tab d-none"><div id="o5"></div></section>
+<section id="t6" class="tab d-none"><div id="o6"></div></section>
+{% endblock %}
+{% block scripts %}<script>
+const $=id=>document.getElementById(id);
+async function api(u){const r=await fetch(u,{credentials:'same-origin'});const j=await r.json().catch(()=>({error:'Unexpected reply'}));if(!r.ok)throw new Error(j.error||('Error '+r.status));return j}
+function run(fn){showErr('err');return fn().catch(e=>showErr('err',e.message))}
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('d-none',s.id!==b.dataset.t));if(b.dataset.t==='t5')loadEval();if(b.dataset.t==='t6')loadIns();});
+function opt(sel,items,lab,val){clear(sel);items.forEach(i=>{const o=document.createElement('option');o.value=val(i);o.textContent=lab(i);sel.appendChild(o)})}
+const prodLabel=p=>p.category+' · '+p.short_id+' ('+p.buyers+' buyers)';
+async function loadCust(){const j=await api('/api/rec/customers?tier='+$('tier').value+'&k=30');opt($('cust'),j.customers,c=>c.customer_id.slice(0,8)+' ('+c.purchases+' purchase'+(c.purchases>1?'s':'')+')',c=>c.customer_id)}
+$('tier').onchange=()=>run(loadCust);
+function recTable(recs,extra){const w=el('div');const rows=recs.map(r=>({rank:r.rank,cat:r.category,id:r.short_id,price:r.median_price==null?'-':r.median_price,score:num(r.score,3),src:r.source+(r.fallback?' (fallback)':''),why:r.reasons.join(' | ')}));
+ w.appendChild(table([{label:'#',k:'rank'},{label:'Category',k:'cat'},{label:'Product',k:'id'},{label:'Typical price',k:'price'},{label:'Rank score',k:'score'},{label:'Type',k:'src'},{label:'Why recommended',k:'why'}],rows));return w}
+$('go1').onclick=()=>run(async()=>{const j=await api('/api/rec/customer/'+$('cust').value+'?k=10&model='+$('model').value);const o=clear($('o1'));
+ o.appendChild(el('div',j.note,'alert alert-'+(j.tier==='established'?'success':'warning')));
+ const h=el('div',null,'card mb-3');h.appendChild(el('div','Purchase history','card-header'));const b=el('div',null,'card-body');b.appendChild(table([{label:'Date',k:'date'},{label:'Category',k:'category'},{label:'Product',k:'short_id'},{label:'Spend',k:'spend'}],j.history));h.appendChild(b);o.appendChild(h);
+ const c=el('div',null,'card');c.appendChild(el('div','Top recommendations','card-header'));const cb=el('div',null,'card-body');cb.appendChild(recTable(j.recommendations));cb.appendChild(el('p',j.score_note,'note mt-2'));c.appendChild(cb);o.appendChild(c)});
+async function prodSearch(q,sel){const j=await api('/api/rec/products?k=40&q='+encodeURIComponent(q));opt(sel,j.products,prodLabel,p=>p.product_id)}
+let t2,t3;$('q2').oninput=()=>{clearTimeout(t2);t2=setTimeout(()=>run(()=>prodSearch($('q2').value,$('p2'))),300)};$('q3').oninput=()=>{clearTimeout(t3);t3=setTimeout(()=>run(()=>prodSearch($('q3').value,$('p3'))),300)};
+$('go2').onclick=()=>run(async()=>{const j=await api('/api/rec/similar/'+$('p2').value+'?k=10');const o=clear($('o2'));j.warnings.forEach(w=>o.appendChild(el('div',w,'alert alert-warning')));
+ o.appendChild(table([{label:'Category',k:'category'},{label:'Product',k:'short_id'},{label:'Typical price',k:'median_price'},{label:'Detail similarity',k:'cs'},{label:'Buyer overlap',k:'cf'},{label:'Why',k:'why'}],j.similar.map(s=>({category:s.category,short_id:s.short_id,median_price:s.median_price==null?'-':s.median_price,cs:num(s.content_similarity,2),cf:num(s.co_purchase_similarity,2),why:s.reasons.join(' ')}))))});
+$('go3').onclick=()=>run(async()=>{const j=await api('/api/rec/together/'+$('p3').value+'?k=10');const o=clear($('o3'));if(j.note)o.appendChild(el('div',j.note,'alert alert-warning'));
+ if(!j.together.length){o.appendChild(el('div','No pattern found for this product.','note'));return}
+ o.appendChild(table([{label:'Level',k:'level'},{label:'Item',k:'item'},{label:'Orders with both',k:'n'},{label:'Confidence',k:'conf'},{label:'Lift',k:'lift'}],j.together.map(t=>({level:t.level,item:t.level==='product'?t.category+' · '+t.short_id:t.category,n:t.pair_count,conf:num(t.confidence,3),lift:num(t.lift,1)}))));
+ o.appendChild(el('p',j.method+' Based on '+fmt(j.n_orders)+' orders.','note mt-2'))});
+$('go4').onclick=()=>run(async()=>{const j=await api('/api/rec/new?k=10&category='+encodeURIComponent($('c4').value));const o=clear($('o4'));o.appendChild(el('div',j.note,'alert alert-warning'));o.appendChild(recTable(j.recommendations))});
+let evalDone=false;async function loadEval(){if(evalDone)return;const o=clear($('o5'));await run(async()=>{const e=await api('/api/rec/evaluation');evalDone=true;const p=e.protocol.test;
+ o.appendChild(el('div','Test period '+p.period+'. Models trained only on purchases before '+p.train_before+'. '+p.eligible_customers+' customers, '+p.truth_items+' held-out purchases, catalog of '+fmt(p.catalog_size)+' products. Truth = '+e.protocol.ground_truth+'.','alert alert-info'));
+ const names={popularity:'Popular only (baseline)',item_cf:'Similar buyers (item CF)',user_cf:'Customers like you (user CF)',als:'Matrix factorisation (ALS)',content:'Product similarity (content)',assoc:'Bought together (rules)',hybrid:'Hybrid'};
+ const order=['popularity','item_cf','user_cf','als','content','assoc','hybrid'];const rows=order.filter(k=>e.test_results[k]).map(k=>[k,e.test_results[k]]).map(([k,v])=>({m:names[k]||k,p:num(v['P@10'],4),r:num(v['R@10'],4),map:num(v['MAP@10'],4),n:num(v['NDCG@10'],4),ci:'['+num(v['NDCG@10_ci95'][0],4)+', '+num(v['NDCG@10_ci95'][1],4)+']',cov:pct(v['coverage@10'],2),nov:num(v['novelty@10'],1),sig:pct(v.signal_rate,0)}));
+ o.appendChild(table([{label:'Method',k:'m'},{label:'Precision@10',k:'p'},{label:'Recall@10',k:'r'},{label:'MAP@10',k:'map'},{label:'NDCG@10',k:'n'},{label:'NDCG@10 95% range',k:'ci'},{label:'Catalog coverage',k:'cov'},{label:'Novelty',k:'nov'},{label:'Customers with a real signal',k:'sig'}],rows));
+ const d=e.paired_differences['hybrid_minus_popularity_NDCG@10'];
+ o.appendChild(el('div','Hybrid minus popularity (NDCG@10): '+num(d[0],4)+', 95% range ['+num(d[1],4)+', '+num(d[2],4)+']. If the range includes 0, the two cannot be told apart. Hybrid weights were chosen on an earlier validation period: '+JSON.stringify(e.hybrid_weights_chosen_on_validation)+'.','alert alert-warning mt-3'));
+ const cw=el('div');cw.style.cssText='position:relative;height:260px';const cv=el('canvas');cv.id='ch';cw.appendChild(cv);o.appendChild(cw);const ks=order.filter(k=>e.test_results[k]);
+ new Chart(cv,{type:'bar',data:{labels:ks.map(k=>names[k]||k),datasets:[{label:'NDCG@10',data:ks.map(k=>e.test_results[k]['NDCG@10']),backgroundColor:C.blue}]},options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
+})}
+let insDone=false;async function loadIns(){if(insDone)return;const o=clear($('o6'));await run(async()=>{const j=await api('/api/rec/insights?k=12');insDone=true;o.appendChild(el('div',j.caveat,'alert alert-warning'));
+ const a=el('div',null,'card mb-3');a.appendChild(el('div','Product pairs often bought in the same order','card-header'));const ab=el('div',null,'card-body');ab.appendChild(table([{label:'Product A',k:'a'},{label:'Product B',k:'b'},{label:'Orders with both',k:'n'},{label:'Lift',k:'l'}],j.bundles.map(b=>({a:b.a.category+' · '+b.a.short_id,b:b.b.category+' · '+b.b.short_id,n:b.pair_count,l:num(b.lift,1)}))));a.appendChild(ab);o.appendChild(a);
+ const c=el('div',null,'card');c.appendChild(el('div','Category pairs often ordered together','card-header'));const cb=el('div',null,'card-body');cb.appendChild(table([{label:'Category A',k:'a'},{label:'Category B',k:'b'},{label:'Orders with both',k:'n'},{label:'Lift',k:'l'}],j.category_pairs.map(b=>({a:b.a,b:b.b,n:b.pair_count,l:num(b.lift,2)}))));c.appendChild(cb);o.appendChild(c)})}
+run(async()=>{await loadCust();await prodSearch('',$('p2'));await prodSearch('',$('p3'));const c=await api('/api/rec/categories');c.categories.forEach(x=>{const o=document.createElement('option');o.value=x.category;o.textContent=x.category;$('c4').appendChild(o)})});
+</script>{% endblock %}

@@ -1,0 +1,28 @@
+{
+  "orders_total": 99441,
+  "review_rows": 99224,
+  "orders_with_multiple_reviews": 547,
+  "funnel": {
+    "all_orders": 99441,
+    "delivered_status": 96478,
+    "delivered_with_date": 96470,
+    "...and_has_items": 96470,
+    "...and_has_review": 95824
+  },
+  "quality": {
+    "delivered_before_purchase": 0,
+    "review_created_before_delivery": 4976,
+    "missing_distance": 477,
+    "unknown_category": 1350,
+    "zero_price_orders": 0,
+    "payment_vs_items+freight_mismatch_gt_1": 244
+  },
+  "iqr_outliers": {
+    "delivery_days": 1339,
+    "freight_ratio": 2138,
+    "items_price": 3897,
+    "distance_km": 595
+  },
+  "analytic_rows": 95824,
+  "analytic_unique_orders": 95824
+}

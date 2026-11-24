@@ -1,0 +1,33 @@
+{% extends "base.html" %}{% block title %}Executive Dashboard - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Executive Dashboard</h1>
+<p class="lead-sm">Customer experience overview of the Olist marketplace (Sept 2016 - Oct 2018). All values are computed from the dataset; reviews-based metrics use the {{ '{:,}'.format(h1.n_late + h1.n_on_time) }} delivered orders that have a review.</p>
+<div class="row g-3 mb-3">
+  {% set cards = [('Total orders', '{:,}'.format(kpis.total_orders_all_statuses), ''), ('Item revenue (delivered)', 'R$ ' ~ '{:,.0f}'.format(kpis.revenue_items_delivered), ''), ('Avg review score', '{:.2f}'.format(kpis.avg_review_score_analytic) ~ ' / 5', ''), ('Late deliveries', '{:.1f}%'.format(kpis.pct_late_delivered_with_date), 'warn'), ('Negative reviews (1-2 stars)', '{:.1f}%'.format(kpis.pct_dissatisfied_1_2), 'warn'), ('Avg delivery time', '{:.1f} days'.format(kpis.avg_delivery_days), ''), ('Avg order value (items)', 'R$ {:.0f}'.format(kpis.avg_order_value_items), ''), ('Customers who reorder', '{:.1f}%'.format(kpis.pct_customers_repeat), '')] %}
+  {% for l,v,c in cards %}<div class="col-6 col-md-3"><div class="card kpi {{ c }}"><div class="v">{{ v }}</div><div class="l">{{ l }}</div></div></div>{% endfor %}
+</div>
+<div class="row g-3 mb-3">
+  <div class="col-lg-6"><div class="card"><div class="card-header">Delivered orders per month</div><div class="card-body" style="height:260px"><canvas id="cOrders" aria-label="Orders per month"></canvas></div></div></div>
+  <div class="col-lg-6"><div class="card"><div class="card-header">Item revenue per month (thousand R$)</div><div class="card-body" style="height:260px"><canvas id="cRev" aria-label="Revenue per month"></canvas></div></div></div>
+  <div class="col-lg-6"><div class="card"><div class="card-header">Late-delivery rate and negative-review rate (%)</div><div class="card-body" style="height:260px"><canvas id="cLate" aria-label="Late and negative rate"></canvas></div></div></div>
+  <div class="col-lg-6"><div class="card"><div class="card-header">Customer satisfaction overview: review score distribution (%)</div><div class="card-body" style="height:260px"><canvas id="cScore" aria-label="Score distribution"></canvas></div></div></div>
+  <div class="col-lg-6"><div class="card"><div class="card-header">Negative reviews (%) by delivery delay</div><div class="card-body" style="height:260px"><canvas id="cBand" aria-label="Dissatisfaction by delay"></canvas></div></div></div>
+  <div class="col-lg-6"><div class="card h-100"><div class="card-header">Customer Experience Score (0-100)</div><div class="card-body">
+    <div class="row text-center"><div class="col"><div class="kpi"><div class="v">{{ '%.1f'|format(cx.mean) }}</div><div class="l">all reviewed orders</div></div></div>
+    <div class="col"><div class="kpi"><div class="v" style="color:#2a78d6">{{ '%.1f'|format(cx.mean_on_time) }}</div><div class="l">on-time orders</div></div></div>
+    <div class="col"><div class="kpi"><div class="v" style="color:#eb6834">{{ '%.1f'|format(cx.mean_late) }}</div><div class="l">late orders</div></div></div></div>
+    <p class="note mb-0 mt-2">{{ cx.definition }}</p></div></div></div>
+</div>
+<div class="card mb-3"><div class="card-header">Key findings (each is backed by a test on the Research page)</div><ul class="list-group list-group-flush">
+{% for f in findings %}<li class="list-group-item"><strong>{{ f.finding }}</strong><br><span class="note">{{ f.evidence }}</span></li>{% endfor %}</ul></div>
+<p class="caveat">Late-delivery % here counts delivered orders with a recorded delivery date (date-based, delivered date later than estimated date). Findings describe associations in historical data, not proven causes.</p>
+{% endblock %}
+{% block scripts %}<script>
+const M={{ monthly|tojson }}, SD={{ score_dist|tojson }}, BANDS={{ bands|tojson }};
+const lab=M.map(r=>r.purchase_month);
+mk('cOrders',{type:'bar',data:{labels:lab,datasets:[{data:M.map(r=>r.orders),backgroundColor:C.blue,borderRadius:3}]},options:{scales:{x:{ticks:{maxRotation:90,font:{size:9}}}}}});
+mk('cRev',{type:'bar',data:{labels:lab,datasets:[{data:M.map(r=>r.revenue/1000),backgroundColor:C.blue,borderRadius:3}]},options:{scales:{x:{ticks:{maxRotation:90,font:{size:9}}}}}});
+mk('cLate',{type:'line',data:{labels:lab,datasets:[{label:'Late deliveries %',data:M.map(r=>r.late_pct),borderColor:C.orange,backgroundColor:C.orange,tension:.25,pointRadius:3,borderWidth:2},{label:'Negative reviews %',data:M.map(r=>r.dissatisfied_pct),borderColor:C.blue,backgroundColor:C.blue,tension:.25,pointRadius:3,borderWidth:2}]},options:{plugins:{legend:{display:true,position:'bottom'}},scales:{x:{ticks:{maxRotation:90,font:{size:9}}}}}});
+mk('cScore',{type:'bar',data:{labels:['1','2','3','4','5'].map(s=>s+' star'),datasets:[{data:['1.0','2.0','3.0','4.0','5.0'].map(k=>SD[k]),backgroundColor:[C.orange,C.orange,C.grey,C.blue,C.blue],borderRadius:3}]},options:{}});
+mk('cBand',{type:'bar',data:{labels:BANDS.map(b=>b.delay_days),datasets:[{data:BANDS.map(b=>b.pct_dissatisfied),backgroundColor:BANDS.map((b,i)=>i<2?C.blue:C.orange),borderRadius:3}]},options:{scales:{x:{ticks:{font:{size:10}}}}}});
+</script>{% endblock %}

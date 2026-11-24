@@ -1,0 +1,49 @@
+{% extends "base.html" %}{% block title %}Satisfaction Prediction - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Customer Satisfaction Prediction</h1>
+<p class="lead-sm">Predicts the risk that an order receives a <strong>1-2 star</strong> review (about 13% of orders). Leave "actual delivery days" blank for an <em>early</em> (checkout-time) estimate; fill it in for the <em>delivery-time</em> model. The review itself is never an input.</p>
+<div class="row g-3">
+<div class="col-lg-5"><div class="card"><div class="card-header">Order details</div><div class="card-body">
+<form id="pf" class="row g-2">
+<div class="col-6"><label class="form-label note">Item price (R$) *</label><input class="form-control" name="items_price" type="number" step="0.01" min="0.01" value="120" required></div>
+<div class="col-6"><label class="form-label note">Freight (R$) *</label><input class="form-control" name="freight_value" type="number" step="0.01" min="0" value="20" required></div>
+<div class="col-6"><label class="form-label note">Items in order</label><input class="form-control" name="n_items" type="number" min="1" value="1"></div>
+<div class="col-6"><label class="form-label note">Estimated delivery (days) *</label><input class="form-control" name="estimated_days" type="number" min="1" value="24" required></div>
+<div class="col-12"><label class="form-label note">Seller (top 300 by volume)</label><select class="form-select" name="seller_id">{% for s in opts.sellers %}<option value="{{ s }}">{{ s[:12] }}...</option>{% endfor %}</select></div>
+<div class="col-6"><label class="form-label note">Customer state</label><select class="form-select" name="customer_state">{% for s in opts.states %}<option {{ 'selected' if s=='SP' }}>{{ s }}</option>{% endfor %}</select></div>
+<div class="col-6"><label class="form-label note">Payment type</label><select class="form-select" name="payment_type">{% for s in opts.payment_types %}<option>{{ s }}</option>{% endfor %}</select></div>
+<div class="col-12"><label class="form-label note">Product category</label><select class="form-select" name="category">{% for s in opts.categories %}<option {{ 'selected' if s=='bed_bath_table' }}>{{ s }}</option>{% endfor %}</select></div>
+<div class="col-6"><label class="form-label note">Weight (g, optional)</label><input class="form-control" name="total_weight_g" type="number" min="0"></div>
+<div class="col-6"><label class="form-label note">Distance (km, optional)</label><input class="form-control" name="distance_km" type="number" min="0"></div>
+<div class="col-12"><label class="form-label note">Actual delivery days (optional, enables delivery-time model)</label><input class="form-control" name="delivery_days" type="number" min="0" step="0.1" placeholder="e.g. 31"></div>
+<div class="col-12"><button class="btn btn-primary" type="submit">Predict</button></div></form>
+<div id="pErr" class="alert alert-danger mt-3 d-none"></div></div></div></div>
+<div class="col-lg-7"><div id="pOut" class="d-none">
+<div class="card mb-3"><div class="card-header">Result</div><div class="card-body">
+<div class="row text-center"><div class="col"><div class="kpi"><div class="v" id="rLabel">-</div><div class="l">flagged as high risk?</div></div></div>
+<div class="col"><div class="kpi warn"><div class="v" id="rObs">-</div><div class="l">observed dissatisfied rate for orders with a similar score (test data)</div></div></div>
+<div class="col"><div class="kpi"><div class="v" id="rScore">-</div><div class="l">raw model score (not a probability)</div></div></div></div>
+<p class="note mt-2 mb-0" id="rNote"></p></div></div>
+<div class="card"><div class="card-header">Why? Factors pushing the risk up (orange) or down (blue)</div><div class="card-body" style="height:330px"><canvas id="cShap"></canvas></div></div>
+</div>
+<div class="card" id="pHelp"><div class="card-body note">Fill in the form and press Predict. Typical values are pre-filled.</div></div></div></div>
+<div class="card mt-3"><div class="card-header">Model comparison (held-out test period: {{ ml.split.test_period[0] }} to {{ ml.split.test_period[1] }}, n={{ '{:,}'.format(ml.split.n_test) }}, {{ '%.1f'|format(ml.split.dissatisfied_rate_test*100) }}% dissatisfied)</div><div class="tbl-wrap"><table class="table table-sm sticky-head mb-0"><thead><tr><th>Feature set</th><th>Model</th><th>ROC-AUC</th><th>PR-AUC</th><th>Precision</th><th>Recall</th><th>F1</th></tr></thead><tbody>
+{% for fs,models in ml.results.items() %}{% for m,r in models.items() %}<tr {{ 'class=table-primary' if ml.selected[fs].model==m }}><td>{{ fs }}</td><td>{{ m }}</td><td>{{ '%.3f'|format(r.test.roc_auc) }}</td><td>{{ '%.3f'|format(r.test.pr_auc) }}</td><td>{{ '%.3f'|format(r.test.precision) }}</td><td>{{ '%.3f'|format(r.test.recall) }}</td><td>{{ '%.3f'|format(r.test.f1) }}</td></tr>{% endfor %}{% endfor %}
+</tbody></table></div></div>
+<p class="note mt-2">Highlighted = selected on validation PR-AUC. Reference: a random model has ROC-AUC 0.50 and PR-AUC {{ '%.3f'|format(ml.split.dissatisfied_rate_test) }}. Classes are imbalanced, so accuracy alone is misleading (always predicting "satisfied" gives {{ '%.1f'|format((1-ml.split.dissatisfied_rate_test)*100) }}%).</p>
+{% endblock %}
+{% block scripts %}<script>
+let shapChart=null;
+document.getElementById('pf').addEventListener('submit',async e=>{e.preventDefault();
+ const err=document.getElementById('pErr');err.classList.add('d-none');
+ const body={};new FormData(e.target).forEach((v,k)=>{if(v!=='')body[k]=v});
+ try{const j=await postJSON('/api/predict',body);
+  document.getElementById('pOut').classList.remove('d-none');document.getElementById('pHelp').classList.add('d-none');
+  document.getElementById('rLabel').textContent=j.predicted_dissatisfied?'Yes':'No';
+  document.getElementById('rObs').textContent=(j.observed_rate_in_band*100).toFixed(0)+'%';
+  document.getElementById('rScore').textContent=j.risk_score.toFixed(2);
+  document.getElementById('rNote').textContent=`Model: ${j.model}. Flag threshold ${j.threshold.toFixed(2)}. Base rate on test data: ${(j.test_base_rate*100).toFixed(1)}%. Similar-score band had ${j.band_n_test_orders.toLocaleString()} test orders. ${j.note}`;
+  const c=j.contributions.slice().reverse();if(shapChart)shapChart.destroy();
+  shapChart=mk('cShap',{type:'bar',data:{labels:c.map(x=>x.feature.replace(/_/g,' ')+(x.value!=null?' = '+x.value:'')),datasets:[{data:c.map(x=>x.shap_logodds),backgroundColor:c.map(x=>x.shap_logodds>0?C.orange:C.blue),borderRadius:3}]},options:{indexAxis:'y',scales:{x:{title:{display:true,text:'SHAP value (log-odds)'}}}}});
+ }catch(x){err.textContent=x.message;err.classList.remove('d-none');}});
+</script>{% endblock %}

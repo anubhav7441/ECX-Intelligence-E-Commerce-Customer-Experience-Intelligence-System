@@ -1,0 +1,58 @@
+{
+  "items": [
+    {
+      "id": "RQ1",
+      "title": "Can late delivery risk be predicted before delivery?",
+      "status": "MEASURED",
+      "detail": "Checkout stage ROC-AUC 0.65 (weak); carrier hand-off stage 0.79. Strong temporal shift in late rate."
+    },
+    {
+      "id": "RQ2",
+      "title": "Which sellers/months are statistically unusual?",
+      "status": "MEASURED (no ground truth)",
+      "detail": "Anomaly detectors use FDR-controlled tests; accuracy cannot be scored without labels."
+    },
+    {
+      "id": "RQ3",
+      "title": "Do richer NLP features improve review understanding?",
+      "status": "PARTLY MEASURED",
+      "detail": "Rules/TF-IDF measured on 150 labels from one AI annotator. Multilingual transformer NOT RUN (downloads blocked)."
+    },
+    {
+      "id": "RQ4",
+      "title": "Are multi-agent investigations faithful to the data?",
+      "status": "MEASURED (automated)",
+      "detail": "Agent vs independent pandas gold on 30 sellers; see Experiment 5."
+    },
+    {
+      "id": "RQ5",
+      "title": "Do agents save analyst time?",
+      "status": "NOT RUN",
+      "detail": "Needs human participants timed on manual vs agent investigation. Protocol: docs/V2_EXPERIMENT_PROTOCOLS.md"
+    },
+    {
+      "id": "RQ6",
+      "title": "Do explanations (SHAP) help users trust/act?",
+      "status": "NOT RUN (user study)",
+      "detail": "SHAP computed in v1; human study not possible here."
+    },
+    {
+      "id": "RQ7",
+      "title": "Does grounding reduce LLM hallucination?",
+      "status": "NOT RUN",
+      "detail": "No local LLM in the build environment. The assistant has a numeric-consistency guard for an optional LLM, tested only with stub functions."
+    },
+    {
+      "id": "EXP4",
+      "title": "Explainability (SHAP) evaluation",
+      "status": "v1 MEASURED",
+      "detail": "Grouped SHAP importance reported in the v1 report; no human evaluation."
+    },
+    {
+      "id": "EXP6",
+      "title": "Recommendation evaluation",
+      "status": "NOT RUN",
+      "detail": "Recommendations R1-R7 are evidence-linked in v1; no outcome data exists to evaluate whether they help."
+    }
+  ]
+}

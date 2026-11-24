@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Seller Intelligence - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Seller Intelligence</h1>
+<p class="lead-sm">Only sellers with at least {{ info.min_orders }} reviewed orders are ranked ({{ info.n_eligible }} sellers, covering {{ '%.0f'|format(info.share_orders_covered_pct) }}% of analysed orders). Segments compare revenue (median split) with average review score (platform mean {{ '%.2f'|format(info.experience_cut_mean_score) }}). Dissatisfied rate has a 95% Wilson confidence interval.</p>
+<div class="row g-3 mb-3"><div class="col-lg-6"><img class="fig" src="{{ url_for('pages.figure', name='bi_seller_segments.png') }}" alt="Seller segmentation"></div>
+<div class="col-lg-6"><div class="card h-100"><div class="card-header">Segments</div><div class="card-body">
+{% for s,n in info.segment_counts.items() %}<p class="mb-1"><span class="badge {{ 'text-bg-warning' if s=='PRIORITY PROBLEM' else 'text-bg-secondary' }}">{{ s }}</span> {{ n }} sellers</p>{% endfor %}
+<p class="note mt-3">Priority problem = above-median revenue but below-average score: the biggest customer-experience risk.</p>
+<p class="note mb-0">Seller performance score (0-100) = 50% shrunk average review, 30% on-time rate, 20% order-volume rank.</p></div></div></div></div>
+<div class="mb-2"><label class="note me-2">Filter:</label><select id="seg" class="form-select form-select-sm d-inline-block w-auto" onchange="filt()"><option value="">All segments</option><option>PRIORITY PROBLEM</option><option>Best performers</option><option>Growth opportunity</option><option>Low priority</option></select></div>
+<div class="card"><div class="tbl-wrap"><table class="table table-sm sticky-head mb-0" id="st" data-dir="asc"><thead><tr>
+{% for h,n in [('Seller',0),('Orders',1),('Revenue R$',1),('Avg score',1),('Late %',1),('Dissatisfied %',1),('95% CI',0),('Perf. score',1),('Segment',0)] %}<th role="button" onclick="sortTable('st',{{ loop.index0 }},{{ 'true' if n else 'false' }})">{{ h }}</th>{% endfor %}</tr></thead><tbody>
+{% for r in rows %}<tr data-seg="{{ r.segment }}"><td title="{{ r.primary_seller_id }}">{{ r.seller_short }}</td><td>{{ r.orders }}</td><td>{{ '{:,.0f}'.format(r.revenue) }}</td><td>{{ '%.2f'|format(r.avg_score) }}</td><td>{{ '%.1f'|format(r.late_rate*100) }}</td><td>{{ '%.1f'|format(r.dissatisfied_rate*100) }}</td><td>{{ '%.0f'|format(r.dis_ci_lo*100) }}-{{ '%.0f'|format(r.dis_ci_hi*100) }}%</td><td>{{ '%.0f'|format(r.perf_score) }}</td><td><span class="badge badge-seg {{ 'text-bg-warning' if r.segment=='PRIORITY PROBLEM' else 'text-bg-light border' }}">{{ r.segment }}</span></td></tr>{% endfor %}</tbody></table></div></div>
+<p class="note mt-2">Seller = the seller of the first item in each order (multi-seller orders are 1-2% of orders). Seller ids are anonymised in the dataset.</p>
+{% endblock %}
+{% block scripts %}<script>function filt(){const v=document.getElementById('seg').value;document.querySelectorAll('#st tbody tr').forEach(r=>{r.style.display=(!v||r.dataset.seg===v)?'':'none'});}</script>{% endblock %}

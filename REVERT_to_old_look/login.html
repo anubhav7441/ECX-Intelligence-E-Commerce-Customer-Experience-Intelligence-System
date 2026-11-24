@@ -1,0 +1,29 @@
+{% extends "public.html" %}
+{% block title %}Log in — ECX-Intelligence{% endblock %}
+{% block bodyclass %}authpage{% endblock %}
+{% block header %}{% endblock %}{% block footer %}{% endblock %}
+{% block body %}<main class="split">
+  {% include "_authside.html" %}
+  <div class="r">
+    <h1>Welcome back</h1>
+    <div class="tabs" role="tablist"><a href="{{ url_for('auth.register') }}">Sign up</a><a class="on" href="{{ url_for('auth.login') }}" aria-current="page">Sign in</a></div>
+    {% if error %}<div class="alert-x" role="alert">{{ error }}</div>{% endif %}
+    <form method="post" action="{{ url_for('auth.login') }}" novalidate id="lf">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">{% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      <div class="fld"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="username" required value="{{ email }}" autofocus></div>
+      <div class="fld"><label for="password">Password</label><div class="pw"><input id="password" name="password" type="password" autocomplete="current-password" required><button type="button" id="eye" aria-label="Show or hide password">Show</button></div></div>
+      <button class="btn-x pri lg" style="width:100%" id="sb">Sign in</button>
+    </form>
+    <p class="alt">Just looking? <a href="{{ url_for('demo.page') }}">Explore demo</a> · <a href="{{ url_for('landing') }}">Back to home</a></p>
+  </div>
+</main>{% endblock %}
+{% block scripts %}<script>
+function fe(id,msg){var f=document.getElementById(id).parentNode;while(f&&!f.classList.contains('fld'))f=f.parentNode;var o=f.querySelector('.err');if(!o){o=document.createElement('div');o.className='err';f.appendChild(o);}o.textContent=msg;f.classList.toggle('bad',!!msg);return !msg;}
+document.getElementById('lf').addEventListener('submit',function(e){
+  var em=document.getElementById('email').value.trim(),pw=document.getElementById('password').value;
+  var a=fe('email',!em?'Enter your email address.':(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)||em.length>254)?'Enter a valid email address.':'');
+  var b2=fe('password',!pw?'Enter your password.':pw.length>200?'Password is too long.':'');
+  if(!(a&&b2)){e.preventDefault();return;}
+  var b=document.getElementById('sb');b.disabled=true;b.textContent='Signing in…';});
+document.getElementById('eye').onclick=function(){var p=document.getElementById('password');var s=p.type==='password';p.type=s?'text':'password';this.textContent=s?'Hide':'Show';};
+</script>{% endblock %}

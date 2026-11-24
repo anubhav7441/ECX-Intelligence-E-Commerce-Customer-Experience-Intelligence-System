@@ -1,0 +1,41 @@
+{% extends "base.html" %}{% block title %}Data Management - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Data Management</h1>
+<p class="lead-sm">Database status, data-quality summary of the Olist dataset, and CSV validation. Uploaded files are checked in memory only; they are not stored or merged into the analysis.</p>
+<div class="row g-3 mb-3">
+<div class="col-lg-5"><div class="card h-100"><div class="card-header">Database (SQLite via SQLAlchemy)</div><div class="card-body">
+{% if db.ok %}<span class="badge text-bg-success mb-2">Connected</span>
+<table class="table table-sm"><tbody>{% for t,n in db.tables.items() %}<tr><td>{{ t }}</td><td class="text-end">{{ '{:,}'.format(n) }}</td></tr>{% endfor %}</tbody></table>
+{% else %}<span class="badge text-bg-danger mb-2">Not available</span><p class="note">{{ db.error }}</p><p class="note">Run <code>python scripts/01_load_database.py</code> to (re)create the database.</p>{% endif %}
+</div></div></div>
+<div class="col-lg-7"><div class="card h-100"><div class="card-header">Data-quality summary (analytic population)</div><div class="card-body">
+<p class="note">How 99,441 orders narrow to the analysed set (delivered, has delivery date, has items, has a review):</p>
+<table class="table table-sm"><tbody>{% for k,v in prep.funnel.items() %}<tr><td>{{ k.replace('_',' ').replace('...','') }}</td><td class="text-end">{{ '{:,}'.format(v) }}</td></tr>{% endfor %}</tbody></table>
+<p class="note mb-1"><strong>Checks on the analysed orders:</strong></p>
+<table class="table table-sm"><tbody>{% for k,v in prep.quality.items() %}<tr><td>{{ k.replace('_',' ') }}</td><td class="text-end">{{ '{:,}'.format(v) }}</td></tr>{% endfor %}</tbody></table>
+<p class="note mb-0">{{ '{:,}'.format(prep.orders_with_multiple_reviews) }} orders had more than one review; the latest was kept. Reviews created before the recorded delivery date are flagged and used in a sensitivity analysis.</p>
+</div></div></div></div>
+<div class="card mb-3"><div class="card-header">Validate a CSV file</div><div class="card-body">
+<form id="upForm" class="row g-2 align-items-center"><div class="col-md-8"><input type="file" class="form-control" id="file" accept=".csv" required aria-label="CSV file"></div>
+<div class="col-md-4"><button class="btn btn-primary" type="submit">Validate</button> <span class="note">.csv, max 20 MB</span></div></form>
+<div id="upErr" class="alert alert-danger mt-3 d-none" role="alert"></div>
+<div id="upRes" class="mt-3 d-none"></div></div></div>
+{% endblock %}
+{% block scripts %}<script>
+document.getElementById('upForm').addEventListener('submit',async e=>{
+ e.preventDefault();const err=document.getElementById('upErr'),res=document.getElementById('upRes');err.classList.add('d-none');res.classList.add('d-none');res.replaceChildren();
+ const f=document.getElementById('file').files[0];if(!f){return;}
+ const fd=new FormData();fd.append('file',f);
+ try{const r=await fetch('/api/upload',{method:'POST',body:fd});const j=await r.json();if(!r.ok)throw new Error(j.error||'Upload failed');
+  const h=document.createElement('div');
+  const p=document.createElement('p');p.textContent=`${j.filename}: ${j.rows.toLocaleString()} rows, ${j.columns} columns. Detected table: ${j.detected_table||'unknown'}. Status: ${j.quality}.`;h.appendChild(p);
+  if(j.issues.length){const ul=document.createElement('ul');j.issues.forEach(i=>{const li=document.createElement('li');li.textContent=i;ul.appendChild(li)});h.appendChild(ul);}
+  if(j.missing_values.length){const t=document.createElement('p');t.className='note mb-1';t.textContent='Missing values: '+j.missing_values.map(m=>`${m.column} ${m.missing} (${m.pct}%)`).join('; ');h.appendChild(t);}
+  const dw=document.createElement('p');dw.className='note';dw.textContent=`Duplicate rows: ${j.duplicate_rows}`+(j.duplicate_keys!=null?`; duplicate keys: ${j.duplicate_keys}`:'');h.appendChild(dw);
+  const wrap=document.createElement('div');wrap.className='tbl-wrap';const tb=document.createElement('table');tb.className='table table-sm sticky-head';
+  const th=document.createElement('thead'),trh=document.createElement('tr');j.preview_columns.forEach(c=>{const x=document.createElement('th');x.textContent=c+' ('+(j.dtypes[c]||'')+')';trh.appendChild(x)});th.appendChild(trh);tb.appendChild(th);
+  const tbd=document.createElement('tbody');j.preview.forEach(row=>{const tr=document.createElement('tr');row.forEach(v=>tr.appendChild(td(v)));tbd.appendChild(tr)});tb.appendChild(tbd);wrap.appendChild(tb);h.appendChild(wrap);
+  res.appendChild(h);res.classList.remove('d-none');
+ }catch(ex){err.textContent=ex.message;err.classList.remove('d-none');}
+});
+</script>{% endblock %}

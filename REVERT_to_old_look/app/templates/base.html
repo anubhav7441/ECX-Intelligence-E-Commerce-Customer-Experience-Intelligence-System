@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}ECX-Intelligence{% endblock %}</title>
+<meta name="csrf-token" content="{{ csrf_token }}">
+<link href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/fonts.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/theme.css') }}" rel="stylesheet">
+</head>
+<body data-auth="{{ 1 if auth_on else 0 }}" data-user="{{ 1 if user else 0 }}">
+<script src="{{ url_for('static', filename='js/csrf.js') }}"></script>
+<script src="{{ url_for('static', filename='js/guard.js') }}"></script>
+{% macro ic(n) %}<svg viewBox="0 0 24 24" aria-hidden="true">{% if n=='home' %}<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>{% elif n=='db' %}<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>{% elif n=='bulb' %}<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0012 3z"/>{% elif n=='chat' %}<path d="M21 12a8 8 0 01-11.5 7.2L4 21l1.8-5A8 8 0 1121 12z"/>{% elif n=='shield' %}<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/>{% elif n=='sliders' %}<path d="M4 6h10M18 6h2M4 12h2M10 12h10M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>{% elif n=='file' %}<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>{% elif n=='gear' %}<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/>{% elif n=='users' %}<circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6"/><path d="M17 4.5a3.5 3.5 0 010 7M22 20c0-2.7-1.8-4.6-4.5-5.4"/>{% else %}<circle cx="12" cy="12" r="9"/>{% endif %}</svg>{% endmacro %}
+<div class="topbar-m"><span>ECX-<span style="color:#a79bff">Intelligence</span></span><button class="btn btn-sm btn-outline-secondary" onclick="toggleNav()" aria-label="Open or close the menu">Menu</button></div>
+<nav class="sidebar" id="sidebar" aria-label="Main navigation">
+  <div class="brand"><a href="{{ url_for('landing') }}"><span class="mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/></svg></span><b>ECX-<span>Intelligence</span></b></a></div>
+  {% set main = [('workspace','auth.workspace','Overview','home'),('multidata','md.page','My Data','db'),('insights','insights.page','Insights &amp; Advice','bulb'),('ops','ops.center','Operations Center','shield'),('assistant','v2.assistant_page','Ask a Question','chat'),('risk','v2.risk_page','Order Risk Check','shield'),('recsys','rec.page','Product Recommendations','users'),('simulate','v2.simulate_page','What-If Planner','sliders'),('history','auth.history','Reports &amp; History','file'),('account','auth.account','Settings','gear')] %}
+  {% for key,ep,label,icon in main %}<a href="{{ url_for(ep) }}" class="nav-i {{ 'active' if active==key else '' }}" {{ 'aria-current=page' if active==key else '' }}>{{ ic(icon) }}<span class="t">{{ label|safe }}</span></a>{% endfor %}
+  {% if role=='admin' %}<a href="{{ url_for('admin.page') }}" class="nav-i {{ 'active' if active=='admin' else '' }}">{{ ic('users') }}<span class="t">Admin Panel</span></a>{% endif %}
+  {% set nav = [('dashboard','pages.dashboard','Executive Dashboard'),('data','pages.data_management','Data Management'),('reviews','pages.reviews','Review Intelligence'),('predict','pages.predict','Satisfaction Prediction'),('explain','pages.explain','Explainable AI (SHAP)'),('sellers','pages.sellers','Seller Intelligence'),('products','pages.products','Product Intelligence'),('geography','pages.geography','Geographical Intelligence'),('research','pages.research','Research &amp; Statistics'),('recommendations','pages.recommendations','Recommendations')] %}
+  {% set nav2 = [('command','v2.command','Command Center 2.0'),('voice','v2.voice_page','Customer Voice 2.0'),('anomalies','v2.anomalies_page','Anomaly Center'),('investigate','v2.investigate_page','AI Investigation Center'),('actions','v2.actions_page','Action Center &amp; Evidence'),('evaluation','v2.evaluation_page','Model Evaluation Center')] %}
+  <details {{ 'open' if active in ['dashboard','data','reviews','predict','explain','sellers','products','geography','research','recommendations','command','voice','anomalies','investigate','actions','evaluation'] else '' }}>
+    <summary>More tools (advanced) <span aria-hidden="true">▾</span></summary>
+    <div class="grp" style="padding-left:12px">Olist dashboard</div>
+    {% for key,ep,label in nav %}<a href="{{ url_for(ep) }}" class="{{ 'active' if active==key else '' }}">{{ label|safe }}</a>{% endfor %}
+    <div class="grp" style="padding-left:12px">AI tools</div>
+    {% for key,ep,label in nav2 %}<a href="{{ url_for(ep) }}" class="{{ 'active' if active==key else '' }}">{{ label|safe }}</a>{% endfor %}
+  </details>
+  {% if user %}<div class="user-chip"><div class="av">{{ user['name'][:1]|upper }}</div><div><div class="uc-name">{{ user['name'] }}</div><div class="uc-mail">{{ user['role']|capitalize }}</div></div></div>
+  <form method="post" action="{{ url_for('auth.logout') }}" class="logout"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><button>Log out</button></form>{% endif %}
+</nav>
+<main class="main">{% block content %}{% endblock %}</main>
+<script src="{{ url_for('static', filename='vendor/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/v2.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body></html>

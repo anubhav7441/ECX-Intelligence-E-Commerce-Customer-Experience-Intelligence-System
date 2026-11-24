@@ -1,0 +1,26 @@
+{
+  "n_anomalies": 212,
+  "by_detector": {
+    "seller_freight_burden": 82,
+    "seller_dissatisfaction": 35,
+    "seller_sudden_negative_change": 34,
+    "seller_late_rate": 24,
+    "seller_multivariate_isolation_forest": 19,
+    "seller_complaint_frequency": 15,
+    "platform_monthly_neg": 2,
+    "platform_monthly_late": 1
+  },
+  "n_sellers_flagged": 141,
+  "baselines": {
+    "late": 0.0666450139345808,
+    "neg": 0.12827148335184294,
+    "seller_complaint": 0.044705907005008066,
+    "freight_extreme": 0.05111790960333592
+  },
+  "params": {
+    "min_orders_per_seller": 30,
+    "alpha_fdr": 0.05,
+    "isolation_forest_top_pct": 3
+  },
+  "validation_note": "No ground-truth anomaly labels exist, so detectors are NOT scored for accuracy. Evidence is statistical (FDR-controlled tests) and the Isolation Forest is a ranking only. A planted-anomaly recovery test is in tests/test_v2_anomaly.py."
+}

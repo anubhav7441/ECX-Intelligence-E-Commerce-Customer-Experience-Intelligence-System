@@ -1,0 +1,75 @@
+{
+  "note": "Observed dissatisfied rate among TEST orders whose risk score falls in each band (test base rate shown).",
+  "models": {
+    "S0_R": {
+      "test_base_rate": 0.09551968832614442,
+      "bands": [
+        {
+          "lo": 0.44598791003227234,
+          "hi": 0.4946521520614624,
+          "n": 7161,
+          "observed_dissatisfied_rate": 0.07177768468091049
+        },
+        {
+          "lo": 0.4946521520614624,
+          "hi": 0.52070152759552,
+          "n": 4337,
+          "observed_dissatisfied_rate": 0.09315194835139497
+        },
+        {
+          "lo": 0.52070152759552,
+          "hi": 0.5372152924537659,
+          "n": 1436,
+          "observed_dissatisfied_rate": 0.11211699164345404
+        },
+        {
+          "lo": 0.5372152924537659,
+          "hi": 0.5500580817461013,
+          "n": 721,
+          "observed_dissatisfied_rate": 0.14285714285714285
+        },
+        {
+          "lo": 0.5500580817461013,
+          "hi": 0.603326678276062,
+          "n": 719,
+          "observed_dissatisfied_rate": 0.26564673157162727
+        }
+      ]
+    },
+    "S1_R": {
+      "test_base_rate": 0.09551968832614442,
+      "bands": [
+        {
+          "lo": 0.3159848153591156,
+          "hi": 0.3816443085670471,
+          "n": 7187,
+          "observed_dissatisfied_rate": 0.04814247947683317
+        },
+        {
+          "lo": 0.3816443085670471,
+          "hi": 0.44032497406005866,
+          "n": 4312,
+          "observed_dissatisfied_rate": 0.0851113172541744
+        },
+        {
+          "lo": 0.44032497406005866,
+          "hi": 0.5417788326740265,
+          "n": 1437,
+          "observed_dissatisfied_rate": 0.10855949895615867
+        },
+        {
+          "lo": 0.5417788326740265,
+          "hi": 0.6306784152984619,
+          "n": 715,
+          "observed_dissatisfied_rate": 0.1874125874125874
+        },
+        {
+          "lo": 0.6306784152984619,
+          "hi": 0.8037421107292175,
+          "n": 723,
+          "observed_dissatisfied_rate": 0.5117565698478561
+        }
+      ]
+    }
+  }
+}

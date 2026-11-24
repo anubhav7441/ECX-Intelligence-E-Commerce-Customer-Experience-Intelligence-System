@@ -1,0 +1,26 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.pytest_cache/
+.ipynb_checkpoints/
+# raw data and the database are large / licensed: download the dataset yourself (see README)
+data/raw/
+database/ecx.db
+uploads/
+
+# user-uploaded datasets (Multi-Dataset module) stay on your machine
+data/datasets/*
+!data/datasets/.gitkeep
+database/ecx_app.db
+
+database/.secret_key
+database/ecx_auth.db
+database/ecx_app.db
+logs/
+data/datasets/
+
+# operations layer: alerts / API keys database and generated digests
+database/ecx_ops.db
+reports/

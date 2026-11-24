@@ -1,0 +1,87 @@
+{
+  "n_reviews": 150,
+  "per_class": [
+    {
+      "category": "late_delivery",
+      "precision": 0.765,
+      "recall": 0.796,
+      "f1": 0.78,
+      "support": 49
+    },
+    {
+      "category": "damaged_product",
+      "precision": 0.857,
+      "recall": 0.75,
+      "f1": 0.8,
+      "support": 8
+    },
+    {
+      "category": "wrong_product",
+      "precision": 0.8,
+      "recall": 0.4,
+      "f1": 0.533,
+      "support": 20
+    },
+    {
+      "category": "missing_product",
+      "precision": 0.9,
+      "recall": 0.529,
+      "f1": 0.667,
+      "support": 17
+    },
+    {
+      "category": "product_quality",
+      "precision": 0.632,
+      "recall": 0.75,
+      "f1": 0.686,
+      "support": 16
+    },
+    {
+      "category": "seller_issue",
+      "precision": 0.391,
+      "recall": 0.5,
+      "f1": 0.439,
+      "support": 18
+    },
+    {
+      "category": "packaging",
+      "precision": 0.6,
+      "recall": 1.0,
+      "f1": 0.75,
+      "support": 3
+    },
+    {
+      "category": "shipping",
+      "precision": 0.545,
+      "recall": 0.667,
+      "f1": 0.6,
+      "support": 9
+    },
+    {
+      "category": "payment",
+      "precision": 0.571,
+      "recall": 0.8,
+      "f1": 0.667,
+      "support": 5
+    },
+    {
+      "category": "other",
+      "precision": 0.471,
+      "recall": 0.727,
+      "f1": 0.571,
+      "support": 33
+    }
+  ],
+  "micro_precision": 0.6185567010309279,
+  "micro_recall": 0.6741573033707865,
+  "micro_f1": 0.6451612903225806,
+  "macro_f1_over_supported_classes": 0.6492833914053426,
+  "exact_match_accuracy": 0.52,
+  "mean_jaccard": 0.6116666666666667,
+  "complaint_vs_no_complaint": {
+    "precision": 0.9090909090909091,
+    "recall": 0.7692307692307693,
+    "f1": 0.8333333333333334
+  },
+  "annotator": "single annotator (Claude, AI) - not independent human gold labels"
+}

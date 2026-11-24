@@ -1,0 +1,13 @@
+{#- Isometric 3D bar chart in plain CSS (no WebGL, no script). Real figures: share of unhappy customers (1-2 stars) by days late,
+    95,824 delivered and reviewed Olist orders. Expects iso_size = "" (landing) or "mini" (sign-in panel). -#}
+{% set rows = [("Early", 9.2, 0), ("On the day", 12.5, 0), ("1-3 days late", 32.1, 1), ("4-7 days late", 67.7, 2), ("8-14 days late", 80.2, 3), ("15+ days late", 78.3, 3)] %}
+{% set pal = [("#2A8F86", "#1F6E67", "#16524D"), ("#2DD4BF", "#1FA796", "#167B6E"), ("#FFC857", "#E0A230", "#B07C1C"), ("#FF9F43", "#E07F23", "#B25F12")] %}
+<div class="iso {{ iso_size }}" role="img" aria-label="3D bar chart from real Olist data: unhappy customers rise from 9 percent for early orders to about 80 percent for orders 8 to 14 days late">
+  <div class="isoplane"><div class="isogrid"></div>
+  {% for r in rows %}{% set c = pal[r[2]] %}<div class="bx" title="{{ r[0] }}: {{ r[1] }}% unhappy" style="--l:{{ loop.index0 * 66 }}px;--h:{{ (r[1] * 2.62) | round | int }}px;--c1:{{ c[0] }};--c2:{{ c[1] }};--c3:{{ c[2] }};--i:{{ loop.index0 }}"><i class="t"></i><i class="s"></i><i class="w"></i></div>{% endfor %}
+  </div>
+  {% if not iso_size %}<div class="hud a"><b>WARNING &middot; LATE DELIVERIES</b><span>62.4% of late orders got a bad review, against 9.3% of on-time orders</span></div>
+  <div class="hud b"><b>8-14 DAYS LATE</b><strong>80.2% <small>unhappy</small></strong></div>
+  <div class="xl"><span>Early</span><span>On the day</span><span>1-3 late</span><span>4-7 late</span><span>8-14 late</span><span>15+ late</span></div>
+  <p class="src">Real Olist data: 95,824 delivered, reviewed orders. Bars show the share who gave 1&ndash;2 stars.</p>{% endif %}
+</div>

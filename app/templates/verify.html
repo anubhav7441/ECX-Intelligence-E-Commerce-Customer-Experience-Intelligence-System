@@ -1,0 +1,28 @@
+{% extends "public.html" %}
+{% block title %}Verify your email — ECX-Intelligence{% endblock %}
+{% block bodyclass %}authpage city{% endblock %}
+{% block head %}<link href="{{ url_for('static', filename='css/city.css') }}" rel="stylesheet">{% endblock %}
+{% block header %}{% endblock %}{% block footer %}{% endblock %}
+{% block body %}<main class="split">
+  {% include "_authside.html" %}
+  <div class="r">
+    <h1>Check your email</h1>
+    <p class="alt" style="text-align:left;margin:0 0 14px">We sent a 6-digit code to <b>{{ masked }}</b>. Enter it below to finish creating your account. The code works for 15 minutes.</p>
+    {% if notice %}<div class="alert-x" role="status" style="border-color:rgba(45,212,191,.5);color:#7CF0DD">{{ notice }}</div>{% endif %}
+    {% if error %}<div class="alert-x" role="alert">{{ error }}</div>{% endif %}
+    <form method="post" action="{{ url_for('auth.verify') }}" novalidate id="vf">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <div class="fld"><label for="code">Verification code</label><input id="code" name="code" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" required autofocus style="letter-spacing:.35em;font-size:1.3rem;text-align:center"></div>
+      <button class="btn-x pri lg" style="width:100%" id="sb">Verify and continue</button>
+    </form>
+    <form method="post" action="{{ url_for('auth.verify_resend') }}" style="margin-top:10px">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <button class="btn-x lg" style="width:100%" type="submit">Send a new code</button>
+    </form>
+    <p class="alt">Wrong address? <a href="{{ url_for('auth.register') }}">Sign up again</a> · <a href="{{ url_for('landing') }}">Back to home</a></p>
+  </div>
+</main>{% endblock %}
+{% block scripts %}<script>
+document.getElementById('vf').addEventListener('submit',function(e){var v=document.getElementById('code').value.replace(/\D/g,'');
+  if(v.length!==6){e.preventDefault();document.getElementById('code').focus();return;}var b=document.getElementById('sb');b.disabled=true;b.textContent='Checking…';});
+</script>{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% block title %}Command Center 2.0 - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Executive Command Center 2.0</h1>
+<p class="lead-sm">One-screen summary of the 2.0 intelligence layer. Everything is computed from the Olist historical data (2016-2018); anomalies and proposals are <strong>investigation signals for humans</strong>, not automatic decisions.</p>
+{% if not k %}<div class="caveat">Processed data missing. Extract the data ZIP into <code>data/processed</code> or run <code>python scripts/run_all.py</code>.</div>{% else %}
+<div class="row g-3 mb-3">
+ <div class="col-6 col-lg-3"><div class="card kpi"><div class="v">{{ '{:,}'.format(k.n_orders) }}</div><div class="l">analysed orders</div></div></div>
+ <div class="col-6 col-lg-3"><div class="card kpi warn"><div class="v">{{ '%.1f'|format(k.late_rate*100) }}%</div><div class="l">late deliveries</div></div></div>
+ <div class="col-6 col-lg-3"><div class="card kpi warn"><div class="v">{{ '%.1f'|format(k.dissatisfied_rate*100) }}%</div><div class="l">dissatisfied (1-2 stars)</div></div></div>
+ <div class="col-6 col-lg-3"><div class="card kpi"><div class="v">{{ k.n_sellers }}</div><div class="l">sellers</div></div></div>
+</div>{% endif %}
+<div class="row g-3">
+ <div class="col-lg-4"><div class="card h-100"><div class="card-header">Anomaly signals</div><div class="card-body">
+  {% if an %}<div class="kpi p-0"><div class="v">{{ an.n_anomalies }}</div><div class="l">signals across {{ an.n_sellers_flagged }} sellers + platform months</div></div>
+  <ul class="note mt-2 ps-3 mb-2">{% for d,c in an.by_detector.items() %}<li>{{ d.replace('_',' ') }}: {{ c }}</li>{% endfor %}</ul>
+  <a href="{{ url_for('v2.anomalies_page') }}">Open Anomaly Center</a>{% else %}<span class="note">Run <code>python -m ecx2.anomaly.detect</code></span>{% endif %}</div></div></div>
+ <div class="col-lg-4"><div class="card h-100"><div class="card-header">Action Center</div><div class="card-body">
+  <div class="row text-center">{% for s in ['proposed','approved','in_progress','completed','rejected'] %}<div class="col"><div class="kpi p-1"><div class="v" style="font-size:1.3rem">{{ cnt.actions[s] }}</div><div class="l">{{ s.replace('_',' ') }}</div></div></div>{% endfor %}</div>
+  <p class="note mt-2">Evidence ledger entries: <strong>{{ cnt.evidence }}</strong>. Proposals need a named human reviewer; nothing is executed automatically.</p>
+  <a href="{{ url_for('v2.actions_page') }}">Open Action Center</a></div></div></div>
+ <div class="col-lg-4"><div class="card h-100"><div class="card-header">Early late-delivery risk models</div><div class="card-body">
+  {% if risk %}{% for s,v in risk.selected.items() %}<p class="mb-1"><strong>{{ s }}</strong> ({{ v.model }}): test ROC-AUC {{ '%.2f'|format(v.test.roc_auc) }}, top-decile lift {{ '%.1f'|format(v.top_decile_lift) }}x</p>{% endfor %}
+  <p class="note">Checkout-time prediction is weak; hand-off stage is useful. See Model Evaluation Center.</p>{% else %}<span class="note">Run <code>python -m ecx2.risk.train</code></span>{% endif %}</div></div></div>
+</div>
+<div class="row g-3 mt-1">{% for u,l,d in [('v2.investigate_page','AI Investigation Center','Multi-agent investigation of a seller or month'),('v2.assistant_page','AI Research Assistant','Ask grounded questions; run statistical tests'),('v2.simulate_page','Business Simulation','Hypothetical what-if scenarios')] %}
+ <div class="col-md-4"><a class="card p-3 text-decoration-none text-reset" href="{{ url_for(u) }}"><strong>{{ l }}</strong><span class="note">{{ d }}</span></a></div>{% endfor %}</div>
+{% endblock %}

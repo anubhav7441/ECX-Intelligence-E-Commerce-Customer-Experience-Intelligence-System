@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}API keys - ECX-Intelligence{% endblock %}
+{% block content %}
+<p class="note mb-1"><a href="{{ url_for('ops.center') }}">&larr; Operations Center</a></p>
+<h1 class="page">API keys</h1>
+<div class="caveat mb-3"><strong>For other systems.</strong> A key lets another program read alerts, actions and outcomes at <code>/api/v1/...</code> by sending <code>Authorization: Bearer &lt;key&gt;</code>. A "write" key can also acknowledge alerts. The key is shown once, stored only as a hash, rate-limited, and can be revoked. Never paste a key into code you share or into a public repository.</div>
+<div class="card mb-3"><div class="card-body"><form id="f" class="row g-2">
+ <div class="col-md-5"><label class="form-label note">Name (what will use it)</label><input class="form-control form-control-sm" name="name" maxlength="80" required></div>
+ <div class="col-md-3"><label class="form-label note">Access</label><select class="form-select form-select-sm" name="scope"><option value="read">Read only</option><option value="write">Read and acknowledge</option></select></div>
+ <div class="col-md-4 d-flex align-items-end"><button class="btn btn-primary btn-sm">Create key</button></div></form>
+ <div id="err" class="alert alert-danger d-none mt-2"></div><div id="new" class="alert alert-warning d-none mt-2"></div></div></div>
+<div class="card"><div class="card-body p-0">
+{% if keys %}<div class="tbl-wrap"><table class="table table-sm sticky-head mb-0"><thead><tr><th>ID</th><th>Name</th><th>Starts with</th><th>Access</th><th>Created</th><th>Last used</th><th>Uses</th><th>Status</th><th></th></tr></thead><tbody>
+{% for k in keys %}<tr><td>{{ k.key_id }}</td><td>{{ k.name }}</td><td><code>{{ k.prefix }}...</code></td><td>{{ k.scope }}</td><td>{{ k.created_at }}</td><td>{{ k.last_used or '-' }}</td><td>{{ k.uses }}</td><td>{{ 'revoked' if k.revoked else 'active' }}</td><td>{% if not k.revoked %}<button class="btn btn-sm btn-outline-danger" onclick="rev('{{ k.key_id }}')">Revoke</button>{% endif %}</td></tr>{% endfor %}</tbody></table></div>
+{% else %}<p class="note p-3 mb-0">No keys yet.</p>{% endif %}</div></div>
+{% endblock %}
+{% block scripts %}<script>
+f.addEventListener('submit',async e=>{e.preventDefault();showErr('err');const b={};new FormData(f).forEach((v,k)=>b[k]=v);
+ try{const r=await fetch('/api/admin/keys',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();if(!r.ok)throw new Error(j.error||'Failed');
+  const n=clear(document.getElementById('new'));n.classList.remove('d-none');n.appendChild(el('strong','Copy this key now. It will not be shown again:'));n.appendChild(el('div',null,'mt-1')).appendChild(el('code',j.key));
+  n.appendChild(el('div','Reload this page afterwards to see the key in the list.','note mt-1'))}catch(x){showErr('err',x.message)}});
+async function rev(id){if(!confirm('Revoke '+id+'? Programs using it will stop working.'))return;await fetch('/api/admin/keys/'+id+'/revoke',{method:'POST'});location.reload()}
+</script>{% endblock %}

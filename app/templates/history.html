@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}History & Reports — ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">History &amp; Reports</h1>
+<p class="lead-sm">Every analysis and report you have run. Opening an entry shows the <b>saved</b> results; nothing is recomputed.</p>
+<div class="card"><div class="card-body p-0" id="box"><div class="p-3"><div class="skeleton" style="height:90px"></div></div></div></div>
+{% endblock %}
+{% block scripts %}<script>
+function E(t){var d=document.createElement('div');d.textContent=t==null?'':t;return d.innerHTML;}
+fetch('/api/history').then(function(r){return r.json()}).then(function(j){var b=document.getElementById('box');
+ if(!j.runs.length){b.innerHTML='<div class="empty m-3">Nothing here yet. Run an analysis from the <a href="/multidata">Dataset Center</a>.</div>';return;}
+ b.innerHTML='<div class="table-responsive"><table class="table table-sm mb-0"><thead><tr><th>When (UTC)</th><th>Dataset</th><th>Type</th><th>Analyses</th><th>Status</th><th></th></tr></thead><tbody>'+j.runs.map(function(r){
+  var pdf=r.kind==='report'?' · <a href="/api/md/'+encodeURIComponent(r.dataset_id)+'/files/report.pdf">Download PDF</a>':'';
+  return '<tr><td>'+E(r.ts.slice(0,16).replace('T',' '))+'</td><td>'+E(r.dataset_name)+'</td><td>'+E(r.kind)+'</td><td class="note">'+E((r.analyses||[]).join(', ')||'-')+'</td><td>'+E(r.status)+'</td><td><a href="/multidata?dataset='+encodeURIComponent(r.dataset_id)+'">View saved results</a>'+pdf+'</td></tr>'}).join('')+'</tbody></table></div>';
+}).catch(function(){document.getElementById('box').innerHTML='<div class="alert alert-danger m-3">Could not load history.</div>'});
+</script>{% endblock %}

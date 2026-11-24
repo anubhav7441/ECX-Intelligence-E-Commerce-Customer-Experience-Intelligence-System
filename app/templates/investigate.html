@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block title %}AI Investigation Center - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">AI Investigation Center</h1>
+<p class="lead-sm">A <strong>Supervisor</strong> delegates to five agents (Seller, Delivery Risk, Customer Review, Research Validation, Action Planning). Each agent calls grounded data tools and returns a structured report. <strong>No LLM is used</strong>; all numbers come from pandas/scipy. Proposed actions go to the Action Center for human approval.</p>
+<div class="card mb-3"><div class="card-body"><form id="f" class="row g-2 align-items-end">
+<div class="col-md-3"><label class="form-label note">Investigate</label><select id="tt" class="form-select"><option value="seller">a seller</option><option value="platform_month">a platform month</option></select></div>
+<div class="col-md-6"><label class="form-label note" id="lb">Seller id (full or first 8+ characters)</label><input id="tid" class="form-control" required></div>
+<div class="col-md-3"><button class="btn btn-primary w-100" type="submit">Run investigation</button></div></form>
+<div id="err" class="alert alert-danger mt-3 d-none"></div></div></div>
+<div id="out"></div>
+{% endblock %}
+{% block scripts %}<script>
+const q=new URLSearchParams(location.search);if(q.get('seller'))document.getElementById('tid').value=q.get('seller');
+document.getElementById('tt').onchange=e=>{document.getElementById('lb').textContent=e.target.value==='seller'?'Seller id (full or first 8+ characters)':'Month, e.g. 2017-11'};
+document.getElementById('f').addEventListener('submit',async e=>{e.preventDefault();showErr('err');const o=clear(document.getElementById('out'));o.appendChild(el('p','Running agents...','note'));
+ try{const r=await postJSON('/api/v2/investigate',{target_type:tt.value,target_id:tid.value.trim()});clear(o);
+  const s=el('div',null,'card mb-3');const sb=el('div',null,'card-body');sb.appendChild(el('div','Summary','fw-semibold'));sb.appendChild(el('p',r.summary));
+  sb.appendChild(confBadge(r.overall_confidence));sb.appendChild(el('span','overall confidence | run '+r.run_id+' | human review required','note'));
+  sb.appendChild(el('div','Plan: '+r.plan.join(' > '),'note mt-2'));s.appendChild(sb);o.appendChild(s);
+  r.reports.forEach(a=>{const c=el('div',null,'card mb-2');c.appendChild(el('div',a.agent+'  ['+a.status+']','card-header'));const b=el('div',null,'card-body');
+   b.appendChild(el('div','Task: '+a.task,'note'));
+   a.findings.forEach(f=>{const p=el('p',null,'mb-1');p.appendChild(confBadge(f.confidence));p.appendChild(el('span',f.statement));if(f.evidence_id)p.appendChild(el('span',' ['+f.evidence_id+']','note'));b.appendChild(p)});
+   if(a.uncertainty.length){b.appendChild(el('div','Uncertainty','fw-semibold mt-2'));a.uncertainty.forEach(u=>b.appendChild(el('div','- '+u,'note')))}
+   if(a.errors.length){b.appendChild(el('div','Errors','fw-semibold mt-2 bad'));a.errors.forEach(u=>b.appendChild(el('div','- '+u,'note')))}
+   b.appendChild(el('div','Tool calls: '+a.tool_calls.map(t=>t.name+(t.ok?'':' (failed)')).join(', ')+' | Sources: '+a.data_sources.join('; '),'note mt-2'));
+   b.appendChild(el('div','Next step: '+a.recommended_next_step,'note'));c.appendChild(b);o.appendChild(c)});
+  if(r.actions.length){const c=el('div',null,'card mb-2');c.appendChild(el('div','Proposed actions (awaiting human approval - nothing is executed)','card-header'));
+   c.appendChild(table([{label:'ID',k:'action_id'},{label:'Action',k:'title'},{label:'Priority',k:'priority'},{label:'Owner role',k:'owner_role'},{label:'Evidence',f:x=>x.evidence_ids.join(', ')}],r.actions));
+   const f=el('div',null,'card-body');const a=el('a','Open in Action Center','btn btn-sm btn-outline-primary',{href:'/actions'});f.appendChild(a);c.appendChild(f);o.appendChild(c)}
+  o.appendChild(el('div','Limitations: '+r.limitations.join(' '),'caveat'));
+ }catch(x){clear(o);showErr('err',x.message)}});
+</script>{% endblock %}

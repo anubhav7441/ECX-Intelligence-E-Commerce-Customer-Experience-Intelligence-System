@@ -1,0 +1,669 @@
+{
+  "n_analytic_orders": 95824,
+  "descriptive": {
+    "mean_review_score": 4.155879529136751,
+    "median_review_score": 5.0,
+    "pct_dissatisfied_1_2": 12.806812489564201,
+    "pct_late": 6.659083319418935,
+    "mean_delivery_days": 12.51676507129873,
+    "median_delivery_days": 10.206059027777778,
+    "mean_estimated_days": 23.73197813105856,
+    "mean_delay_days_when_late": 10.518414041686256,
+    "score_distribution_pct": {
+      "1.0": 9.76,
+      "2.0": 3.05,
+      "3.0": 8.26,
+      "4.0": 19.71,
+      "5.0": 59.22
+    }
+  },
+  "H1_late_vs_ontime": {
+    "label": "all analytic orders",
+    "n_late": 6381,
+    "n_on_time": 89443,
+    "mean_score_late": 2.270490518727472,
+    "mean_score_on_time": 4.290386055923885,
+    "mean_diff": -2.0198955371964127,
+    "mean_diff_ci95": [
+      -2.05869970185486,
+      -1.9795594718300673
+    ],
+    "mannwhitney_U": 103305546.0,
+    "p_value": 0.0,
+    "cliffs_delta": -0.6379916974646743,
+    "effect_size_label": "large",
+    "pct_dissatisfied_late": 62.419683435198245,
+    "pct_dissatisfied_on_time": 9.267354628087162,
+    "chi2": 15068.908499715766,
+    "chi2_p": 0.0,
+    "phi": 0.39655529213658053,
+    "odds_ratio": 16.261811351821216,
+    "odds_ratio_ci95": [
+      15.384278637153066,
+      17.189399300372948
+    ]
+  },
+  "H1_sensitivity_review_after_delivery_only": {
+    "label": "reviews created on/after delivery date",
+    "n_late": 1630,
+    "n_on_time": 89218,
+    "mean_score_late": 3.5263803680981596,
+    "mean_score_on_time": 4.2912753031899395,
+    "mean_diff": -0.76489493509178,
+    "mean_diff_ci95": [
+      -0.837600383812065,
+      -0.6921560850399247
+    ],
+    "mannwhitney_U": 50670204.5,
+    "p_value": 2.80528897499539e-129,
+    "cliffs_delta": -0.3031447683051661,
+    "effect_size_label": "small",
+    "pct_dissatisfied_late": 25.0920245398773,
+    "pct_dissatisfied_on_time": 9.247012934609607,
+    "chi2": 466.0785818917837,
+    "chi2_p": 2.286154120106552e-103,
+    "phi": 0.07162619611883465,
+    "odds_ratio": 3.287510187873824,
+    "odds_ratio_ci95": [
+      2.9325870983232165,
+      3.685388659574267
+    ]
+  },
+  "delay_band_table": [
+    {
+      "delay_days": "early (>=1d)",
+      "n": 88163,
+      "mean_score": 4.294,
+      "pct_dissatisfied": 9.222
+    },
+    {
+      "delay_days": "on estimated day",
+      "n": 1280,
+      "mean_score": 4.034,
+      "pct_dissatisfied": 12.422
+    },
+    {
+      "delay_days": "1-3d late",
+      "n": 1852,
+      "mean_score": 3.291,
+      "pct_dissatisfied": 32.127
+    },
+    {
+      "delay_days": "4-7d late",
+      "n": 1748,
+      "mean_score": 2.103,
+      "pct_dissatisfied": 67.677
+    },
+    {
+      "delay_days": "8-14d late",
+      "n": 1446,
+      "mean_score": 1.671,
+      "pct_dissatisfied": 80.152
+    },
+    {
+      "delay_days": ">14d late",
+      "n": 1335,
+      "mean_score": 1.724,
+      "pct_dissatisfied": 78.352
+    }
+  ],
+  "spearman_delay_vs_score": {
+    "rho": -0.17644244393133116,
+    "p": 0.0
+  },
+  "Q5_price_vs_score": {
+    "label": "order item value",
+    "n": 95824,
+    "spearman_rho": -0.02880756136419438,
+    "p": 4.694761283911519e-19,
+    "quartile_table": [
+      {
+        "quartile": "Q1 (lowest)",
+        "n": 24101,
+        "mean_score": 4.219,
+        "pct_dissatisfied": 10.854
+      },
+      {
+        "quartile": "Q2",
+        "n": 23815,
+        "mean_score": 4.179,
+        "pct_dissatisfied": 12.148
+      },
+      {
+        "quartile": "Q3",
+        "n": 24207,
+        "mean_score": 4.157,
+        "pct_dissatisfied": 12.761
+      },
+      {
+        "quartile": "Q4 (highest)",
+        "n": 23701,
+        "mean_score": 4.068,
+        "pct_dissatisfied": 15.501
+      }
+    ],
+    "top_vs_bottom_quartile": {
+      "mannwhitney_p": 1.2016971016424562e-18,
+      "cliffs_delta": -0.041228077904385874,
+      "label": "negligible"
+    }
+  },
+  "H4_freight_ratio_vs_score": {
+    "label": "freight ratio (freight/price)",
+    "n": 95824,
+    "spearman_rho": -0.031015246137554082,
+    "p": 7.757963315373831e-22,
+    "quartile_table": [
+      {
+        "quartile": "Q1 (lowest)",
+        "n": 23957,
+        "mean_score": 4.201,
+        "pct_dissatisfied": 12.318
+      },
+      {
+        "quartile": "Q2",
+        "n": 23965,
+        "mean_score": 4.164,
+        "pct_dissatisfied": 12.406
+      },
+      {
+        "quartile": "Q3",
+        "n": 23948,
+        "mean_score": 4.144,
+        "pct_dissatisfied": 13.053
+      },
+      {
+        "quartile": "Q4 (highest)",
+        "n": 23954,
+        "mean_score": 4.114,
+        "pct_dissatisfied": 13.451
+      }
+    ],
+    "top_vs_bottom_quartile": {
+      "mannwhitney_p": 4.939343323572115e-20,
+      "cliffs_delta": -0.04270701860635484,
+      "label": "negligible"
+    }
+  },
+  "Q6_distance_vs_score": {
+    "label": "seller-customer distance (km)",
+    "n": 95347,
+    "spearman_rho": -0.06438457927867196,
+    "p": 3.968379739880029e-88,
+    "quartile_table": [
+      {
+        "quartile": "Q1 (lowest)",
+        "n": 23837,
+        "mean_score": 4.282,
+        "pct_dissatisfied": 10.182
+      },
+      {
+        "quartile": "Q2",
+        "n": 23837,
+        "mean_score": 4.158,
+        "pct_dissatisfied": 13.072
+      },
+      {
+        "quartile": "Q3",
+        "n": 23836,
+        "mean_score": 4.117,
+        "pct_dissatisfied": 13.396
+      },
+      {
+        "quartile": "Q4 (highest)",
+        "n": 23837,
+        "mean_score": 4.066,
+        "pct_dissatisfied": 14.603
+      }
+    ],
+    "top_vs_bottom_quartile": {
+      "mannwhitney_p": 1.5861639651086952e-77,
+      "cliffs_delta": -0.08699995511635916,
+      "label": "negligible"
+    }
+  },
+  "delivery_days_vs_score": {
+    "label": "actual delivery days",
+    "n": 95824,
+    "spearman_rho": -0.23457864310584894,
+    "p": 0.0,
+    "quartile_table": [
+      {
+        "quartile": "Q1 (lowest)",
+        "n": 23956,
+        "mean_score": 4.42,
+        "pct_dissatisfied": 7.485
+      },
+      {
+        "quartile": "Q2",
+        "n": 23956,
+        "mean_score": 4.349,
+        "pct_dissatisfied": 8.39
+      },
+      {
+        "quartile": "Q3",
+        "n": 23956,
+        "mean_score": 4.258,
+        "pct_dissatisfied": 9.689
+      },
+      {
+        "quartile": "Q4 (highest)",
+        "n": 23956,
+        "mean_score": 3.597,
+        "pct_dissatisfied": 25.664
+      }
+    ],
+    "top_vs_bottom_quartile": {
+      "mannwhitney_p": 0.0,
+      "cliffs_delta": -0.30454505652805175,
+      "label": "small"
+    }
+  },
+  "logit_controls": {
+    "n": 95347,
+    "pseudo_r2": 0.1630096160664155,
+    "terms": {
+      "is_late": {
+        "odds_ratio": 7.726108793286167,
+        "ci95": [
+          7.137537975769757,
+          8.363213938522856
+        ],
+        "p": 0.0
+      },
+      "log_price": {
+        "odds_ratio": 1.1223760764620525,
+        "ci95": [
+          1.082274929741683,
+          1.1639630766602185
+        ],
+        "p": 4.994727530962921e-10
+      },
+      "freight_ratio": {
+        "odds_ratio": 1.3479365928319518,
+        "ci95": [
+          1.188687528580159,
+          1.5285203340743945
+        ],
+        "p": 3.2466395635179513e-06
+      },
+      "distance_100km": {
+        "odds_ratio": 0.9821748597844794,
+        "ci95": [
+          0.9780555389503598,
+          0.9863115301488236
+        ],
+        "p": 4.96661071576964e-17
+      },
+      "delivery_days": {
+        "odds_ratio": 1.041438395878514,
+        "ci95": [
+          1.0383057986578774,
+          1.044580444231331
+        ],
+        "p": 8.797433104942172e-154
+      },
+      "n_items": {
+        "odds_ratio": 1.7358967469969169,
+        "ci95": [
+          1.6782605573648275,
+          1.7955123255509042
+        ],
+        "p": 7.134775230585585e-225
+      }
+    }
+  },
+  "H2_sellers": {
+    "label": "sellers with >=50 orders",
+    "min_orders": 50,
+    "n_groups": 413,
+    "orders_covered": 71929,
+    "overall_rate_pct": 12.806812489564201,
+    "chi2": 2166.966720587764,
+    "dof": 412,
+    "p": 1.7553889642389944e-235,
+    "cramers_v": 0.17356977862821923,
+    "n_groups_significantly_worse": 52,
+    "worst_groups": [
+      {
+        "primary_seller_id": "1ca7077d890b907f89be8c954a02686a",
+        "n": 107,
+        "rate": 0.5981,
+        "ci_lo": 0.5034,
+        "ci_hi": 0.6861
+      },
+      {
+        "primary_seller_id": "2eb70248d66e0e3ef83659f71b244378",
+        "n": 182,
+        "rate": 0.478,
+        "ci_lo": 0.4067,
+        "ci_hi": 0.5503
+      },
+      {
+        "primary_seller_id": "972d0f9cf61b499a4812cf0bfa3ad3c4",
+        "n": 74,
+        "rate": 0.4054,
+        "ci_lo": 0.3009,
+        "ci_hi": 0.5192
+      },
+      {
+        "primary_seller_id": "54965bbe3e4f07ae045b90b0b8541f52",
+        "n": 68,
+        "rate": 0.3971,
+        "ci_lo": 0.2893,
+        "ci_hi": 0.5158
+      },
+      {
+        "primary_seller_id": "a49928bcdf77c55c6d6e05e09a9b4ca5",
+        "n": 94,
+        "rate": 0.3936,
+        "ci_lo": 0.3009,
+        "ci_hi": 0.4947
+      },
+      {
+        "primary_seller_id": "bbad7e518d7af88a0897397ffdca1979",
+        "n": 65,
+        "rate": 0.3846,
+        "ci_lo": 0.2759,
+        "ci_hi": 0.5062
+      },
+      {
+        "primary_seller_id": "6fd52c528dcb38be2eea044946b811f8",
+        "n": 66,
+        "rate": 0.3636,
+        "ci_lo": 0.2581,
+        "ci_hi": 0.4842
+      },
+      {
+        "primary_seller_id": "712e6ed8aa4aa1fa65dab41fed5737e4",
+        "n": 76,
+        "rate": 0.3553,
+        "ci_lo": 0.257,
+        "ci_hi": 0.4674
+      },
+      {
+        "primary_seller_id": "8444e55c1f13cd5c179851e5ca5ebd00",
+        "n": 91,
+        "rate": 0.3297,
+        "ci_lo": 0.2417,
+        "ci_hi": 0.4314
+      },
+      {
+        "primary_seller_id": "b2479f944e1b90cf8a5de1bbfde284d6",
+        "n": 98,
+        "rate": 0.3061,
+        "ci_lo": 0.2236,
+        "ci_hi": 0.4032
+      }
+    ]
+  },
+  "H3_categories": {
+    "label": "categories with >=100 orders",
+    "min_orders": 100,
+    "n_groups": 52,
+    "orders_covered": 95007,
+    "overall_rate_pct": 12.806812489564201,
+    "chi2": 464.01221097349253,
+    "dof": 51,
+    "p": 5.6817749350364485e-68,
+    "cramers_v": 0.06988547195753902,
+    "n_groups_significantly_worse": 9,
+    "worst_groups": [
+      {
+        "primary_category": "fashion_male_clothing",
+        "n": 105,
+        "rate": 0.2286,
+        "ci_lo": 0.1587,
+        "ci_hi": 0.3176
+      },
+      {
+        "primary_category": "office_furniture",
+        "n": 1236,
+        "rate": 0.2184,
+        "ci_lo": 0.1963,
+        "ci_hi": 0.2423
+      },
+      {
+        "primary_category": "audio",
+        "n": 341,
+        "rate": 0.2141,
+        "ci_lo": 0.1739,
+        "ci_hi": 0.2607
+      },
+      {
+        "primary_category": "home_confort",
+        "n": 368,
+        "rate": 0.1793,
+        "ci_lo": 0.1435,
+        "ci_hi": 0.2218
+      },
+      {
+        "primary_category": "unknown",
+        "n": 1350,
+        "rate": 0.1674,
+        "ci_lo": 0.1484,
+        "ci_hi": 0.1883
+      },
+      {
+        "primary_category": "bed_bath_table",
+        "n": 9072,
+        "rate": 0.1573,
+        "ci_lo": 0.15,
+        "ci_hi": 0.1649
+      },
+      {
+        "primary_category": "furniture_decor",
+        "n": 6167,
+        "rate": 0.1498,
+        "ci_lo": 0.1411,
+        "ci_hi": 0.159
+      },
+      {
+        "primary_category": "computers_accessories",
+        "n": 6469,
+        "rate": 0.1448,
+        "ci_lo": 0.1365,
+        "ci_hi": 0.1536
+      },
+      {
+        "primary_category": "telephony",
+        "n": 4052,
+        "rate": 0.1402,
+        "ci_lo": 0.1298,
+        "ci_hi": 0.1512
+      }
+    ]
+  },
+  "H5_states": {
+    "label": "customer states with >=100 orders",
+    "min_orders": 100,
+    "n_groups": 24,
+    "orders_covered": 95637,
+    "overall_rate_pct": 12.806812489564201,
+    "chi2": 704.7295778817306,
+    "dof": 23,
+    "p": 4.47621850442973e-134,
+    "cramers_v": 0.0858416936237093,
+    "n_groups_significantly_worse": 9,
+    "worst_groups": [
+      {
+        "customer_state": "AL",
+        "n": 394,
+        "rate": 0.2132,
+        "ci_lo": 0.1756,
+        "ci_hi": 0.2563
+      },
+      {
+        "customer_state": "MA",
+        "n": 712,
+        "rate": 0.1994,
+        "ci_lo": 0.1717,
+        "ci_hi": 0.2304
+      },
+      {
+        "customer_state": "SE",
+        "n": 334,
+        "rate": 0.1886,
+        "ci_lo": 0.1503,
+        "ci_hi": 0.234
+      },
+      {
+        "customer_state": "RJ",
+        "n": 12211,
+        "rate": 0.1833,
+        "ci_lo": 0.1765,
+        "ci_hi": 0.1902
+      },
+      {
+        "customer_state": "PA",
+        "n": 933,
+        "rate": 0.179,
+        "ci_lo": 0.1557,
+        "ci_hi": 0.2049
+      },
+      {
+        "customer_state": "CE",
+        "n": 1273,
+        "rate": 0.1712,
+        "ci_lo": 0.1516,
+        "ci_hi": 0.1929
+      },
+      {
+        "customer_state": "BA",
+        "n": 3229,
+        "rate": 0.17,
+        "ci_lo": 0.1575,
+        "ci_hi": 0.1834
+      },
+      {
+        "customer_state": "PI",
+        "n": 471,
+        "rate": 0.1614,
+        "ci_lo": 0.1309,
+        "ci_hi": 0.1973
+      },
+      {
+        "customer_state": "PE",
+        "n": 1579,
+        "rate": 0.1482,
+        "ci_lo": 0.1315,
+        "ci_hi": 0.1666
+      }
+    ]
+  },
+  "H5_regions": {
+    "label": "customer macro-regions",
+    "min_orders": 100,
+    "n_groups": 5,
+    "orders_covered": 95824,
+    "overall_rate_pct": 12.806812489564201,
+    "chi2": 156.78766061556652,
+    "dof": 4,
+    "p": 7.141325635275228e-33,
+    "cramers_v": 0.04045002480024508,
+    "n_groups_significantly_worse": 2,
+    "worst_groups": [
+      {
+        "customer_region": "Northeast",
+        "n": 8975,
+        "rate": 0.1675,
+        "ci_lo": 0.1599,
+        "ci_hi": 0.1753
+      },
+      {
+        "customer_region": "North",
+        "n": 1779,
+        "rate": 0.1518,
+        "ci_lo": 0.1358,
+        "ci_hi": 0.1692
+      }
+    ]
+  },
+  "Q10_repeat_purchase": {
+    "n_first_orders": 55043,
+    "repeat_rate_dissatisfied_pct": 3.774367482372459,
+    "repeat_rate_satisfied_pct": 4.101652373980339,
+    "n_dissatisfied": 7233,
+    "n_satisfied": 47810,
+    "repeaters_dissatisfied": 273,
+    "repeaters_satisfied": 1961,
+    "ci95_dissatisfied": [
+      3.3591353136574242,
+      4.2386764168079765
+    ],
+    "ci95_satisfied": [
+      3.927529468609886,
+      4.283150678872763
+    ],
+    "chi2": 1.7282243007544105,
+    "p": 0.18863782969313275,
+    "phi": 0.005603366194623688,
+    "overall_pct_customers_with_repeat_order": 3.2022599113717964
+  },
+  "verdicts": [
+    {
+      "id": "H1",
+      "hypothesis": "Late delivery is a major driver of negative reviews.",
+      "data_test": "Mann-Whitney U + chi-square + odds ratio + bootstrap CI; logistic regression with controls",
+      "statistical_evidence": "Mean score 2.27 (late) vs 4.29 (on time); dissatisfied 62.4% vs 9.3%; Cliff's delta -0.64 (large); OR 16.26; p<1e-300",
+      "verdict": "Confirmed (association)",
+      "note": "Association only. Effect is much smaller when restricted to reviews written after delivery (see H1_sensitivity): many late-order reviews were created before the recorded delivery date."
+    },
+    {
+      "id": "H2",
+      "hypothesis": "Certain sellers have systematically poor customer experience.",
+      "data_test": "Chi-square homogeneity across sellers (>=50 orders); Wilson CI vs overall rate",
+      "statistical_evidence": "chi2=2167.0, dof=412, p=1.8e-235, Cramer's V=0.174; 52 of 413 sellers have CI lower bound above overall rate",
+      "verdict": "Confirmed",
+      "note": ""
+    },
+    {
+      "id": "H3",
+      "hypothesis": "Some product categories have unusually high complaint rates.",
+      "data_test": "Chi-square homogeneity across categories (>=100 orders); Wilson CI",
+      "statistical_evidence": "chi2=464.0, dof=51, p=5.7e-68, V=0.070; 9 of 52 categories significantly worse",
+      "verdict": "Confirmed",
+      "note": ""
+    },
+    {
+      "id": "H4",
+      "hypothesis": "High freight costs are associated with poor customer satisfaction.",
+      "data_test": "Spearman correlation + top vs bottom quartile Mann-Whitney",
+      "statistical_evidence": "Spearman rho=-0.031 (p=7.8e-22); top-vs-bottom quartile Cliff's delta -0.043 (negligible)",
+      "verdict": "Statistically significant but negligible practical effect",
+      "note": "Statistical significance is not the same as practical importance; check effect size."
+    },
+    {
+      "id": "H5",
+      "hypothesis": "Certain geographic regions have operational problems.",
+      "data_test": "Chi-square homogeneity across states (>=100 orders); Wilson CI",
+      "statistical_evidence": "chi2=704.7, dof=23, p=4.5e-134, V=0.086; 9 of 24 states significantly worse",
+      "verdict": "Confirmed",
+      "note": ""
+    },
+    {
+      "id": "Q5",
+      "hypothesis": "Expensive orders are more likely to receive negative reviews.",
+      "data_test": "Spearman + top vs bottom quartile",
+      "statistical_evidence": "rho=-0.029 (p=4.7e-19); Cliff's delta -0.041 (negligible)",
+      "verdict": "Statistically significant but negligible practical effect",
+      "note": ""
+    },
+    {
+      "id": "Q6",
+      "hypothesis": "Longer seller-customer distance lowers satisfaction.",
+      "data_test": "Spearman + top vs bottom quartile",
+      "statistical_evidence": "rho=-0.064 (p=4e-88); Cliff's delta -0.087 (negligible)",
+      "verdict": "Statistically significant but negligible practical effect",
+      "note": ""
+    },
+    {
+      "id": "Q10",
+      "hypothesis": "Customers with a negative first experience are less likely to purchase again.",
+      "data_test": "Chi-square on first orders (purchases before 2018-03-01)",
+      "statistical_evidence": "Repeat rate 3.77% (dissatisfied) vs 4.10% (satisfied); p=0.19",
+      "verdict": "Not supported (no significant difference)",
+      "note": "Repeat purchasing is rare in this dataset, so power and generalisation are limited."
+    }
+  ]
+}

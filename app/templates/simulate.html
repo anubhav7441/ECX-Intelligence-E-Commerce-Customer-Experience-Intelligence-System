@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block title %}What-If Planner - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">What-If Planner</h1><p class="lead-sm">Try a change — for example “deliver 2 days faster” — and see how many customers would probably be happier. Nothing is changed in your real data.</p>
+<div class="caveat mb-3"><strong>This is an estimate, not a promise.</strong> It is based on 2016–2018 Olist orders (June–August 2018) and patterns in that data, so treat the numbers as a guide.</div>
+<div class="row g-3"><div class="col-lg-5"><div class="card"><div class="card-header">What would you change?</div><div class="card-body"><form id="f" class="row g-2">
+{% for k,(lo,hi,desc) in params.items() %}<div class="col-12"><label class="form-label note">{{ desc }} ({{ lo }}-{{ hi }})</label><input class="form-control" name="{{ k }}" type="number" min="{{ lo }}" max="{{ hi }}" step="any" value="0"></div>{% endfor %}
+<div class="col-6"><label class="form-label note">Only for one state (optional)</label><input class="form-control" name="state" maxlength="2" placeholder="SP"></div>
+<div class="col-6"><label class="form-label note">Only for one seller (optional)</label><input class="form-control" name="seller_id"></div>
+<div class="col-12"><button class="btn btn-primary">Show me the effect</button></div></form><div id="err" class="alert alert-danger mt-3 d-none"></div></div></div></div>
+<div class="col-lg-7"><div class="card"><div class="card-header">Result</div><div class="card-body" id="out"><span class="note">Type a number in at least one box on the left, then press “Show me the effect”.</span></div></div></div></div>
+{% endblock %}
+{% block scripts %}<script>
+f.addEventListener('submit',async e=>{e.preventDefault();showErr('err');const b={};new FormData(e.target).forEach((v,k)=>{if(v!=='')b[k]=v});
+ try{const r=await postJSON('/api/v2/simulate',b);const o=clear(document.getElementById('out'));o.appendChild(el('div','Estimate based on past data','badge bg-warning text-dark mb-2'));
+  o.appendChild(el('p','Based on '+fmt(r.cohort_n)+' past orders.'));
+  const rows=[{m:'Orders arriving late',a:pct(r.baseline.late_rate),b:pct(r.simulated.late_rate)},{m:'Unhappy customers (1-2 stars)',a:pct(r.baseline.expected_dissatisfied_rate,2),b:pct(r.simulated.expected_dissatisfied_rate,2)},{m:'Average delivery time (days)',a:num(r.baseline.mean_delivery_days,1),b:num(r.simulated.mean_delivery_days,1)}];
+  o.appendChild(table([{label:'Metric',k:'m'},{label:'Today',k:'a'},{label:'With your change',k:'b'}],rows));
+  const c=r.change;
+  const fewer=c.avoided_dissatisfied_orders_est,pp=c.expected_dissatisfied_pp;const bx=el('div',null,'adv p-'+(pp<0?'Good':'Medium')+' mt-3');const g=el('div',null,'adv-g');g.style.gridTemplateColumns='1fr 1fr 1fr';[['pr','In plain words',pp<0?'With this change, roughly '+fmt(Math.abs(fewer))+' fewer customers out of '+fmt(r.cohort_n)+' would be unhappy ('+num(Math.abs(pp),1)+' percentage points less).':'This change would not reduce unhappy customers by much.'],['wy','How sure are we','The honest range is '+num(c.expected_dissatisfied_ci95_pp[0],1)+' to '+num(c.expected_dissatisfied_ci95_pp[1],1)+' percentage points. Real results can differ.'],['so','What to do',pp<0?'If this change is affordable, try it on one state or one seller first and compare the reviews after a month.':'Try a bigger change, or look at the Insights page for what matters most.']].forEach(([cl,t,x])=>{const d=el('div');d.appendChild(el('div',t,'lab '+cl));d.appendChild(el('p',x));g.appendChild(d)});bx.appendChild(g);o.appendChild(bx);const dt=el('details',null,'mt-2');dt.appendChild(el('summary','Assumptions behind this estimate','note',{style:'cursor:pointer'}));r.assumptions.forEach(a=>dt.appendChild(el('div','- '+a,'note')));o.appendChild(dt);
+ }catch(x){showErr('err',x.message)}});
+</script>{% endblock %}

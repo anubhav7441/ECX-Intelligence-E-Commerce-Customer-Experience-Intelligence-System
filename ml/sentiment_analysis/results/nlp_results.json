@@ -1,0 +1,407 @@
+{
+  "n_commented_reviews": 38872,
+  "n_negative_commented": 9234,
+  "complaint_categories": [
+    {
+      "category": "late_delivery",
+      "pct_of_negative_reviews": 40.32921810699588,
+      "pct_of_all_commented": 14.732969746861494,
+      "mean_score_when_present": 2.139165357080496,
+      "mean_score_when_absent": 4.055181777040278,
+      "n_present": 5727
+    },
+    {
+      "category": "damaged_product",
+      "pct_of_negative_reviews": 4.981589776911415,
+      "pct_of_all_commented": 2.166083556287302,
+      "mean_score_when_present": 2.4049881235154396,
+      "mean_score_when_absent": 3.8031816986589533,
+      "n_present": 842
+    },
+    {
+      "category": "wrong_product",
+      "pct_of_negative_reviews": 9.140134286333117,
+      "pct_of_all_commented": 3.0304589421691706,
+      "mean_score_when_present": 1.9134125636672326,
+      "mean_score_when_absent": 3.8310075874144425,
+      "n_present": 1178
+    },
+    {
+      "category": "missing_product",
+      "pct_of_negative_reviews": 12.713883474117393,
+      "pct_of_all_commented": 4.3012965630788225,
+      "mean_score_when_present": 1.9108851674641147,
+      "mean_score_when_absent": 3.856586021505376,
+      "n_present": 1672
+    },
+    {
+      "category": "product_quality",
+      "pct_of_negative_reviews": 12.778860732077108,
+      "pct_of_all_commented": 6.33875282980037,
+      "mean_score_when_present": 2.8267045454545454,
+      "mean_score_when_absent": 3.8369314436387607,
+      "n_present": 2464
+    },
+    {
+      "category": "seller_issue",
+      "pct_of_negative_reviews": 17.034871128438382,
+      "pct_of_all_commented": 5.446079440214035,
+      "mean_score_when_present": 1.8280585734529995,
+      "mean_score_when_absent": 3.8849136171949397,
+      "n_present": 2117
+    },
+    {
+      "category": "packaging",
+      "pct_of_negative_reviews": 2.7398743773012777,
+      "pct_of_all_commented": 1.5538176579543115,
+      "mean_score_when_present": 2.915562913907285,
+      "mean_score_when_absent": 3.7864273021845927,
+      "n_present": 604
+    },
+    {
+      "category": "shipping",
+      "pct_of_negative_reviews": 7.45072557938055,
+      "pct_of_all_commented": 3.7584894011113397,
+      "mean_score_when_present": 2.7234770704996576,
+      "mean_score_when_absent": 3.813878271096736,
+      "n_present": 1461
+    },
+    {
+      "category": "payment",
+      "pct_of_negative_reviews": 4.2668399393545595,
+      "pct_of_all_commented": 1.6335665774850794,
+      "mean_score_when_present": 2.231496062992126,
+      "mean_score_when_absent": 3.798493605669901,
+      "n_present": 635
+    },
+    {
+      "category": "other",
+      "pct_of_negative_reviews": 22.460472168074507,
+      "pct_of_all_commented": 68.38341222473761,
+      "mean_score_when_present": 4.417011511549169,
+      "mean_score_when_absent": 2.3797396257119607,
+      "n_present": 26582
+    }
+  ],
+  "H2_delivery_complaint_vs_score": {
+    "n_with": 5727,
+    "n_without": 33145,
+    "mean_with": 2.139165357080496,
+    "mean_without": 4.055181777040278,
+    "p": 0.0,
+    "cliffs_delta": -0.6153476413606969
+  },
+  "construct_validity_late_text_vs_late_flag": {
+    "pct_late_orders_with_late_complaint": 61.76548790215368,
+    "pct_ontime_orders_with_late_complaint": 9.694967389137307
+  },
+  "severity_distribution_negative_pct": {
+    "Medium": 47.55,
+    "Low": 27.97,
+    "High": 24.47
+  },
+  "aspects": {
+    "delivery": {
+      "pct_reviews_mentioning": 56.19469026548673,
+      "pct_negative_among_mentions": 23.13678813404138,
+      "pct_positive_among_mentions": 54.925837758652264,
+      "pct_negative_among_negative_reviews": 40.66493393978774
+    },
+    "product": {
+      "pct_reviews_mentioning": 51.8573780613295,
+      "pct_negative_among_mentions": 21.227304296061117,
+      "pct_positive_among_mentions": 56.29526738763766,
+      "pct_negative_among_negative_reviews": 35.4775828460039
+    },
+    "seller_service": {
+      "pct_reviews_mentioning": 16.135007203128215,
+      "pct_negative_among_mentions": 23.628826530612244,
+      "pct_positive_among_mentions": 42.075892857142854,
+      "pct_negative_among_negative_reviews": 12.627247130171106
+    },
+    "packaging": {
+      "pct_reviews_mentioning": 4.316731837826714,
+      "pct_negative_among_mentions": 17.520858164481528,
+      "pct_positive_among_mentions": 52.62216924910608,
+      "pct_negative_among_negative_reviews": 1.8410223088585662
+    },
+    "price": {
+      "pct_reviews_mentioning": 3.519242642519037,
+      "pct_negative_among_mentions": 17.690058479532166,
+      "pct_positive_among_mentions": 55.409356725146196,
+      "pct_negative_among_negative_reviews": 1.4294996751137101
+    },
+    "payment": {
+      "pct_reviews_mentioning": 0.8926733895863346,
+      "pct_negative_among_mentions": 31.988472622478387,
+      "pct_positive_among_mentions": 8.069164265129682,
+      "pct_negative_among_negative_reviews": 0.9963179553822828
+    }
+  },
+  "delivery_aspect_negative_late_vs_ontime": {
+    "late_pct": 56.26163254453602,
+    "on_time_pct": 8.36774799920253
+  },
+  "cooccurrence_negative": {
+    "late_delivery": {
+      "late_delivery": 3724,
+      "damaged_product": 68,
+      "wrong_product": 152,
+      "missing_product": 358,
+      "product_quality": 136,
+      "seller_issue": 524,
+      "packaging": 47,
+      "shipping": 380,
+      "payment": 164
+    },
+    "damaged_product": {
+      "late_delivery": 68,
+      "damaged_product": 460,
+      "wrong_product": 28,
+      "missing_product": 30,
+      "product_quality": 93,
+      "seller_issue": 115,
+      "packaging": 73,
+      "shipping": 15,
+      "payment": 17
+    },
+    "wrong_product": {
+      "late_delivery": 152,
+      "damaged_product": 28,
+      "wrong_product": 844,
+      "missing_product": 54,
+      "product_quality": 113,
+      "seller_issue": 249,
+      "packaging": 18,
+      "shipping": 29,
+      "payment": 41
+    },
+    "missing_product": {
+      "late_delivery": 358,
+      "damaged_product": 30,
+      "wrong_product": 54,
+      "missing_product": 1174,
+      "product_quality": 56,
+      "seller_issue": 277,
+      "packaging": 44,
+      "shipping": 65,
+      "payment": 53
+    },
+    "product_quality": {
+      "late_delivery": 136,
+      "damaged_product": 93,
+      "wrong_product": 113,
+      "missing_product": 56,
+      "product_quality": 1180,
+      "seller_issue": 283,
+      "packaging": 53,
+      "shipping": 31,
+      "payment": 49
+    },
+    "seller_issue": {
+      "late_delivery": 524,
+      "damaged_product": 115,
+      "wrong_product": 249,
+      "missing_product": 277,
+      "product_quality": 283,
+      "seller_issue": 1573,
+      "packaging": 48,
+      "shipping": 90,
+      "payment": 125
+    },
+    "packaging": {
+      "late_delivery": 47,
+      "damaged_product": 73,
+      "wrong_product": 18,
+      "missing_product": 44,
+      "product_quality": 53,
+      "seller_issue": 48,
+      "packaging": 253,
+      "shipping": 10,
+      "payment": 5
+    },
+    "shipping": {
+      "late_delivery": 380,
+      "damaged_product": 15,
+      "wrong_product": 29,
+      "missing_product": 65,
+      "product_quality": 31,
+      "seller_issue": 90,
+      "packaging": 10,
+      "shipping": 688,
+      "payment": 40
+    },
+    "payment": {
+      "late_delivery": 164,
+      "damaged_product": 17,
+      "wrong_product": 41,
+      "missing_product": 53,
+      "product_quality": 49,
+      "seller_issue": 125,
+      "packaging": 5,
+      "shipping": 40,
+      "payment": 394
+    }
+  },
+  "sentiment": {
+    "label_source": "stars: 1-2 negative, 3 neutral, 4-5 positive (weak-label proxy, not human sentiment labels)",
+    "n_train": 31097,
+    "n_test": 7775,
+    "tfidf_lr": {
+      "accuracy": 0.8018006430868168,
+      "macro_f1": 0.6666652581198512,
+      "per_class": {
+        "negative": {
+          "precision": 0.7688311688311689,
+          "recall": 0.8012994044396319,
+          "f1-score": 0.7847295864262991,
+          "support": 1847.0
+        },
+        "neutral": {
+          "precision": 0.25128644939965694,
+          "recall": 0.4271137026239067,
+          "f1-score": 0.31641468682505397,
+          "support": 686.0
+        },
+        "positive": {
+          "precision": 0.9523911187019641,
+          "recall": 0.8510110644792064,
+          "f1-score": 0.8988515011082007,
+          "support": 5242.0
+        }
+      },
+      "confusion_matrix_rows_true_cols_pred": [
+        [
+          1480,
+          305,
+          62
+        ],
+        [
+          232,
+          293,
+          161
+        ],
+        [
+          213,
+          568,
+          4461
+        ]
+      ]
+    },
+    "lexicon_baseline": {
+      "accuracy": 0.7295176848874598,
+      "macro_f1": 0.5791216169851084
+    },
+    "majority_baseline": {
+      "class": "positive",
+      "accuracy": 0.6742122186495176
+    },
+    "labels_order": [
+      "negative",
+      "neutral",
+      "positive"
+    ]
+  },
+  "top_negative_ngrams": [
+    [
+      "nao recomendo",
+      4.961
+    ],
+    [
+      "nao",
+      3.89
+    ],
+    [
+      "comprei",
+      3.879
+    ],
+    [
+      "nao gostei",
+      3.639
+    ],
+    [
+      "pessima",
+      3.463
+    ],
+    [
+      "quero",
+      3.184
+    ],
+    [
+      "horrivel",
+      3.156
+    ],
+    [
+      "nao recebi",
+      3.135
+    ],
+    [
+      "nem",
+      3.109
+    ],
+    [
+      "produto nao",
+      2.927
+    ],
+    [
+      "dinheiro",
+      2.922
+    ],
+    [
+      "esperar",
+      2.907
+    ],
+    [
+      "diferente",
+      2.71
+    ],
+    [
+      "itens",
+      2.698
+    ],
+    [
+      "pessimo",
+      2.697
+    ],
+    [
+      "cancelar",
+      2.692
+    ],
+    [
+      "quebrado",
+      2.685
+    ],
+    [
+      "mal",
+      2.431
+    ],
+    [
+      "nao foi",
+      2.418
+    ],
+    [
+      "nao funciona",
+      2.404
+    ],
+    [
+      "metade",
+      2.398
+    ],
+    [
+      "paguei",
+      2.386
+    ],
+    [
+      "insatisfeito",
+      2.378
+    ],
+    [
+      "resposta",
+      2.263
+    ],
+    [
+      "falsificado",
+      2.251
+    ]
+  ]
+}

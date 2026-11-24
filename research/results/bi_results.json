@@ -1,0 +1,737 @@
+{
+  "kpis": {
+    "total_orders_all_statuses": 99441,
+    "delivered_orders": 96478,
+    "revenue_items_delivered": 13221498.11,
+    "freight_total_delivered": 2198275.6399999997,
+    "avg_order_value_items": 137.0415857501192,
+    "avg_review_score_analytic": 4.155879529136751,
+    "pct_dissatisfied_1_2": 12.806812489564201,
+    "pct_late_delivered_with_date": 6.7730900798175595,
+    "pct_late_analytic": 6.659083319418935,
+    "avg_delivery_days": 12.558217098051975,
+    "n_sellers": 3088,
+    "n_unique_customers": 96096,
+    "pct_customers_repeat": 3.1187562437562435
+  },
+  "cx_score": {
+    "definition": "100*(0.5*review + 0.3*delivery + 0.2*text sentiment); if no text: 100*(0.65*review + 0.35*delivery). review=(stars-1)/4; delivery=1 if on time else 1-delay/14 (floored 0); sentiment=1-P(negative) from out-of-fold TF-IDF model.",
+    "mean": 85.05381166048413,
+    "mean_late": 38.30820861079219,
+    "mean_on_time": 88.38871425834068
+  },
+  "sellers": {
+    "min_orders": 50,
+    "n_eligible": 413,
+    "revenue_cut_median": 11317.57,
+    "experience_cut_mean_score": 4.155879529136751,
+    "segment_counts": {
+      "Growth opportunity": 124,
+      "Best performers": 109,
+      "PRIORITY PROBLEM": 98,
+      "Low priority": 82
+    },
+    "priority_problem_sellers": [
+      {
+        "primary_seller_id": "4a3ca9315b744ce9f8e9374361493884",
+        "orders": 1707,
+        "revenue": 195825.4,
+        "avg_score": 3.886,
+        "late_rate": 0.1,
+        "dissatisfied_rate": 0.175,
+        "perf_score": 80.068
+      },
+      {
+        "primary_seller_id": "7c67e1448b00f6e969d365cea6b010ab",
+        "orders": 960,
+        "revenue": 183989.44,
+        "avg_score": 3.504,
+        "late_rate": 0.091,
+        "dissatisfied_rate": 0.253,
+        "perf_score": 75.464
+      },
+      {
+        "primary_seller_id": "1025f0e2d44d7041d6cf58b6550e0bfa",
+        "orders": 891,
+        "revenue": 137940.49,
+        "avg_score": 4.018,
+        "late_rate": 0.08,
+        "dissatisfied_rate": 0.167,
+        "perf_score": 82.381
+      },
+      {
+        "primary_seller_id": "6560211a19b47992c3666cc44a7e94c0",
+        "orders": 1795,
+        "revenue": 120688.09,
+        "avg_score": 3.986,
+        "late_rate": 0.052,
+        "dissatisfied_rate": 0.159,
+        "perf_score": 84.189
+      },
+      {
+        "primary_seller_id": "7d13fca15225358621be4086e1eb0964",
+        "orders": 552,
+        "revenue": 113765.24,
+        "avg_score": 4.054,
+        "late_rate": 0.116,
+        "dissatisfied_rate": 0.168,
+        "perf_score": 80.325
+      },
+      {
+        "primary_seller_id": "5dceca129747e92ff8ef7a997dc4f8ca",
+        "orders": 317,
+        "revenue": 108675.82,
+        "avg_score": 4.009,
+        "late_rate": 0.057,
+        "dissatisfied_rate": 0.192,
+        "perf_score": 82.016
+      },
+      {
+        "primary_seller_id": "1f50f920176fa81dab994f9023523100",
+        "orders": 1379,
+        "revenue": 106873.09,
+        "avg_score": 4.155,
+        "late_rate": 0.088,
+        "dissatisfied_rate": 0.136,
+        "perf_score": 84.03
+      },
+      {
+        "primary_seller_id": "cc419e0650a3c5ba77189a1882b7556a",
+        "orders": 1644,
+        "revenue": 101906.93,
+        "avg_score": 4.155,
+        "late_rate": 0.053,
+        "dissatisfied_rate": 0.128,
+        "perf_score": 86.159
+      },
+      {
+        "primary_seller_id": "cca3071e3e9bb7d12640c9fbe2301306",
+        "orders": 664,
+        "revenue": 60443.13,
+        "avg_score": 3.947,
+        "late_rate": 0.045,
+        "dissatisfied_rate": 0.175,
+        "perf_score": 83.443
+      },
+      {
+        "primary_seller_id": "04308b1ee57b6625f47df1d56f00eedf",
+        "orders": 92,
+        "revenue": 58991.8,
+        "avg_score": 3.946,
+        "late_rate": 0.076,
+        "dissatisfied_rate": 0.196,
+        "perf_score": 71.811
+      }
+    ],
+    "share_orders_covered_pct": 75.06365837368509
+  },
+  "categories": {
+    "min_orders": 100,
+    "n_eligible": 52,
+    "segment_counts": {
+      "Low priority": 16,
+      "Best performers": 15,
+      "PRIORITY PROBLEM": 11,
+      "Growth opportunity": 10
+    },
+    "worst_by_avg_score": [
+      {
+        "primary_category": "office_furniture",
+        "orders": 1236,
+        "revenue": 264467.67,
+        "avg_score": 3.651,
+        "dissatisfied_rate": 0.218,
+        "late_rate": 0.08
+      },
+      {
+        "primary_category": "fashion_male_clothing",
+        "orders": 105,
+        "revenue": 10257.33,
+        "avg_score": 3.819,
+        "dissatisfied_rate": 0.229,
+        "late_rate": 0.038
+      },
+      {
+        "primary_category": "audio",
+        "orders": 341,
+        "revenue": 50918.01,
+        "avg_score": 3.848,
+        "dissatisfied_rate": 0.214,
+        "late_rate": 0.117
+      },
+      {
+        "primary_category": "home_confort",
+        "orders": 368,
+        "revenue": 57752.1,
+        "avg_score": 3.908,
+        "dissatisfied_rate": 0.179,
+        "late_rate": 0.095
+      },
+      {
+        "primary_category": "fixed_telephony",
+        "orders": 209,
+        "revenue": 54794.72,
+        "avg_score": 3.967,
+        "dissatisfied_rate": 0.167,
+        "late_rate": 0.043
+      },
+      {
+        "primary_category": "fashion_underwear_beach",
+        "orders": 116,
+        "revenue": 9256.05,
+        "avg_score": 4.009,
+        "dissatisfied_rate": 0.164,
+        "late_rate": 0.095
+      },
+      {
+        "primary_category": "bed_bath_table",
+        "orders": 9072,
+        "revenue": 1012258.63,
+        "avg_score": 4.011,
+        "dissatisfied_rate": 0.157,
+        "late_rate": 0.074
+      },
+      {
+        "primary_category": "construction_tools_safety",
+        "orders": 153,
+        "revenue": 38100.43,
+        "avg_score": 4.02,
+        "dissatisfied_rate": 0.157,
+        "late_rate": 0.026
+      }
+    ],
+    "priority_problem": [
+      {
+        "primary_category": "watches_gifts",
+        "orders": 5430,
+        "revenue": 1156380.28,
+        "avg_score": 4.127,
+        "dissatisfied_rate": 0.135,
+        "late_rate": 0.073
+      },
+      {
+        "primary_category": "bed_bath_table",
+        "orders": 9072,
+        "revenue": 1012258.63,
+        "avg_score": 4.011,
+        "dissatisfied_rate": 0.157,
+        "late_rate": 0.074
+      },
+      {
+        "primary_category": "computers_accessories",
+        "orders": 6469,
+        "revenue": 883106.51,
+        "avg_score": 4.084,
+        "dissatisfied_rate": 0.145,
+        "late_rate": 0.063
+      },
+      {
+        "primary_category": "furniture_decor",
+        "orders": 6167,
+        "revenue": 709668.14,
+        "avg_score": 4.073,
+        "dissatisfied_rate": 0.15,
+        "late_rate": 0.071
+      },
+      {
+        "primary_category": "auto",
+        "orders": 3774,
+        "revenue": 571366.4,
+        "avg_score": 4.151,
+        "dissatisfied_rate": 0.129,
+        "late_rate": 0.072
+      },
+      {
+        "primary_category": "baby",
+        "orders": 2741,
+        "revenue": 396696.47,
+        "avg_score": 4.122,
+        "dissatisfied_rate": 0.138,
+        "late_rate": 0.08
+      },
+      {
+        "primary_category": "telephony",
+        "orders": 4052,
+        "revenue": 308057.68,
+        "avg_score": 4.056,
+        "dissatisfied_rate": 0.14,
+        "late_rate": 0.071
+      },
+      {
+        "primary_category": "office_furniture",
+        "orders": 1236,
+        "revenue": 264467.67,
+        "avg_score": 3.651,
+        "dissatisfied_rate": 0.218,
+        "late_rate": 0.08
+      },
+      {
+        "primary_category": "unknown",
+        "orders": 1350,
+        "revenue": 169582.15,
+        "avg_score": 4.031,
+        "dissatisfied_rate": 0.167,
+        "late_rate": 0.071
+      },
+      {
+        "primary_category": "electronics",
+        "orders": 2488,
+        "revenue": 152071.94,
+        "avg_score": 4.129,
+        "dissatisfied_rate": 0.131,
+        "late_rate": 0.076
+      },
+      {
+        "primary_category": "construction_tools_construction",
+        "orders": 723,
+        "revenue": 141137.65,
+        "avg_score": 4.133,
+        "dissatisfied_rate": 0.131,
+        "late_rate": 0.072
+      }
+    ],
+    "top_by_revenue": [
+      {
+        "primary_category": "health_beauty",
+        "orders": 8562,
+        "revenue": 1223620.98,
+        "avg_score": 4.235,
+        "dissatisfied_rate": 0.113
+      },
+      {
+        "primary_category": "watches_gifts",
+        "orders": 5430,
+        "revenue": 1156380.28,
+        "avg_score": 4.127,
+        "dissatisfied_rate": 0.135
+      },
+      {
+        "primary_category": "bed_bath_table",
+        "orders": 9072,
+        "revenue": 1012258.63,
+        "avg_score": 4.011,
+        "dissatisfied_rate": 0.157
+      },
+      {
+        "primary_category": "sports_leisure",
+        "orders": 7446,
+        "revenue": 950051.77,
+        "avg_score": 4.233,
+        "dissatisfied_rate": 0.112
+      },
+      {
+        "primary_category": "computers_accessories",
+        "orders": 6469,
+        "revenue": 883106.51,
+        "avg_score": 4.084,
+        "dissatisfied_rate": 0.145
+      },
+      {
+        "primary_category": "furniture_decor",
+        "orders": 6167,
+        "revenue": 709668.14,
+        "avg_score": 4.073,
+        "dissatisfied_rate": 0.15
+      },
+      {
+        "primary_category": "housewares",
+        "orders": 5655,
+        "revenue": 613650.74,
+        "avg_score": 4.203,
+        "dissatisfied_rate": 0.116
+      },
+      {
+        "primary_category": "cool_stuff",
+        "orders": 3502,
+        "revenue": 604243.46,
+        "avg_score": 4.228,
+        "dissatisfied_rate": 0.11
+      }
+    ]
+  },
+  "geography": {
+    "n_states": 24,
+    "hotspot_states": [
+      {
+        "customer_state": "AL",
+        "orders": 394,
+        "dissatisfied_rate": 0.213,
+        "late_rate": 0.208,
+        "avg_delivery_days": 24.457,
+        "avg_score": 3.848
+      },
+      {
+        "customer_state": "MA",
+        "orders": 712,
+        "dissatisfied_rate": 0.199,
+        "late_rate": 0.171,
+        "avg_delivery_days": 21.442,
+        "avg_score": 3.833
+      },
+      {
+        "customer_state": "SE",
+        "orders": 334,
+        "dissatisfied_rate": 0.189,
+        "late_rate": 0.15,
+        "avg_delivery_days": 21.439,
+        "avg_score": 3.907
+      },
+      {
+        "customer_state": "RJ",
+        "orders": 12211,
+        "dissatisfied_rate": 0.183,
+        "late_rate": 0.119,
+        "avg_delivery_days": 15.242,
+        "avg_score": 3.965
+      },
+      {
+        "customer_state": "PA",
+        "orders": 933,
+        "dissatisfied_rate": 0.179,
+        "late_rate": 0.107,
+        "avg_delivery_days": 23.641,
+        "avg_score": 3.914
+      },
+      {
+        "customer_state": "CE",
+        "orders": 1273,
+        "dissatisfied_rate": 0.171,
+        "late_rate": 0.137,
+        "avg_delivery_days": 21.205,
+        "avg_score": 3.944
+      },
+      {
+        "customer_state": "BA",
+        "orders": 3229,
+        "dissatisfied_rate": 0.17,
+        "late_rate": 0.119,
+        "avg_delivery_days": 19.246,
+        "avg_score": 3.931
+      },
+      {
+        "customer_state": "PI",
+        "orders": 471,
+        "dissatisfied_rate": 0.161,
+        "late_rate": 0.138,
+        "avg_delivery_days": 19.494,
+        "avg_score": 3.994
+      },
+      {
+        "customer_state": "PE",
+        "orders": 1579,
+        "dissatisfied_rate": 0.148,
+        "late_rate": 0.094,
+        "avg_delivery_days": 18.372,
+        "avg_score": 4.083
+      }
+    ],
+    "regions": [
+      {
+        "customer_region": "Central-West",
+        "orders": 5594,
+        "avg_score": 4.129,
+        "late_rate": 0.065,
+        "avg_delivery_days": 14.984,
+        "dissatisfied_rate": 0.131,
+        "freight_ratio": 0.251
+      },
+      {
+        "customer_region": "North",
+        "orders": 1779,
+        "avg_score": 4.031,
+        "late_rate": 0.083,
+        "avg_delivery_days": 22.509,
+        "dissatisfied_rate": 0.152,
+        "freight_ratio": 0.357
+      },
+      {
+        "customer_region": "Northeast",
+        "orders": 8975,
+        "avg_score": 3.97,
+        "late_rate": 0.125,
+        "avg_delivery_days": 19.925,
+        "dissatisfied_rate": 0.167,
+        "freight_ratio": 0.315
+      },
+      {
+        "customer_region": "South",
+        "orders": 13745,
+        "avg_score": 4.191,
+        "late_rate": 0.058,
+        "avg_delivery_days": 13.998,
+        "dissatisfied_rate": 0.118,
+        "freight_ratio": 0.251
+      },
+      {
+        "customer_region": "Southeast",
+        "orders": 65731,
+        "avg_score": 4.18,
+        "late_rate": 0.06,
+        "avg_delivery_days": 10.715,
+        "dissatisfied_rate": 0.124,
+        "freight_ratio": 0.206
+      }
+    ],
+    "top_volume_poor": [
+      {
+        "customer_state": "RJ",
+        "orders": 12211,
+        "dissatisfied_rate": 0.183,
+        "late_rate": 0.119
+      },
+      {
+        "customer_state": "CE",
+        "orders": 1273,
+        "dissatisfied_rate": 0.171,
+        "late_rate": 0.137
+      },
+      {
+        "customer_state": "BA",
+        "orders": 3229,
+        "dissatisfied_rate": 0.17,
+        "late_rate": 0.119
+      },
+      {
+        "customer_state": "PE",
+        "orders": 1579,
+        "dissatisfied_rate": 0.148,
+        "late_rate": 0.094
+      }
+    ]
+  },
+  "order_structure": {
+    "by_items": [
+      {
+        "multi_item": "1 item",
+        "n": 86296,
+        "dissatisfied": 0.1127,
+        "late": 0.0682,
+        "delivery_days": 12.5984,
+        "score": 4.2134
+      },
+      {
+        "multi_item": "2+ items",
+        "n": 9528,
+        "dissatisfied": 0.2674,
+        "late": 0.0516,
+        "delivery_days": 11.7771,
+        "score": 3.6351
+      }
+    ],
+    "by_sellers": [
+      {
+        "multi_seller": "1 seller",
+        "n": 94563,
+        "dissatisfied": 0.1235,
+        "late": 0.0674,
+        "delivery_days": 12.5621,
+        "score": 4.1731
+      },
+      {
+        "multi_seller": "2+ sellers",
+        "n": 1261,
+        "dissatisfied": 0.4718,
+        "late": 0.0095,
+        "delivery_days": 9.1193,
+        "score": 2.8612
+      }
+    ],
+    "note": "Multi-item orders may be delivered in parts and a single review covers all items (dataset limitation); association only.",
+    "by_items_and_late": [
+      {
+        "multi_item": "1 item",
+        "is_late": 0.0,
+        "n": 80407,
+        "dissatisfied": 0.0755
+      },
+      {
+        "multi_item": "1 item",
+        "is_late": 1.0,
+        "n": 5889,
+        "dissatisfied": 0.621
+      },
+      {
+        "multi_item": "2+ items",
+        "is_late": 0.0,
+        "n": 9036,
+        "dissatisfied": 0.2459
+      },
+      {
+        "multi_item": "2+ items",
+        "is_late": 1.0,
+        "n": 492,
+        "dissatisfied": 0.6626
+      }
+    ]
+  },
+  "journey": {
+    "stages": [
+      {
+        "stage": "Payment approval (hours)",
+        "mean_on_time": 10.132286158728029,
+        "mean_late": 12.296154120740393,
+        "ratio_late_over_on_time": 1.2135616708918542,
+        "p90_threshold": 34.59619444444445,
+        "dissatisfied_pct_if_slowest_10pct": 13.54764638346728,
+        "dissatisfied_pct_otherwise": 12.724510974803751,
+        "late_pct_if_slowest_10pct": 8.05761402776328
+      },
+      {
+        "stage": "Seller handling: approval to carrier (days)",
+        "mean_on_time": 2.5973379813408775,
+        "mean_late": 5.529506182514804,
+        "ratio_late_over_on_time": 2.128912841624174,
+        "p90_threshold": 5.980733796296294,
+        "dissatisfied_pct_if_slowest_10pct": 23.65097588978186,
+        "dissatisfied_pct_otherwise": 11.602101040084413,
+        "late_pct_if_slowest_10pct": 17.722575931531157
+      },
+      {
+        "stage": "Carrier transit (days)",
+        "mean_on_time": 7.976919267148621,
+        "mean_late": 27.778713414678396,
+        "ratio_late_over_on_time": 3.482386179972961,
+        "p90_threshold": 18.83800925925926,
+        "dissatisfied_pct_if_slowest_10pct": 40.331837629134924,
+        "dissatisfied_pct_otherwise": 9.748263586925013,
+        "late_pct_if_slowest_10pct": 49.26432223729521
+      }
+    ],
+    "missed_seller_handoff_deadline_pct": 8.984179328769411,
+    "late_pct_if_handoff_missed": 20.525031943315135,
+    "late_pct_if_handoff_ok": 5.290374362208336,
+    "dissatisfied_pct_if_handoff_missed": 23.754210709722383,
+    "dissatisfied_pct_if_handoff_ok": 11.726193888665941,
+    "n_handoff_known": 95824
+  },
+  "recommendations": [
+    {
+      "id": "R1",
+      "priority": 1,
+      "evidence": [
+        "H1_late_vs_ontime",
+        "delay_band_table",
+        "H1_sensitivity"
+      ],
+      "action": "Treat late delivery as the top operational KPI: set an alert when an order passes its estimated date and trigger proactive customer communication, and make the estimated-date promise more realistic.",
+      "why": "62.4% of late orders are dissatisfied vs 9.3% on time (odds ratio 16.3); in the controlled logistic model lateness keeps an odds ratio of 7.7. Delivery features are the largest SHAP factor group.",
+      "expected_impact": "Association-based range: roughly 1,011 (reviews written after delivery only) to 3,392 (all reviews) fewer dissatisfied reviews among 6,381 late orders if lateness were eliminated. This is an upper-bound association, not a proven causal effect.",
+      "measure": "Weekly late-delivery rate; dissatisfied-review rate for late vs on-time orders; share of late orders contacted before the estimated date."
+    },
+    {
+      "id": "R2",
+      "priority": 2,
+      "evidence": [
+        "sellers.PRIORITY PROBLEM",
+        "H2_sellers"
+      ],
+      "action": "Review the high-revenue / low-experience 'priority problem' sellers first: agree improvement plans on handling time and shipping-deadline compliance, with a probation threshold.",
+      "why": "Seller dissatisfaction rates differ significantly (chi-square p=2e-235, Cramer's V=0.17); 98 of 413 sellers with >= 50 orders are in the priority-problem segment; top examples: 4a3ca931.. (1707 orders, avg 3.89), 7c67e144.. (960 orders, avg 3.50), 1025f0e2.. (891 orders, avg 4.02)",
+      "expected_impact": "Because these sellers carry high order volume, each point of improvement reaches more customers than fixes for low-volume sellers.",
+      "measure": "Per-seller average score, late rate and dissatisfied rate (with 95% CI) monthly; movement between segments."
+    },
+    {
+      "id": "R3",
+      "priority": 3,
+      "evidence": [
+        "categories.PRIORITY PROBLEM",
+        "H3_categories"
+      ],
+      "action": "Investigate high-revenue categories with below-average satisfaction (watches_gifts, bed_bath_table, computers_accessories): product descriptions, size/dimension accuracy, packaging and carrier choice for bulky items.",
+      "why": "9 of 52 categories are significantly worse than the overall dissatisfied rate; the top worst categories by rate are fashion_male_clothing, office_furniture, audio.",
+      "expected_impact": "Targets categories where revenue is large, so reduced dissatisfaction protects the most sales.",
+      "measure": "Category dissatisfied rate and complaint mix (damaged/quality/wrong product) per month."
+    },
+    {
+      "id": "R4",
+      "priority": 4,
+      "evidence": [
+        "H5_states",
+        "geography.hotspot_states"
+      ],
+      "action": "Run a regional logistics review for hotspot states (AL, MA, SE, RJ): carrier performance, realistic delivery estimates, and local fulfilment options.",
+      "why": "9 of 24 states have a dissatisfied rate whose 95% CI lies above the overall rate; hotspots include AL (21.3% dissatisfied, 20.8% late, n=394); MA (19.9% dissatisfied, 17.1% late, n=712); SE (18.9% dissatisfied, 15.0% late, n=334); RJ (18.3% dissatisfied, 11.9% late, n=12211).",
+      "expected_impact": "Fixing high-volume hotspots (e.g. RJ) affects many orders; smaller states show higher rates but fewer customers.",
+      "measure": "State-level late rate, delivery days vs estimate, dissatisfied rate with CI."
+    },
+    {
+      "id": "R5",
+      "priority": 5,
+      "evidence": [
+        "order_structure",
+        "SHAP S1_R n_items rank 2"
+      ],
+      "action": "Audit multi-item and multi-seller orders: check for partial/split shipments and communicate which items arrive separately.",
+      "why": "Orders with 2+ items have 26.7% dissatisfied vs 11.3% for single-item orders; 'items in order' is the 2nd most important feature in the delivery-time SHAP model. The gap persists among ON-TIME orders (24.6% vs 7.5%), so it is not just lateness. Complaint text also shows missing/partial deliveries (12.7% of negative reviews).",
+      "expected_impact": "Addresses a driver independent of lateness; size of effect depends on how much is due to split shipments (not observable here).",
+      "measure": "Dissatisfied rate by item count; share of orders delivered in one shipment; 'missing product' complaint share."
+    },
+    {
+      "id": "R6",
+      "priority": 6,
+      "evidence": [
+        "nlp complaint_categories",
+        "seller_issue"
+      ],
+      "action": "Improve seller/store responsiveness (reply SLA for complaints, exchange and refund handling).",
+      "why": "Seller-issue complaints appear in 17.0% of negative commented reviews and have the lowest mean score (1.83). Caveat: this category had the weakest classifier precision in our evaluation.",
+      "expected_impact": "Reduces escalations (e.g. consumer-complaint sites mentioned in reviews).",
+      "measure": "Median response time; share of complaints resolved; seller_issue complaint rate."
+    },
+    {
+      "id": "R7",
+      "priority": 7,
+      "evidence": [
+        "Q10_repeat_purchase"
+      ],
+      "action": "Do not assume that fixing ratings alone will raise repeat purchases; test retention interventions (e.g. coupons after a bad experience) with an A/B experiment.",
+      "why": "Repeat rate after a dissatisfied first order was 3.77% vs 4.10% after a satisfied one (p=0.19): no significant difference, and only 3.1% of customers ever reorder in this data.",
+      "expected_impact": "Avoids investing in a retention effect the data does not support.",
+      "measure": "Repeat-purchase rate within 180 days by experience group in a controlled experiment."
+    }
+  ],
+  "findings": [
+    {
+      "finding": "Late deliveries are strongly associated with dissatisfied reviews.",
+      "evidence": "62.4% of late orders vs 9.3% of on-time orders are 1-2 stars (Cliff's delta -0.64); dissatisfaction rises from 12% (on the estimated day) to 80% (8-14 days late). Restricted to reviews written after delivery the effect is smaller (delta -0.30) because many late-order reviews were written before the recorded delivery.",
+      "business_impact": "6,381 late orders (6.7% of reviewed orders) generate a disproportionate share of dissatisfaction.",
+      "recommendation": "R1"
+    },
+    {
+      "finding": "Customers mainly complain about non-delivery/delay, incomplete orders and seller responsiveness - not price.",
+      "evidence": "Late/not-delivered appears in 40.3% of negative commented reviews; price and freight effects are negligible (Cliff's delta -0.04 and -0.04).",
+      "business_impact": "Operational fixes matter more than discounting.",
+      "recommendation": "R1, R6"
+    },
+    {
+      "finding": "Seller quality is heterogeneous: a set of sellers is significantly worse than the platform.",
+      "evidence": "52 of 413 sellers (>=50 orders) have a dissatisfaction CI entirely above the overall rate (chi-square p=2e-235).",
+      "business_impact": "Concentrated, addressable problem.",
+      "recommendation": "R2"
+    },
+    {
+      "finding": "Some high-revenue categories and several regions under-perform.",
+      "evidence": "9 categories and 9 states are significantly worse than overall; effect sizes are small (Cramer's V 0.07 and 0.09).",
+      "business_impact": "Targeted, not platform-wide, interventions.",
+      "recommendation": "R3, R4"
+    },
+    {
+      "finding": "Multi-item orders are a hidden risk factor.",
+      "evidence": "26.7% vs 11.3% dissatisfied; 2nd most important SHAP feature in the delivery-time model.",
+      "business_impact": "Possible partial-delivery experience problem.",
+      "recommendation": "R5"
+    },
+    {
+      "finding": "Predicting dissatisfaction is hard from structured data alone; delivery outcome and seller history are what help.",
+      "evidence": "See ML results: checkout-time ROC-AUC about 0.57-0.61, delivery-time about 0.69-0.71; historical review features add a significant but modest gain.",
+      "business_impact": "Use the model for risk monitoring, not individual decisions.",
+      "recommendation": "R1, R2"
+    },
+    {
+      "finding": "No evidence in this dataset that a bad experience reduces repeat purchase.",
+      "evidence": "Repeat rate 3.77% vs 4.10% (p=0.19); only 3.1% of customers reorder.",
+      "business_impact": "Limits retention claims.",
+      "recommendation": "R7"
+    }
+  ]
+}

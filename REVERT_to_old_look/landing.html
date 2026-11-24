@@ -1,0 +1,79 @@
+{% extends "public.html" %}
+{% block title %}ECX-Intelligence — Know what to fix in your online business{% endblock %}
+{% block bodyclass %}dark{% endblock %}
+{% block navdemo %}{% endblock %}{% block navlinks %}<a class="l" href="#advice">Features</a><a class="l" href="#how">How it works</a><a class="l" href="#tools">Tools</a><a class="l" href="#trust">About</a>{% endblock %}
+{% block body %}
+<main>
+<section class="hero2"><div class="wrap">
+  <span class="pill">New: plain-English advice for every analysis</span>
+  <h1>Business insight<br>for every shop owner.</h1>
+  <p class="sub">Upload your sales or review file. See what is going wrong, why it happens and what you can do about it &mdash; no data skills needed.</p>
+  <div class="cta"><a class="btn-x white lg" href="{{ url_for('demo.page') }}">Explore demo</a></div>
+</div>
+<div class="lightbar" aria-hidden="true"></div>
+<div class="mock" role="img" aria-label="Preview of the ECX-Intelligence overview using real Olist data">
+  <div class="rail" aria-hidden="true"><i></i><i></i><i></i><i class="g"></i><i class="g"></i></div>
+  <div><div class="tabsm"><span class="on">Overview</span><span>Advice</span><span>My data</span></div>
+  <div class="bodym"><div class="crumb">Overview <span>&rsaquo; Olist sample data</span></div>
+   <div class="rowm"><div><div class="ttl"><i></i>Late deliveries &amp; reviews</div><div class="note" style="font-size:.7rem;color:#9aa5d4">Share of customers who gave 1&ndash;2 stars</div></div>
+   <div class="mbars"><div class="b"><span>Late</span><u style="width:62%"></u></div><div class="b"><span>On time</span><u style="width:9%"></u></div></div>
+   <div class="donut"><b>62%</b></div></div>
+   <div class="chart"><svg viewBox="0 0 760 210" preserveAspectRatio="none" role="img" aria-label="Unhappy customers rise from 9 percent for early orders to about 80 percent for orders 8 to 14 days late"><defs><linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#7c6cff" stop-opacity=".55"/><stop offset="1" stop-color="#7c6cff" stop-opacity="0"/></linearGradient></defs><line x1="0" x2="760" y1="185" y2="185" stroke="rgba(255,255,255,.08)"/><text x="2" y="181" fill="#7f8ac0" font-size="10">0%</text><line x1="0" x2="760" y1="102" y2="102" stroke="rgba(255,255,255,.08)"/><text x="2" y="98" fill="#7f8ac0" font-size="10">50%</text><line x1="0" x2="760" y1="20" y2="20" stroke="rgba(255,255,255,.08)"/><text x="2" y="16" fill="#7f8ac0" font-size="10">100%</text><path d="M0,169.8 C76,169.8 76,164.4 152,164.4 C228,164.4 228,132.0 304,132.0 C380,132.0 380,73.3 456,73.3 C532,73.3 532,52.7 608,52.7 C684,52.7 684,55.8 760,55.8 L760,185 L0,185 Z" fill="url(#g1)"/><path d="M0,169.8 C76,169.8 76,164.4 152,164.4 C228,164.4 228,132.0 304,132.0 C380,132.0 380,73.3 456,73.3 C532,73.3 532,52.7 608,52.7 C684,52.7 684,55.8 760,55.8" fill="none" stroke="#8f7bff" stroke-width="3"/><circle cx="608" cy="52.7" r="6" fill="#0a0e3a" stroke="#fff" stroke-width="3"/><text x="30" y="203" fill="#7f8ac0" font-size="10" text-anchor="middle">Early</text><text x="152" y="203" fill="#7f8ac0" font-size="10" text-anchor="middle">On the day</text><text x="304" y="203" fill="#7f8ac0" font-size="10" text-anchor="middle">1-3 days late</text><text x="456" y="203" fill="#7f8ac0" font-size="10" text-anchor="middle">4-7 late</text><text x="608" y="203" fill="#7f8ac0" font-size="10" text-anchor="middle">8-14 late</text><text x="730" y="203" fill="#7f8ac0" font-size="10" text-anchor="middle">15+ late</text></svg><div class="tip"><span>8&ndash;14 days late</span><b>80.2%</b></div></div>
+   <div class="cap">Real Olist marketplace data (95,824 delivered, reviewed orders). Unhappy rate by days late.</div></div></div>
+</div>
+</section>
+
+<section class="s" id="advice"><div class="wrap">
+  <span class="kick">Advice, not just charts</span><h2 class="t">Every finding comes with a problem, a reason and a fix</h2>
+  <p class="lead">Most tools show charts and leave you to guess. Here each insight is written in simple English in three parts.</p>
+  <div class="trio fade"><div class="a"><b>The problem</b><p>“6.7% of orders arrive late, and those customers give far lower ratings.”</p></div><div class="b"><b>Why it is happening</b><p>“Late orders wait longer at the carrier than on-time orders do.”</p></div><div class="c"><b>What you can do</b><p>“Show a realistic delivery date and message customers early when an order is late.”</p></div></div>
+  <p class="note" style="color:#8b97c9;margin-top:12px;font-size:.85rem">Example from the real Olist marketplace data included in the demo.</p>
+</div></section>
+
+<section class="s alt" id="how"><div class="wrap">
+  <span class="kick">How it works</span><h2 class="t">From your file to clear next steps in four steps</h2>
+  <div class="steps">
+    <div class="step fade"><h3>Create an account</h3><p>Free and takes a minute. Or try the demo first.</p></div>
+    <div class="step fade"><h3>Add your data</h3><p>Upload a CSV or Excel file. We check it for you.</p></div>
+    <div class="step fade"><h3>Confirm your columns</h3><p>We guess which column is price, date, product… you just confirm.</p></div>
+    <div class="step fade"><h3>Read your advice</h3><p>Get problems, reasons and fixes, plus a PDF report.</p></div>
+  </div>
+</div></section>
+
+<section class="s" id="tools"><div class="wrap">
+  <span class="kick">What you get</span><h2 class="t">Simple tools that answer everyday business questions</h2>
+  <div class="cards">
+    <div class="pc fade"><div class="ic"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 00-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0012 3z"/></svg></div><h3>Insights &amp; Advice</h3><p>The most important things to fix first, ranked, with clear actions.</p></div>
+    <div class="pc fade"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/></svg></div><h3>Easy data upload</h3><p>CSV and Excel files, automatic checks and guided column matching.</p></div>
+    <div class="pc fade"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M12 8v4M12 16h.01"/></svg></div><h3>Order risk check</h3><p>Spot orders likely to end in a bad review, with the reasons shown.</p></div>
+    <div class="pc fade"><div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 01-11.5 7.2L4 21l1.8-5A8 8 0 1121 12z"/></svg></div><h3>Ask a question</h3><p>Type a question and get an answer built only from your real numbers.</p></div>
+    <div class="pc fade"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h2M10 12h10M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></div><h3>What-if planner</h3><p>“What if deliveries were 2 days faster?” See the likely effect before you act.</p></div>
+    <div class="pc fade"><div class="ic"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg></div><h3>PDF reports</h3><p>A shareable report for each dataset, saved in your history.</p></div>
+  </div>
+</div></section>
+
+<section class="s alt" id="tour"><div class="wrap">
+  <span class="kick">Product tour</span><h2 class="t">Clean screens, real data</h2>
+  <div class="gallery">
+    <figure class="shot fade"><img loading="lazy" src="{{ url_for('static', filename='img/overview.jpg') }}" alt="Overview page"><figcaption class="cap">Overview — your top priorities at a glance</figcaption></figure>
+    <figure class="shot fade"><img loading="lazy" src="{{ url_for('static', filename='img/mydata.jpg') }}" alt="My Data page"><figcaption class="cap">My Data — upload, check and analyse files</figcaption></figure>
+    <figure class="shot fade"><img loading="lazy" src="{{ url_for('static', filename='img/risk.jpg') }}" alt="Order risk check"><figcaption class="cap">Order Risk Check</figcaption></figure>
+    <figure class="shot fade"><img loading="lazy" src="{{ url_for('static', filename='img/simulate.jpg') }}" alt="What-if planner"><figcaption class="cap">What-If Planner</figcaption></figure>
+  </div>
+</div></section>
+
+<section class="s" id="trust"><div class="wrap">
+  <span class="kick">Trust &amp; honesty</span><h2 class="t">Numbers you can check, limits we tell you about</h2>
+  <div class="stats"><div class="stat"><b>95,824</b><span>real orders analysed in the sample data</span></div><div class="stat"><b>3 parts</b><span>every insight: problem, reason, fix</span></div><div class="stat"><b>Private</b><span>your files are visible only to you</span></div><div class="stat"><b>PDF</b><span>report for each dataset</span></div></div>
+  <div class="honest"><b>Good to know.</b> Advice shows patterns in your data, not guaranteed causes. Small files give weaker evidence and the app says so. The demo uses public Olist data (one Brazilian marketplace, 2016–2018). This is a project that runs on your own computer; it has not been tested for public hosting.</div>
+  <div class="tech"><span>Python</span><span>Flask</span><span>SQLite</span><span>pandas</span><span>scikit-learn</span><span>XGBoost</span><span>SHAP</span></div>
+</div></section>
+
+<section class="s" style="padding-top:0"><div class="wrap"><div class="ctab"><h2>See it with real data in two minutes</h2><p>The demo uses 500 real orders. Create a free account to upload your own files and get advice on them.</p>
+  <a class="btn-x white lg" href="{{ url_for('demo.page') }}">Explore demo</a> <a class="btn-x lg" href="{{ url_for('auth.register') }}">Create free account</a> <a class="btn-x lg" href="{{ url_for('auth.login') }}">Log in</a></div></div></section>
+</main>
+{% endblock %}
+{% block scripts %}<script>
+(function(){var els=document.querySelectorAll('.fade');if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.1});els.forEach(function(e){io.observe(e)});})();
+</script>{% endblock %}

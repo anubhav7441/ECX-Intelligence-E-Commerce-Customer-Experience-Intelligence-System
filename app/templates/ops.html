@@ -1,0 +1,38 @@
+{% extends "base.html" %}{% block title %}Operations Center - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Operations Center</h1>
+<div class="caveat mb-3"><strong>How it works.</strong> The monitor compares the last 28 days with the 84 days before, for the whole platform and for each state, category and seller. It raises an alert only when the rise is both statistically meaningful and large enough to matter. An alert is a signal to investigate, not proof of a cause. Open an alert to see where the problem comes from, what to do, and later whether the fix worked.</div>
+<div class="row g-3 mb-3">
+ <div class="col-6 col-md-3"><div class="card kpi"><div class="card-body"><div class="l">Open - critical</div><div class="v">{{ counts.open_critical }}</div></div></div></div>
+ <div class="col-6 col-md-3"><div class="card kpi"><div class="card-body"><div class="l">Open - warning</div><div class="v">{{ counts.open_warning }}</div></div></div></div>
+ <div class="col-6 col-md-3"><div class="card kpi"><div class="card-body"><div class="l">Acknowledged</div><div class="v">{{ counts.acknowledged }}</div></div></div></div>
+ <div class="col-6 col-md-3"><div class="card kpi"><div class="card-body"><div class="l">Resolved</div><div class="v">{{ counts.resolved }}</div></div></div></div>
+</div>
+<div class="card mb-3"><div class="card-body">
+ <div class="d-flex flex-wrap gap-2 align-items-end">
+  <div><label class="note">Check as at (optional date; empty = newest data)</label><input id="asof" type="date" class="form-control form-control-sm"></div>
+  <button id="run" class="btn btn-primary btn-sm">Run monitor now</button>
+  <button id="dg" class="btn btn-outline-secondary btn-sm">Create digest</button>
+  <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('ops.outcomes_page') }}">Action outcomes</a>
+  {% if role=='admin' %}<a class="btn btn-outline-secondary btn-sm" href="{{ url_for('ops.keys_page') }}">API keys</a>{% endif %}
+ </div>
+ <div id="runMsg" class="note mt-2"></div><pre id="dgOut" class="note mt-2 d-none" style="white-space:pre-wrap"></pre><div id="runErr" class="alert alert-danger d-none mt-2"></div>
+ {% if jobs %}<div class="note mt-2">Last run: {{ jobs[0].started_at }} ({{ jobs[0].status }})</div>{% endif %}
+</div></div>
+<div class="card"><div class="card-body p-0">
+{% if alerts %}<div class="tbl-wrap"><table class="table table-sm sticky-head mb-0"><thead><tr><th>ID</th><th>Severity</th><th>Alert</th><th>As of</th><th>State</th><th></th></tr></thead><tbody>
+{% for a in alerts %}<tr><td>{{ a.alert_id }}</td><td><span class="badge bg-{{ 'danger' if a.severity=='critical' else 'warning text-dark' if a.severity=='warning' else 'secondary' }}">{{ a.severity }}</span></td><td>{{ a.title }}</td><td>{{ a.as_of }}</td><td>{{ a.state }}</td><td><a href="{{ url_for('ops.alert_page', alert_id=a.alert_id) }}">Investigate</a>{% if note_counts.get(a.alert_id) %} <span class="note">({{ note_counts[a.alert_id] }} note{{ 's' if note_counts[a.alert_id] != 1 else '' }})</span>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>
+{% else %}<p class="note p-3 mb-0">No alerts yet. Press "Run monitor now". If nothing is raised, no rate got meaningfully worse in the checked window.</p>{% endif %}
+</div></div>
+{% endblock %}
+{% block scripts %}<script>
+document.getElementById('run').onclick=async()=>{const m=document.getElementById('runMsg');m.textContent='Checking...';showErr('runErr');
+ try{const b={};if(asof.value)b.as_of=asof.value;const r=await fetch('/api/ops/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();
+  if(!r.ok)throw new Error(j.error||'Failed');m.textContent='Found '+j.found+' alert(s): '+j.created+' new, '+j.updated+' refreshed (as at '+j.as_of+').';setTimeout(()=>location.reload(),900)}
+ catch(x){m.textContent='';showErr('runErr',x.message)}};
+document.getElementById('dg').onclick=async()=>{showErr('runErr');
+ try{const b={};if(asof.value)b.as_of=asof.value;const r=await fetch('/api/ops/digest',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const j=await r.json();
+  if(!r.ok)throw new Error(j.error||'Failed');const o=document.getElementById('dgOut');o.textContent=j.text+'\n\nSaved in reports/digests: '+Object.values(j.files).join(', ');o.classList.remove('d-none')}
+ catch(x){showErr('runErr',x.message)}};
+</script>{% endblock %}

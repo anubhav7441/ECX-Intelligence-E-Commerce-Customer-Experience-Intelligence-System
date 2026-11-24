@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% block title %}Review Intelligence - ECX-Intelligence{% endblock %}
+{% block content %}
+<h1 class="page">Customer Review Intelligence</h1>
+<p class="lead-sm">Portuguese review text analysed with a transparent rule-based taxonomy (complaints, aspects, severity) plus a TF-IDF + Logistic Regression sentiment model. {{ '{:,}'.format(nlp.n_commented_reviews) }} reviews have text ({{ '{:,}'.format(nlp.n_negative_commented) }} are 1-2 stars).</p>
+<div class="card mb-3"><div class="card-header">Try it: analyse a review</div><div class="card-body">
+<textarea id="txt" class="form-control mb-2" rows="3" maxlength="2000" placeholder="Paste a Portuguese review, e.g. 'Produto não chegou até hoje e ninguém responde'" aria-label="Review text"></textarea>
+<button class="btn btn-primary" onclick="analyse()">Analyse</button>
+<div id="aErr" class="alert alert-danger mt-3 d-none"></div><div id="aOut" class="mt-3 d-none"></div></div></div>
+<div class="row g-3 mb-3">
+<div class="col-lg-6"><div class="card"><div class="card-header">Complaint categories in negative reviews (% , multi-label)</div><div class="card-body" style="height:330px"><canvas id="cCat"></canvas></div></div></div>
+<div class="col-lg-6"><div class="card"><div class="card-header">Negative sentiment on each aspect, among negative reviews (%)</div><div class="card-body" style="height:330px"><canvas id="cAsp"></canvas></div></div></div></div>
+<div class="row g-3 mb-3">
+<div class="col-lg-7"><div class="card"><div class="card-header">Complaint table</div><div class="tbl-wrap"><table class="table table-sm sticky-head mb-0"><thead><tr><th>Category</th><th>% of negative reviews</th><th>Mean score when present</th><th>Classifier F1 (150 hand-labelled)</th></tr></thead><tbody>
+{% for c in nlp.complaint_categories|sort(attribute='pct_of_negative_reviews', reverse=True) %}{% set f = (ev.per_class|selectattr('category','equalto',c.category)|list|first) %}<tr><td>{{ c.category.replace('_',' ') }}</td><td>{{ '%.1f'|format(c.pct_of_negative_reviews) }}%</td><td>{{ '%.2f'|format(c.mean_score_when_present) if c.mean_score_when_present else '-' }}</td><td>{{ '%.2f'|format(f.f1) if f else '-' }} (n={{ f.support if f else 0 }})</td></tr>{% endfor %}</tbody></table></div></div></div>
+<div class="col-lg-5"><div class="card h-100"><div class="card-header">How reliable is this?</div><div class="card-body note">
+<p><strong>Complaint classifier</strong> (150 reviews, single annotator): micro-F1 {{ '%.2f'|format(ev.micro_f1) }}, exact-match {{ '%.0f'|format(ev.exact_match_accuracy*100) }}%. Detecting "has any complaint": F1 {{ '%.2f'|format(ev.complaint_vs_no_complaint.f1) }}.</p>
+<p><strong>Sentiment model</strong> (labels derived from stars, 3 classes): accuracy {{ '%.1f'|format(nlp.sentiment.tfidf_lr.accuracy*100) }}%, macro-F1 {{ '%.2f'|format(nlp.sentiment.tfidf_lr.macro_f1) }} vs lexicon baseline {{ '%.2f'|format(nlp.sentiment.lexicon_baseline.macro_f1) }} and majority-class accuracy {{ '%.1f'|format(nlp.sentiment.majority_baseline.accuracy*100) }}%. Neutral (3-star) is hard: F1 {{ '%.2f'|format(nlp.sentiment.tfidf_lr.per_class.neutral['f1-score']) }}.</p>
+<p class="mb-0">Weakest categories: seller issue and wrong product (see F1 table). Treat complaint counts as indicative.</p></div></div></div></div>
+<p class="caveat">Labels for the 150-review evaluation sample were assigned by one annotator (an AI assistant), blind to the classifier output and star score; they are not independent human gold labels. The labelled CSV ships with the project so it can be audited.</p>
+{% endblock %}
+{% block scripts %}<script>
+const CAT={{ nlp.complaint_categories|tojson }}.slice().sort((a,b)=>b.pct_of_negative_reviews-a.pct_of_negative_reviews), ASP={{ nlp.aspects|tojson }};
+mk('cCat',{type:'bar',data:{labels:CAT.map(c=>c.category.replace(/_/g,' ')),datasets:[{data:CAT.map(c=>c.pct_of_negative_reviews),backgroundColor:CAT.map(c=>c.category==='late_delivery'?C.orange:C.blue),borderRadius:3}]},options:{indexAxis:'y'}});
+const ak=Object.keys(ASP).sort((a,b)=>ASP[b].pct_negative_among_negative_reviews-ASP[a].pct_negative_among_negative_reviews);
+mk('cAsp',{type:'bar',data:{labels:ak.map(k=>k.replace(/_/g,' ')),datasets:[{data:ak.map(k=>ASP[k].pct_negative_among_negative_reviews),backgroundColor:C.blue,borderRadius:3}]},options:{indexAxis:'y'}});
+async function analyse(){const e=document.getElementById('aErr'),o=document.getElementById('aOut');e.classList.add('d-none');o.classList.add('d-none');o.replaceChildren();
+ try{const j=await postJSON('/api/review/analyze',{text:document.getElementById('txt').value});
+  const rows=[['Complaint categories',j.complaint_categories.map(s=>s.replace(/_/g,' ')).join(', ')],['Severity',j.severity],['Aspects (sentiment)',Object.keys(j.aspects).length?Object.entries(j.aspects).map(([a,s])=>a.replace(/_/g,' ')+': '+s).join('; '):'none detected'],['Model sentiment',j.model_sentiment_label+'  ('+Object.entries(j.model_sentiment).map(([k,v])=>k+' '+(v*100).toFixed(0)+'%').join(', ')+')'],['Lexicon sentiment',j.lexicon_sentiment]];
+  const t=document.createElement('table');t.className='table table-sm';const b=document.createElement('tbody');rows.forEach(r=>{const tr=document.createElement('tr');const th=document.createElement('th');th.textContent=r[0];tr.appendChild(th);tr.appendChild(td(r[1]));b.appendChild(tr)});t.appendChild(b);o.appendChild(t);o.classList.remove('d-none');
+ }catch(x){e.textContent=x.message;e.classList.remove('d-none');}}
+</script>{% endblock %}
